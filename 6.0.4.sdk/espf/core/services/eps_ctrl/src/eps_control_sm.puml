@@ -1,0 +1,18 @@
+@startuml
+title <b>eps_control_sm
+[*] -> off
+state off: on_exit: \n initialize g_response_timer
+state idle: wait for a new request 
+state active_request: on_entry: \n send the ESPS request \n start g_response_timer 
+state retry_request: on_entry: \n increase the number of retries by one
+state finish_request: on_entry: \n remove the request from queue and reset the retries counter
+
+off --> idle: <b>initialized</b> \n
+idle --> active_request: <b>new_request</b> \n
+active_request --> retry_request: <b>__periodic</b> [response_timeout_elapsed]\n
+active_request --> finish_request: <b>response_received</b> \n
+retry_request --> active_request: <b>__periodic</b> [retries_left]\n
+retry_request --> finish_request: <b>__periodic</b> [max_retries]\n
+finish_request --> active_request: <b>__periodic</b> [queue_not_empty]\n
+finish_request --> idle: <b>__periodic</b> [queue_empty]\n
+@enduml

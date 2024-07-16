@@ -1,0 +1,69 @@
+package endurosat.macif
+
+<** 
+	@description: EnduroSat EPSII Service
+    @details: id = 0x17
+**>
+interface EPSII_SERVICE
+{ 
+	// This protocol version
+    version { major 0 minor 1 }
+
+// ============================================================================================
+// Global types - TODO: Export in separate fidl, included here and there
+// ============================================================================================
+
+    <** @description: EPSII Service result type
+	    @details: size = 1 **>
+    enumeration ESEPSII_SERVICE_Results
+    {
+    	<** @description: Ignore **>
+	    SERVICE_RESULT_OK = 0
+	    <** @description: Service routine failed. **>
+	    SERVICE_PARAMETERS_NOT_CORRECT = 1
+	    <** @description: Service routine failed. **>
+    	SERVICE_RESULT_FAIL = 2
+    }
+    
+    <** @description: EPSII Service result type
+        @details: size = 1 **>
+    enumeration ESEPSII_SERVICE_ModuleTypes
+    {
+    	<** @description: Ignore **>
+		UNKNOWN = 0
+        /** @description: EPSII Power Distribution Module **/
+        EPSII_PDM = 2
+        /** @description: EPSII Battery Pack **/
+        EPSII_BP = 3
+        /** @description: EPSII Battery Pack Light version (4 battery) **/        
+        EPSII_BPL = 4
+    }
+    
+	<** 
+		@description: Configure which sensors are in diagnostic mode
+		@details: id = 1
+		**>
+	method SetFactorySettings
+	{
+		in
+		{
+            <** @description: Serial number maximum 30 characters
+            @details: size = 42 **>
+			String SerialNumber 
+
+			ESEPSII_SERVICE_ModuleTypes moduleType
+			UInt16 HwRevision
+			UInt64 HwConfig
+		}
+		out
+		{
+			<** @description: Result of the operation **>
+			ESEPSII_SERVICE_Results result
+		}
+	}
+
+// ============================================================================================
+// END
+// ============================================================================================
+   
+}

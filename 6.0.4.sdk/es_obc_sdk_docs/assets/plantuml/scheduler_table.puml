@@ -1,0 +1,17 @@
+@startuml
+
+partition "**Scheduler File**" {
+    note
+
+ | **Slot** |<#yellow> **payload ID** \n (uint8_t)|<#yellow> **flags** \n (uint8_t)|<#yellow> **time** \n (uin32_t) |<#yellow> **duration** \n (uint16_t) |<#yellow> **payload boot time** \n (uint16_t) |<#yellow> **adcs prep time** \n (uint16_t) |<#yellow> **adcs system state** \n (uint8_t) |<#yellow> **adcs manoeuvre params** \n (float[3]) |<#yellow> **payload arguments** \n (uint8_t [16]) |
+ |<#8080FF> 1 | Pay_0 | 0 | 1685615206 | 600 | 10 | 10 | Target-Tracking| target-coords| "file1.txt"|
+ |<#8080FF> 2 | Pay_1 | 0 | 1685615206 | 200 | 5 | 120 | Nadir Pointing| offset-angles| "file2.txt"|
+ |<#8080FF> ... | ... | ... | ... | ... | ... | ... | ... | ... | ...|
+ |<#8080FF> 40 | Pay_N | 0 | 1685615206 | 8000 | 100 | 0| Nadir Pointing| none | "fileN.txt"|
+
+
+    end note
+
+}
+
+@enduml

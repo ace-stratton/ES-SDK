@@ -1,0 +1,18 @@
+@startuml
+
+participant User as "User code"
+participant EEPEmul as "EEPROM_emul.c"
+
+== Preconditions: STM32 HAL initialization performed ==
+User -> EEPEmul: EEPROM_Emul_Init()
+note over EEPEmul: Called once at startup
+alt Data read
+User -> EEPEmul: access <b>EEPROM_emul_DataTemp</b> structure instance directly
+note over EEPEmul: This structure represents the FLASH data RAM mirror
+else Data write
+User -> EEPEmul: modify <b>EEPROM_emul_DataTemp</b> structure instance
+User -> EEPEmul: EEPROM_Emul_SyncInfo()
+note left of EEPEmul: trigger actual FLASH update
+end alt
+
+@enduml

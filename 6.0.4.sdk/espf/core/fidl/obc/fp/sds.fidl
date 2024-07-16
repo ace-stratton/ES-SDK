@@ -1,0 +1,257 @@
+package endurosat.macif
+
+<** @description: This is the Onboard Computer (OBC) sensor data service (SDS) interface.
+                It provides methods which report the sensor status, sensor reported errors,
+                as well as methods used to configure the time between sensor read operations.
+                Sensors registered can be accessed through the service.
+    @details: id = 26
+**>
+interface SDS
+{
+    version { major 0 minor 3 }
+
+    <** @description: General status type used for SW-related communication and/or settings. **>
+    enumeration StandardResult
+    {
+        <** @description: The operation is successful **>
+        SUCCESS,
+        <** @description: An error has occurred **>
+        ERROR,
+        <** @description: Invalid input arguments provided to the operation **>
+        INVALID_ARGS,
+        <** @description: The action related to the input data is not supported by the firmware **>
+        NOT_SUPPORTED
+    }
+    
+    <** @description: Enumeration for SAFE booleans**>
+    enumeration SafeBool
+    {
+        FALSE = 0,
+        TRUE = 255 
+    }
+    
+    <** @description: Enumeration describing the different states of a sensor type group**>
+    enumeration SensorState
+    {
+        DEINIT,
+        INIT,
+        ERR
+    }
+        
+    <** @description: Sensor types. Data from up to 8 sensor types can be configured to be read by the SDS **>
+    enumeration SensTypeCfgNum
+    {
+        <** @description: Magnetometers **>
+        SENS_MTM,
+        <** @description: Gyros **>
+        SENS_GYRO,
+        <** @description: Coarse Sun Sensors **>
+        SENS_CSS,
+        <** @description: Accelerometers **>
+        SENS_ACC,
+        <** @description: Solar panels temperature sensors **>
+        SENS_PANEL_TEMP,
+        <** @description: Gyro temperature sensors **>
+        SENS_GYRO_TEMP,
+        <** @description: Reserved **>
+        SENS_RES_0,
+        <** @description: Reserved **>
+        SENS_RES_1
+    }
+    
+    <** @description: Sensor axis **>
+    enumeration SensAxis
+    {
+        X_AXIS,
+        Y_AXIS,
+        Z_AXIS
+    }
+    
+    <** @description: Sensor number **>
+    enumeration SensNum
+    {
+        PRIMARY,
+        SECONDARY
+    }
+    
+        
+    <** @description: Set the frequency at which the different sensor types (magnetometers, rate sensors, etc.) are read and updated in the internal cache.
+        This configuration is stored in the NVM. Any change will take effect after at most one second.
+        @details: id = 0x00000001
+    **>
+    method setSensReadFreq
+    {
+        in
+        {
+            <** @description: Enable flag used to indicate if the sensor read logic should use the frequency values configured here.  If the value is set to FALSE the sensors
+                are powered up and read, then powered down, once per second **>
+            SafeBool enable
+            <** @description: Magnetometers read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensMTM
+            <** @description: Gyroscopes read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensGyro
+            <** @description: Coarse Sun Sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensCSS
+            <** @description: Accelerometers read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensACC
+            <** @description: Panel temperature sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensPANEL_TEMP
+            <** @description: Gyroscopes temperature sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensGYRO_TEMP
+            <** @description: Reserved sensor type frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensRES_0
+            <** @description: Reserved sensor type frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensRES_1
+        }
+        
+        out
+        {
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Get the frequency at which the different sensor types (magnetometers, rate sensors, etc.) are read and updated in the internal cache.
+        This configuration is stored in the NVM. Any change will take effect after at most one second.
+        @details: id = 0x00000002
+    **>
+    method getSensReadFreq
+    {        
+        out
+        {
+            <** @description: Enable flag used to indicate if the sensor read logic should use the frequency values configured here. If the value is set to FALSE the sensors
+                are powered up and read, then powered down, once per second **>
+            SafeBool enable
+            <** @description: Magnetometers read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensMTM
+            <** @description: Gyroscopes read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensGyro
+            <** @description: Coarse Sun Sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensCSS
+            <** @description: Accelerometers read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensACC
+            <** @description: Panel temperature sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensPANEL_TEMP
+            <** @description: Gyroscopes temperature sensors read frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensGYRO_TEMP
+            <** @description: Reserved sensor type frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensRES_0
+            <** @description: Reserved sensor type frequency configuration in [Hz].
+            Values larger than 30 Hz are not accepted and will be assumed to be equal to the maximum allowed frequency of 30 Hz. **>
+            UInt16 sensRES_1
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Get the state of a specific sensor type
+        @details: id = 0x00000003
+    **>
+    method getSensState
+    {
+        in
+        {
+            SensTypeCfgNum sensTypeId
+        }
+        
+        out
+        {
+            <** @description: Current sensor type state. If the sensor type is not present, the returned sensor status is deinitialised. **>
+            SensorState sensState
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Get the last reported error of a sensor type
+        @details: id = 0x00000004
+    **>
+    method getSensErr
+    {
+        in
+        {
+            SensTypeCfgNum sensTypeId
+        }
+        
+        out
+        {
+            <** @description: Last reported sensor error. If the sensor type is not present, the returned error code is 0xFF **>
+            UInt8 sensErr
+            <** @description: Last reported sensor error for X axis sensor (applicable for 1-axis sensors only) **>
+            UInt8 X_AXIS
+            <** @description: Last reported sensor error for Y axis sensor (applicable for 1-axis sensors only) **>
+            UInt8 Y_AXIS
+            <** @description: Last reported sensor error for Z axis sensor (applicable for 1-axis sensors only) **>
+            UInt8 Z_AXIS
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Get sensor register value (even if the sensor is currently not initialized).
+        @details: id = 0x00000005
+    **>
+    method getSensReg
+    {
+        in
+        {
+            <** @description: Sensor type - Magnetometer, Rate Sensors, etc. **>
+            SensTypeCfgNum sensTypeId
+            <** @description: Sensor type axis (if applicable). Some sensor types are single axis sensors. This field applies to them.**>
+            SensAxis sensAxis
+            <** @description: Sensor number (if applicable). Some sensor types are redundant. This field applies to them. **>
+            SensNum SensNum
+            <** @description: Register address **>
+            UInt32 reg_address
+        }
+        
+        out
+        {
+            <** @description: Register value. **>
+            UInt32 respBytes
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+    
+	<** @description: Set sensor register value (even if the sensor is currently not initialized).
+        @details: id = 0x00000006
+    **>
+    method setSensReg
+    {
+        in
+        {
+            <** @description: Sensor type - Magnetometer, Rate Sensors, etc. **>
+            SensTypeCfgNum sensTypeId
+            <** @description: Sensor type axis (if applicable). Some sensor types are single axis sensors. This field applies to them.**>
+            SensAxis sensAxis
+            <** @description: Sensor number (if applicable). Some sensor types are redundant. This field applies to them. **>
+            SensNum SensNum
+            <** @description: Register address **>
+            UInt32 reg_address
+            <** @description: Register value **>
+            UInt32 reg_value
+        }
+        
+        out
+        {
+            <** @description: Operation result **>
+            StandardResult opResult
+        }
+    }
+}

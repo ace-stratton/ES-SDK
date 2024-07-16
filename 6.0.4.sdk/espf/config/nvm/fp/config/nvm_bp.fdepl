@@ -1,0 +1,7 @@
+package org.endurosat.deploy
+
+import "../../../../core/fidl/spec/PlatformSpec.fdepl"
+import "nvm_bp.fidl"
+
+define org.endurosat.spec.PlatformSpec for interface endurosat.macif.nvm_bp         		   { IsClient = false }
+

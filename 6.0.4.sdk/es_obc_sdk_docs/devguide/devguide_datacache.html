@@ -1,0 +1,1856 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://endurosat.com/devguide/devguide_datacache.html">
+      
+      
+        <link rel="prev" href="devguide_assertions.html">
+      
+      
+        <link rel="next" href="devguide_telemetry.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Data Cache - EnduroSat On-Board Computer SDK Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#which-files-to-edit-if-i-want-to-modify-the-dc" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-header__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EnduroSat On-Board Computer SDK Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Data Cache
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart.html" class="md-tabs__link">
+        
+  
+    
+  
+  Quick-start Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="hldesign.html" class="md-tabs__link">
+          
+  
+  Developer's Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../assets/src-docs/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Code Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference_docs.html" class="md-tabs__link">
+        
+  
+    
+  
+  Reference documents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_history.html" class="md-tabs__link">
+        
+  
+    
+  
+  Change history
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contacts.html" class="md-tabs__link">
+        
+  
+    
+  
+  Contacts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-nav__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    EnduroSat On-Board Computer SDK Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick-start Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Developer's Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer's Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hldesign.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_dirstructure.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directory structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cmake.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OBC configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            OBC configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_buildcfg.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_sysconfig.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development recipes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development recipes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_newcomp.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_esps_cmd_extend.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the set of OBC supported commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_fwupd.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootloader and firmware updates handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_debugtrace.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_assertions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="devguide_datacache.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#which-files-to-edit-if-i-want-to-modify-the-dc" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which files to edit if I want to modify the DC?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#describing-dc-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Describing DC attributes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generating-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      Generating code
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-your-new-dc-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using your new DC data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowing-if-your-dc-data-is-published-regularly" class="md-nav__link">
+    <span class="md-ellipsis">
+      Knowing if your DC data is published regularly
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_telemetry.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Telemetry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_micropython.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroPython
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_es_adcs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EnduroSat ADCS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5_10" id="__nav_3_5_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_conops.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_user_payloads.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_aocs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Attitude and Orbit Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_payload_scheduler.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Payload Scheduler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cubeadcs_gen2_service.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CubeADCS Gen2 Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_operations_guide.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_pm.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Performance monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Connectivity
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Connectivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_eth.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/src-docs/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference_docs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference documents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_history.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change history
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contacts.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contacts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Data Cache</h1>
+
+<p>The Data Cache (or <abbr title="Data Cache component in the OBC SDK">DC</abbr> in short) provided as part of the <abbr title="On-board Computer">OBC</abbr> SDK is a simple RAM data store which enables data producers and consumers in the system to exchange typed data without introducing tight coupling between them. The data exchange is implemented in a thread-safe way and can be used by all parts of the system, e.g. drivers, services, application components, etc.
+The main benefits of using <abbr title="Data Cache component in the OBC SDK">DC</abbr> compared to direct coupling between components are the following:</p>
+<ul>
+<li>The possibility to easily change the data producer's code without this affecting data consumer's code. The change remains transparent for data readers in the system as long as the data type doesn't change.</li>
+<li>No need for explicit synchronization mechanisms between the data producers and consumers - the data store is always available for use (even before data production has started - you simply read data which is marked as <code>not initialized</code> yet).</li>
+<li>Data which is part of <abbr title="Data Cache component in the OBC SDK">DC</abbr> is described via <abbr title="Franca Interface Definition Language">FIDL</abbr> files and the corresponding code is fully auto-generated (it is part of the CMake build process and just editing the <abbr title="Franca Interface Definition Language">FIDL</abbr> file, produces the necessary code automatically the next time you build the SDK).</li>
+<li>The code generation also produces a special get/set <abbr title="Franca Interface Definition Language">FIDL</abbr> interface which can be used to enable data simulation externally either from <abbr title="Space Development Environment (an EnduroSat tool used for module communication over different interfaces)">SDE</abbr> or from a Python script - this makes testing your code in the system a breeze.</li>
+<li><abbr title="Data Cache component in the OBC SDK">DC</abbr> data is assigned an additional status field which can be used by data consumers to decide whether the data is <em>fresh</em> (e.g. regularly being updated by any producer) and whether it has been updated at all since system start.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">When you should not use <abbr title="Data Cache component in the OBC SDK">DC</abbr>?</p>
+<p><abbr title="Data Cache component in the OBC SDK">DC</abbr> is designed around a simple polling mechanism - data producers and consumers are not synchronized and any side can call <abbr title="Data Cache component in the OBC SDK">DC</abbr> at any time. That means consumers may miss some changes in the data depending on how often they are sampling the <abbr title="Data Cache component in the OBC SDK">DC</abbr> for changes.</p>
+<p>For that reason, you may want to implement custom mechanisms for data exchange if:</p>
+<ul>
+<li>You cannot afford to miss even a single sample of the data produced.</li>
+<li>You need to be directly notified when the data changes.</li>
+<li>You need to exchange bigger amounts of data and you want to avoid data copy operations.</li>
+</ul>
+</div>
+<p><center><a class="glightbox" href="../assets/plantuml/img/datacache.svg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Typical DC data exchange" src="../assets/plantuml/img/datacache.svg" /></a></center>
+<center><i>An example of a typical usage scenario - one producer with multiple consumers</i></center></p>
+<h2 id="which-files-to-edit-if-i-want-to-modify-the-dc">Which files to edit if I want to modify the <abbr title="Data Cache component in the OBC SDK">DC</abbr>?</h2>
+<p>As already mentioned, the process of changing the <abbr title="Data Cache component in the OBC SDK">DC</abbr> items and their format is automated as part of the CMake build of the <abbr title="On-board Computer">OBC</abbr> SDK. The <abbr title="Data Cache component in the OBC SDK">DC</abbr> is fully generated out of a <abbr title="Franca Interface Definition Language">FIDL</abbr> description. We will use a short example to illustrate how to add a new data item and start using it from other components in the system. But, before that, let's have a look at the structure of the <abbr title="Franca Interface Definition Language">FIDL</abbr> files used for <abbr title="Data Cache component in the OBC SDK">DC</abbr> <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> generation:</p>
+<p><center><a class="glightbox" href="../assets/plantuml/img/devguide_datacache_fidl.svg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Data Cache file structure" src="../assets/plantuml/img/devguide_datacache_fidl.svg" /></a></center></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Data items in <abbr title="Data Cache component in the OBC SDK">DC</abbr> are named <code>attributes</code> after the Franca <abbr title="Interface Definition Language">IDL</abbr> syntactic elements used to describe them in the <abbr title="Franca Interface Definition Language">FIDL</abbr> files.</p>
+</div>
+<p>As visible on the diagram, there are two files which describe the <abbr title="Data Cache component in the OBC SDK">DC</abbr> content:</p>
+<ul>
+<li><code>DataCache.fidl</code> - defines the list of <abbr title="Data Cache component in the OBC SDK">DC</abbr> attributes (or data entries), their unique attribute ID and corresponding data type. <code>Attributes</code> can have any valid Franca <abbr title="Interface Definition Language">IDL</abbr> type.</li>
+<li><code>DataCache_Types.fidl</code> - defines all Franca data types which are used for <code>attribute</code> definition. This file is directly imported by <code>DataCache.fidl</code>.</li>
+<li><code>deploy_dc.fdepl</code> - this is the specification for the actual code generation (it enables altering of specific generation parameters for the whole <abbr title="Data Cache component in the OBC SDK">DC</abbr> interface or only for specific attributes).</li>
+</ul>
+<h2 id="describing-dc-attributes">Describing <abbr title="Data Cache component in the OBC SDK">DC</abbr> attributes</h2>
+<p>The <abbr title="Data Cache component in the OBC SDK">DC</abbr>-specific <abbr title="Franca Interface Definition Language">FIDL</abbr> files are actually regular <abbr title="Franca Interface Definition Language">FIDL</abbr> files describing interfaces. What makes them special is how <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> <abbr title="Data Cache component in the OBC SDK">DC</abbr> generator handles them and also the fact that they use Franca <code>attributes</code> as part of a Franca interface to describe data. This kind of description is not supported by other <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> generators for the moment and such <abbr title="Franca Interface Definition Language">FIDL</abbr> files can only be used with the <code>-gen-dc</code> <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> option.</p>
+<p>Let's now describe a single data type which we will assign to a <abbr title="Data Cache component in the OBC SDK">DC</abbr> attribute.</p>
+<ul>
+<li>Open <code>DataCacheTypes.fidl</code> and paste the following code somewhere in the <code>typeCollection DataCacheTypes</code> block (e.g. in the end):
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span></pre></div></td><td class="code"><div><pre><span></span><code>    struct foo_general_data
+    {
+        UInt8 foo_index
+        UInt32 foo_speed
+    }
+</code></pre></div></td></tr></table></div></li>
+<li>Now open <code>DataCache.fidl</code> and create a new attribute at the end of the <code>interface data_cache</code> section using the <code>foo_general_data</code> type we already defined:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>    &lt;** @description: Onboard Computer General Telemetry Package
+        @details: id = &lt;unique id&gt;
+    **&gt;
+    attribute foo_general_data foo_info
+</code></pre></div></td></tr></table></div></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Make sure that you replace the <code>&lt;unique id&gt;</code> value on line <code>2</code> before trying to generate from the modified <abbr title="Franca Interface Definition Language">FIDL</abbr> files. It doesn't matter what value that is as long as it is unique in the same file.</p>
+</div>
+<p>That's it! You just created a new data <code>foo_info</code> containing the items described in the <code>foo_general_data</code> type. Now comes generation time!</p>
+<h2 id="generating-code">Generating code</h2>
+<p>One way to generate <abbr title="Data Cache component in the OBC SDK">DC</abbr> code is to call <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> manually:</p>
+<ol>
+<li>Open a system console</li>
+<li>Change the working directory to <code>&lt;OBC SDK&gt;/espf/config/datacache</code></li>
+<li>Run <code>java -jar ../../../other/scripts/gen/macchiato/macchiato.jar --gen-dc deploy_dc.fdepl ./</code></li>
+</ol>
+<p>Your generated code will appear in the <code>src-gen-dc</code> subfolder and you have to replce the datacache code in the build with the new one manually.</p>
+<p>There is an easier way though, if you base your changes on the existing <abbr title="On-board Computer">OBC</abbr> SDK:</p>
+<ol>
+<li>Edit the <abbr title="Franca Interface Definition Language">FIDL</abbr> descriptions for the <abbr title="Data Cache component in the OBC SDK">DC</abbr></li>
+<li>Trigger a new <abbr title="On-board Computer">OBC</abbr> SDK build for your <abbr title="Data Cache component in the OBC SDK">DC</abbr> changes to be automatically generated and the corresponding code to be built.</li>
+</ol>
+<p>You should see a similar output as part of your build log:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">  1</span>
+<span class="normal">  2</span>
+<span class="normal">  3</span>
+<span class="normal">  4</span>
+<span class="normal">  5</span>
+<span class="normal">  6</span>
+<span class="normal">  7</span>
+<span class="normal">  8</span>
+<span class="normal">  9</span>
+<span class="normal"> 10</span>
+<span class="normal"> 11</span>
+<span class="normal"> 12</span>
+<span class="normal"> 13</span>
+<span class="normal"> 14</span>
+<span class="normal"> 15</span>
+<span class="normal"> 16</span>
+<span class="normal"> 17</span>
+<span class="normal"> 18</span>
+<span class="normal"> 19</span>
+<span class="normal"> 20</span>
+<span class="normal"> 21</span>
+<span class="normal"> 22</span>
+<span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span></pre></div></td><td class="code"><div><pre><span></span><code>[1/39] Generating C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/datacache.c, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/datacache.h, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/datacache_io.fidl
+EnduroSat -macaron- build front-end [v0.2]
+macaron.py started with args: Namespace(build=None, release_ver=None, clean=False, clean_gen_content=WindowsPath(&#39;.&#39;), fp_gen=False, datacache_gen=True, fp_gen_all=False, depl_config=&#39;C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc.fdepl&#39;, fp_merge_root=WindowsPath(&#39;.&#39;), verbose=False, error_out_only=False, reset_log=False)
+ESPF_ROOT_BUILD_PATH environment variable not set. Using default path setting resolving to &quot;C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x&quot;.
+WARN: ignoring -datacache option in combination with -fp option!
+generating sources...
+    ... EnduroSat ...
+                                  __    _       __
+       ____ ___  ____ ___________/ /_  (_)___ _/ /_____
+      / __ `__ \/ __ `/ ___/ ___/ __ \/ / __ `/ __/ __ \
+     / / / / / / /_/ / /__/ /__/ / / / / /_/ / /_/ /_/ /
+    /_/ /_/ /_/\__,_/\___/\___/_/ /_/_/\__,_/\__/\____/ v1.0.18
+    please wait...
+      --gen-dc: FIDL C DataCache source code generator [v0.7]
+    &gt;&gt;&gt; loading C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\deploy_dc.fdepl
+    0    [main] INFO  generators.macchiato.binders.Gen_DC  - ==&gt; Found 0 issues in file:/C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc.fdepl
+    3    [main] INFO  generators.macchiato.binders.Gen_DC  - ==&gt; Found 1 interfaces in file:/C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc.fdepl
+    12   [main] INFO  generators.macchiato.binders.Gen_DC  - =&gt; [Generating interfaces for DataCache]
+    35   [main] INFO  generators.macchiato.binders.Gen_DC  - Calling DataCache_Types_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-dc\data_cache\v0.1\datacache.h
+    49   [main] INFO  generators.macchiato.binders.Gen_DC  -    ==&gt; datacache.h
+    54   [main] INFO  generators.macchiato.binders.Gen_DC  - Calling DataCache_C_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-dc\data_cache\v0.1\datacache.c
+    64   [main] INFO  generators.macchiato.binders.Gen_DC  -    ==&gt; datacache.c
+    64   [main] INFO  generators.macchiato.binders.Gen_DC  - Calling DataCache_Cfg_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-dc\data_cache\v0.1\datacache_cfg.h.template
+    71   [main] INFO  generators.macchiato.binders.Gen_DC  -    ==&gt; datacache_cfg.h.template
+    72   [main] INFO  generators.macchiato.binders.Gen_DC  - Calling DataCache_IO_FIDL_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-dc\data_cache\v0.1\datacache_io.fidl
+    80   [main] INFO  generators.macchiato.binders.Gen_DC  -    ==&gt; datacache_io.fidl
+    102  [main] INFO  generators.macchiato.binders.Gen_DC  - Calling DataCache_Python_Types_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-dc\data_cache\v0.1\datacache.py
+    117  [main] INFO  generators.macchiato.binders.Gen_DC  -    ==&gt; datacache.py
+    118  [main] INFO  generators.macchiato.binders.Gen_DC  - =&gt; [done]
+    118  [main] INFO  generators.macchiato.binders.Gen_DC  - All done, just remember me when you are flying in space!
+    ==========================================================================================
+                                     Summary
+    ==========================================================================================
+                  Interface |   ver |         ID | Deployed as |   Duplicated?
+    ==========================================================================================
+                   data_cache     0.1    UNDEFINED server          no
+&gt;  command finished successfully!
+cleaning up all directories with name &quot;src-gen-c&quot; under &quot;C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\build\libespf_sub\datacache&quot;...
+[2/39] Generating C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp/data_cache/v0.1/data_cache_server/FP_data_cacheProtocolServer.c, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp/data_cache/v0.1/data_cache_server/FP_data_cacheProtocolServer.h, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp/data_cache/v0.1/data_cache_server/FP_data_cacheProtocolTypes.h, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp/data_cache/v0.1/data_cache_server/FP_data_cacheServerApp.c, C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp/data_cache/v0.1/data_cache_server/FP_data_cacheServerApp.h
+EnduroSat -macaron- build front-end [v0.2]
+macaron.py started with args: Namespace(build=None, release_ver=None, clean=False, clean_gen_content=WindowsPath(&#39;.&#39;), fp_gen=True, datacache_gen=False, fp_gen_all=False, depl_config=&#39;C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc_io.fdepl&#39;, fp_merge_root=WindowsPath(&#39;C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/fp&#39;), verbose=False, error_out_only=False, reset_log=False)
+ESPF_ROOT_BUILD_PATH environment variable not set. Using default path setting resolving to &quot;C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x&quot;.
+    ... EnduroSat ...
+                                  __    _       __
+       ____ ___  ____ ___________/ /_  (_)___ _/ /_____
+      / __ `__ \/ __ `/ ___/ ___/ __ \/ / __ `/ __/ __ \
+     / / / / / / /_/ / /__/ /__/ / / / / /_/ / /_/ /_/ /
+    /_/ /_/ /_/\__,_/\___/\___/_/ /_/_/\__,_/\__/\____/ v1.0.18
+    please wait...
+      --gen-c: ESPSI C source code generator (client/server bindings) [v2.11]
+    &gt;&gt;&gt; loading C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\deploy_dc_io.fdepl
+    0    [main] INFO  .generators.macchiato.binders.Gen_C  - ==&gt; Found 0 issues in file:/C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc_io.fdepl
+    0    [main] INFO  .generators.macchiato.binders.Gen_C  - ==&gt; Found 1 interfaces in file:/C:/Projects/SWP/GitRepo/obc-stdpf-hw-1.x/espf/config/datacache/deploy_dc_io.fdepl
+    12   [main] INFO  .generators.macchiato.binders.Gen_C  - =&gt; [Generating interfaces for C]
+    29   [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Types_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheProtocolTypes.h
+    47   [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheProtocolTypes.h
+    49   [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Server_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheProtocolServer.h
+    59   [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheProtocolServer.h
+    81   [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Server_Implementation_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheProtocolServer.c
+    100  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheProtocolServer.c
+    100  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling ServerApp_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheServerApp.h
+    108  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheServerApp.h
+    115  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Types_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheProtocolTypes.h
+    124  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheProtocolTypes.h
+    126  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_BaseTypes_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\FP_common\FP_BaseProtocolTypes.h
+    134  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_BaseProtocolTypes.h
+    134  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Server_Common_Implementation_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\FP_common\FP_ProtocolServerCommon.c
+    144  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_ProtocolServerCommon.c
+    144  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Server_Common_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\FP_common\FP_ProtocolServerCommon.h
+    152  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_ProtocolServerCommon.h
+    152  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Helpers_Header_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\FP_common\FP_Helpers.h
+    158  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_Helpers.h
+    158  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling Protocol_Helpers_C_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\FP_common\FP_Helpers.c
+    165  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_Helpers.c
+    171  [main] INFO  .generators.macchiato.binders.Gen_C  - Calling ServerApp_Implementation_Generator
+     for interface data_cache...
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\src-gen-c\data_cache\v0.1\data_cache_server\FP_data_cacheServerApp.c
+    178  [main] INFO  .generators.macchiato.binders.Gen_C  -    ==&gt; FP_data_cacheServerApp.c
+    179  [main] INFO  .generators.macchiato.binders.Gen_C  - =&gt; [done]
+    179  [main] INFO  .generators.macchiato.binders.Gen_C  - I am done. Give me more like this one!
+    ==========================================================================================
+                                     Summary
+    ==========================================================================================
+                  Interface |   ver |         ID | Deployed as |   Duplicated?
+    ==========================================================================================
+                   data_cache     0.1   0x00000088 server          no
+    Sorry but I could not find the user file: C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\FP_common\FP_BaseProtocolTypes.h
+    Sorry but I could not find the user file: C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\FP_common\FP_ProtocolServerCommon.c
+    Sorry but I could not find the user file: C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\FP_common\FP_ProtocolServerCommon.h
+    Sorry but I could not find the user file: C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\FP_common\FP_Helpers.h
+    Sorry but I could not find the user file: C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\FP_common\FP_Helpers.c
+    Created file C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\espf\config\datacache\fp\.\data_cache\v0.1\data_cache_server\FP_data_cacheServerApp.c
+    ===============================================================
+    |                           Summary                           |
+    ===============================================================
+    |               File Name              | Replaced | User Tags |
+    ===============================================================
+    | FP_data_cacheProtocolTypes.h        |       Yes |      None |
+    | FP_data_cacheProtocolServer.h       |       Yes |      None |
+    | FP_data_cacheProtocolServer.c       |       Yes |      None |
+    | FP_data_cacheServerApp.h            |       Yes |      None |
+    | FP_data_cacheProtocolTypes.h        |       Yes |      None |
+    | FP_BaseProtocolTypes.h              | Not found |      None |
+    | FP_ProtocolServerCommon.c           | Not found |      None |
+    | FP_ProtocolServerCommon.h           | Not found |      None |
+    | FP_Helpers.h                        | Not found |      None |
+    | FP_Helpers.c                        | Not found |      None |
+    | FP_data_cacheServerApp.c            |       Yes |        38 |
+&gt;  command finished successfully!
+cleaning up all directories with name &quot;src-gen-c&quot; under &quot;C:\Projects\SWP\GitRepo\obc-stdpf-hw-1.x\build\libespf_sub\datacache&quot;...
+</code></pre></div></td></tr></table></div></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You probably noticed that the <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> generator is called twice - the first generation stage produces the actual <abbr title="Data Cache component in the OBC SDK">DC</abbr> code while the second produces the <abbr title="Data Cache component in the OBC SDK">DC</abbr> get/set code based on the generated <code>datacache_io.fidl</code> file. This <abbr title="Franca Interface Definition Language">FIDL</abbr> gives you a direct <abbr title="Space Development Environment (an EnduroSat tool used for module communication over different interfaces)">SDE</abbr> or Python-based interface for reading and updating <abbr title="Data Cache component in the OBC SDK">DC</abbr> items externally, e.g. in testing or simulation scenarios.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <abbr title="Data Cache component in the OBC SDK">DC</abbr> code build step is omitted from the trace provided here but if you inspect more closely the <code>&lt;OBC SDK/build/macaron.log</code> file produced during the build, you will notice that the generated C source files are also built after the generation step is complete.</p>
+</div>
+<h2 id="using-your-new-dc-data">Using your new <abbr title="Data Cache component in the OBC SDK">DC</abbr> data</h2>
+<p>Now that we defined the <code>foo_info</code> attribute, we need to start using this entry. If you check the additions to your <code>&lt;OBC SDK&gt;/espf/config/datacache/datacache.h</code> file after generation, you will notice the following new items:</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="c1">// ...</span>
+<span class="cp">#define DC_ATTR_ID_FOO_INFO 0x00000022</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">u8Foo_index</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">u32Foo_speed</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">PACKED_STRUCT</span><span class="w"> </span><span class="n">DATA_CACHE_foo_general_data_t</span><span class="p">;</span>
+
+<span class="c1">// ...</span>
+
+<span class="n">dc_data_status_t</span><span class="w"> </span><span class="nf">dc_get_foo_info</span><span class="p">(</span><span class="n">DATA_CACHE_foo_general_data_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">p_data</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">dc_set_foo_info</span><span class="p">(</span><span class="n">DATA_CACHE_foo_general_data_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">p_new_data</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+You have your new <code>foo_general_data</code> data type and two public <abbr title="Application Programming Interface">API</abbr> functions for accessing the data. You also have the <code>DC_ATTR_ID_FOO_INFO</code> define which can be used with the static <abbr title="Data Cache component in the OBC SDK">DC</abbr> APIs (see below).</p>
+<p>Let's now modify the entry in <abbr title="Data Cache component in the OBC SDK">DC</abbr> by using the following code in your data producer component:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;datacache.h&quot;</span>
+
+<span class="c1">// define your data values</span>
+<span class="n">DATA_CACHE_foo_general_data_t</span><span class="w"> </span><span class="n">temp_foo_data</span><span class="w"> </span><span class="o">=</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="p">.</span><span class="n">u8Foo_index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5U</span><span class="p">,</span>
+<span class="w">    </span><span class="p">.</span><span class="n">u32Foo_speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2500U</span>
+<span class="p">}</span>
+
+<span class="c1">// set the value in DC</span>
+<span class="n">dc_set_foo_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp_foo_data</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div></p>
+<p>There is another way to access data in <abbr title="Data Cache component in the OBC SDK">DC</abbr> which can be more useful in loops when you have to process multiple blocks using a single configuration. Here is an example:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;datacache.h&quot;</span>
+
+<span class="c1">// obtain the internal DID handle by using the generated attribute ID</span>
+<span class="n">dc_did_id</span><span class="w"> </span><span class="n">my_did_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dc_get_index_by_data_id</span><span class="p">(</span><span class="n">DC_ATTR_ID_FOO_INFO</span><span class="p">);</span>
+
+<span class="c1">// allocate storage for the data to be read</span>
+<span class="n">DATA_CACHE_foo_general_data_t</span><span class="w"> </span><span class="n">temp_foo_data</span><span class="p">;</span>
+
+<span class="c1">// use the internal handle with the raw DC APIs to update the data</span>
+<span class="n">my_did_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dc_set_raw_data</span><span class="p">(</span><span class="n">my_did_id</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">temp_foo_data</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">temp_foo_data</span><span class="p">));</span>
+</code></pre></div></td></tr></table></div>
+<p>Finally, we can read our new <abbr title="Data Cache component in the OBC SDK">DC</abbr> attribute from any data consumer component via the following code:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;datacache.h&quot;</span>
+
+<span class="c1">// define your data values</span>
+<span class="n">DATA_CACHE_foo_general_data_t</span><span class="w"> </span><span class="n">temp_foo_data</span><span class="p">;</span>
+
+<span class="n">dc_data_status_t</span><span class="w"> </span><span class="n">foo_info_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dc_get_foo_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">temp_foo_data</span><span class="p">);</span>
+
+<span class="c1">// check foo_info_status</span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DC_DATA_STATUS_OK</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">foo_info_status</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="c1">// use the data if status is ok</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div></p>
+<h2 id="knowing-if-your-dc-data-is-published-regularly">Knowing if your <abbr title="Data Cache component in the OBC SDK">DC</abbr> data is published regularly</h2>
+<p>When inspecting the generated <code>datacache.h</code> public interface, you probably already noticed that <abbr title="Data Cache component in the OBC SDK">DC</abbr> attributes are assigned an additional <em>status</em> value automatically. The status is returned by the <code>dc_get_&lt;data name&gt;()</code> <abbr title="Application Programming Interface">API</abbr> and can be used by consumers to evaluate how fit the data is. In a decoupled data exchange mechanism like <abbr title="Data Cache component in the OBC SDK">DC</abbr>, it may happen that data is read by a component when the component responsible to produce it was never started or it has crashed. If such data is part of an algorithm taking important decisions about the system, it may turn up that your algorithm works with uninitialized data. Here comes the role of the <abbr title="Data Cache component in the OBC SDK">DC</abbr> as an intermediary. Since it hosts all the data itself, it is also in the position to track the data life time and also to know when data gets modified and at what intervals. If certain data is expected to be updated at least every 5 seconds, the <abbr title="Data Cache component in the OBC SDK">DC</abbr> can detect if the data is not modified on time and it will flag this through the <em>status</em> field letting data consumers know that something may be wrong with this data.</p>
+<h3 id="specifying-the-data-timeout-interval">Specifying the data timeout interval</h3>
+<p>By default, <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> code generator will assume that data which is updated at least 5 seconds is ok to use and will not set the <code>DC_DATA_STATUS_TOUT</code> value for the data <em>status</em>. Although, there is a way to customize this value for every <abbr title="Data Cache component in the OBC SDK">DC</abbr> attribute. You can do this by modifying the <code>deploy_dc.fdepl</code> file passed to the <abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr> generator. To demonstrate this, let's change the timeout configuration for our new <code>foo_info</code> attribute to <code>1200</code> ms:</p>
+<ul>
+<li>open <code>&lt;OBC SDK&gt;/espf/config/datacache/deploy_dc.fdepl</code></li>
+<li>add this code at the end of the file:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span></pre></div></td><td class="code"><div><pre><span></span><code>define org.endurosat.spec.PlatformSpec for interface endurosat.pf.DataCache.data_cache
+{
+    attribute foo_info { Status_timeout = 1200  }
+}
+</code></pre></div></td></tr></table></div></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="footer.title">
+      
+        
+        <a href="devguide_assertions.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Assertions" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Assertions
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="devguide_telemetry.html" class="md-footer__link md-footer__link--next" aria-label="Next: Telemetry" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Telemetry
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            <i>Privileged and confidential</i>
+          </div>
+        
+      </div>
+      <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/endurosat/" target="_blank" rel="noopener" title="EnduroSat on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share", "navigation.tabs", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+
+
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

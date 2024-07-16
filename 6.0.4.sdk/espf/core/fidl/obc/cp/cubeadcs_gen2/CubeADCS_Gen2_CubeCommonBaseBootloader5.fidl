@@ -1,0 +1,1499 @@
+// WARNING!!! THIS IS A GENERATED FILE! DO NOT MODIFY CONTENTS MANUALLY!!!
+
+package endurosat.macif
+
+
+<** @description: Interface for Cube ADCS Gen2 - CubeCommonBaseBootloader5
+    @details: id = 302
+**>
+
+interface CubeADCS_Gen2_CubeCommonBaseBootloader5
+{
+    version {major 1 minor 0}
+    
+    <** @description: This enumeration holds the IDs of CubeADCS Gen2 nodes for which this interface is applicable **>
+    enumeration CmdTargetNode
+    {
+        NodeInvalid = 0
+        
+    }
+    
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeCommonBaseBootloader5_States
+    {
+        
+        <** @description: Bootloader is idle and ready to receive commands **>
+        StateIdle = 0
+        
+        <** @description: Busy setting up read/write transfer - includes firmware file writes **>
+        StateBusySetupXfer = 1
+        
+        <** @description: Busy erasing flash - internally triggered when uploading a firmware binary or config file (with metadata), or specified explicitely by user when writing raw data to memory **>
+        StateBusyAutoErase = 2
+        
+        <** @description: Busy erasing flash **>
+        StateBusyErase = 3
+        
+        <** @description: Busy waiting for next frame **>
+        StateBusyWaitFrame = 4
+        
+        <** @description: Busy writing flash **>
+        StateBusyWrite = 5
+        
+        <** @description: Busy committing new file to file table (including CRC calculation) - happens after successful data transfer **>
+        StateBusyCommitFile = 6
+        
+        <** @description: Busy erase file table flash region in preperation for re-write - happens after successful file commit - intermediary step to improve comms responsiveness of bare-metal application **>
+        StateBusyEraseFileTable = 7
+        
+        <** @description: Busy writing file table to flash - happens after successful table erase - this is the final step of a file upload, state returns to idle **>
+        StateBusyWriteFileTable = 8
+        
+        <** @description: Busy reading flash **>
+        StateBusyRead = 9
+        
+        <** @description: Busy deleting file entry **>
+        StateBusyDelete = 10
+        
+        <** @description: Busy setting the default application target **>
+        StateBusySetTarget = 11
+        
+        <** @description: Busy jumping to application **>
+        StateBusyJump = 12
+        
+        <** @description: Busy reloading config after being set by the user. If the new config is successfully written to flash, a soft reset is triggered to reload the config automatically. **>
+        StateBusyReloadCfg = 13
+        
+        <** @description: Busy writing option bytes. If successful the MCU will reset automatically, otherwise the result will be stored in errors **>
+        StateBusyObWrite = 14
+        
+        <** @description: Busy launching option bytes. Will reset immediately if successful **>
+        StateBusyObCommit = 15
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeCommonBaseBootloader5_FileType
+    {
+        
+        <** @description: Binary image file **>
+        Bin = 0
+        
+        <** @description: Binary config file **>
+        Cfg = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeCommonBaseBootloader5_ResetVal
+    {
+        
+        <** @description: Dummy Value **>
+        DoNothing = 0
+        
+        <** @description: Performs reset immediately - not the same as common-framework **>
+        Soft = 55
+        
+        <** @description: Performs reset immediately **>
+        Hard = 66
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeCommonBaseBootloader5_UartBaud
+    {
+        
+        <** @description: 19200 **>
+        Baud19200 = 0
+        
+        <** @description: 38400 **>
+        Baud38400 = 1
+        
+        <** @description: 57600 **>
+        Baud57600 = 2
+        
+        <** @description: 115200 **>
+        Baud115200 = 3
+        
+        <** @description: 230400 **>
+        Baud230400 = 4
+        
+        <** @description: 460800 **>
+        Baud460800 = 5
+        
+        <** @description: 921600 **>
+        Baud921600 = 6
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_TcTlmError
+    {
+        
+        <** @description: No Error **>
+        Ok = 0
+        
+        <** @description: Invalid TcTlm ID **>
+        InvalidId = 1
+        
+        <** @description: Invalid Length **>
+        InvalidLength = 2
+        
+        <** @description: Invalid Parameter **>
+        InvalidParam = 3
+        
+        <** @description: CRC Check Failed **>
+        Crc = 4
+        
+        <** @description: TCTLM not implemented **>
+        NotImplemented = 5
+        
+        <** @description: Busy **>
+        TcTlmBusy = 6
+        
+        <** @description: Error in sequence of commands **>
+        Sequence = 7
+        
+        <** @description: Internal error **>
+        Internal = 8
+        
+        <** @description: Passthrough node timeout error **>
+        PassTimeout = 9
+        
+        <** @description: Passthrough target is invalid (passthrough is disabled) **>
+        PassTarget = 10
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_NodeType
+    {
+        
+        <** @description: Invalid Node Type **>
+        NodeTypeInvalid = 0
+        
+        <** @description: CubeComputer Type - version independant **>
+        NodeTypeCubeComputer = 1
+        
+        <** @description: CubeSense Type - version independant **>
+        NodeTypeCubeSense = 2
+        
+        <** @description: CubeWheel Type - version independant **>
+        NodeTypeCubeWheel = 3
+        
+        <** @description: CubeIR Type - version independant **>
+        NodeTypeCubeIr = 4
+        
+        <** @description: CubeMag Deploy Type - version independant **>
+        NodeTypeCubeMagDeploy = 5
+        
+        <** @description: CubeMag Compact Type - version independant **>
+        NodeTypeCubeMagCompact = 6
+        
+        <** @description: CubeStar Type - version independant **>
+        NodeTypeCubeStar = 7
+        
+        <** @description: CubeAuriga Type - version independant **>
+        NodeTypeAuriga = 8
+        
+        <** @description: CubeNode General Type - version independant **>
+        NodeTypeCubeNode = 9
+        
+        <** @description: CubeNode SLT Type - version independant **>
+        NodeTypeCubeNodeSlt = 10
+        
+        <** @description: CubeNode PST3S Type - version independant **>
+        NodeTypeCubeNodePst3s = 11
+        
+        <** @description: CubeNode NSSRWL Type - version independant **>
+        NodeTypeCubeNodeNssrwl = 12
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_ProgramType
+    {
+        
+        <** @description: Invalid Program Type **>
+        ProgramTypeInvalid = 0
+        
+        <** @description: control-program primary product application **>
+        ProgramTypeControl = 1
+        
+        <** @description: cube-computer flash-bootloader Bootloader application **>
+        ProgramTypeBootloader = 4
+        
+        <** @description: health-check Health Check application **>
+        ProgramTypeHealthCheck = 5
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_AbstractNode
+    {
+        
+        <** @description: Invalid Abstract Node **>
+        NodeInvalid = 0
+        
+        <** @description: CubeComputer **>
+        NodeComputer = 1
+        
+        <** @description: Star tracker 0 **>
+        NodeStr0 = 2
+        
+        <** @description: Star tracker 1 **>
+        NodeStr1 = 3
+        
+        <** @description: Fine sun sensor 0 **>
+        NodeFss0 = 4
+        
+        <** @description: Fine sun sensor 1 **>
+        NodeFss1 = 5
+        
+        <** @description: Fine sun sensor 2 **>
+        NodeFss2 = 6
+        
+        <** @description: Fine sun sensor 3 **>
+        NodeFss3 = 7
+        
+        <** @description: Horizon sun sensor 0 **>
+        NodeHss0 = 8
+        
+        <** @description: Horizon sun sensor 1 **>
+        NodeHss1 = 9
+        
+        <** @description: Magnetometer sensor 0 **>
+        NodeMag0 = 10
+        
+        <** @description: Magnetometer sensor 1 **>
+        NodeMag1 = 11
+        
+        <** @description: External sensor 0 **>
+        NodeExt0 = 12
+        
+        <** @description: External sensor 1 **>
+        NodeExt1 = 13
+        
+        <** @description: Reaction wheel 0 **>
+        NodeRwl0 = 14
+        
+        <** @description: Reaction wheel 1 **>
+        NodeRwl1 = 15
+        
+        <** @description: Reaction wheel 2 **>
+        NodeRwl2 = 16
+        
+        <** @description: Reaction wheel 3 **>
+        NodeRwl3 = 17
+        
+        <** @description: Reaction wheel 4 **>
+        NodeRwl4 = 18
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_SerialSource
+    {
+        
+        <** @description: Serial number sourced from OTP **>
+        SourceOtp = 0
+        
+        <** @description: Serial number sourced from Config **>
+        SourceConfig = 1
+        
+    }
+    
+    
+    
+    
+    <**
+        @description: Perform a soft reset
+        @details: id = 0
+    **>
+    method setReset
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: The type of reset to perform **>
+            CubeCommonBaseBootloader5_ResetVal ResetType
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Stay in bootloader. Do NOT jump to app
+        @details: id = 1
+    **>
+    method setHalt
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Configuration of base bootloader
+        @details: id = 2
+    **>
+    method setConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Configurable serial number - used only if OtpOverride==TRUE  
+            @details: size = 32 **>
+            UInt8[] SerialNumber
+            
+            <** @description: The amount of time the bootloader waits before automatically jumping to the default app target. Ensure that this value is large enough to be able to halt the bootloader **>
+            UInt16 Backoff
+            
+            <** @description: If set, the node will always ignore OTP and use the serial number in config (NodeType+SerialInt) **>
+            Boolean OtpOverride
+            
+            <** @description: UART1 baud rate **>
+            CubeCommonBaseBootloader5_UartBaud Uart1Baud
+            
+            <** @description: UART1 slave receive timeout **>
+            UInt16 Uart1Timeout
+            
+            <** @description: UART1 RS485 address **>
+            UInt8 Uart1RS485Addr
+            
+            <** @description: UART1 RS485 transceiver populated **>
+            Boolean Uart1RS485Trans
+            
+            <** @description: UART2 baud rate (CubeComputer only) **>
+            CubeCommonBaseBootloader5_UartBaud Uart2Baud
+            
+            <** @description: UART2 slave receive timeout (CubeComputer only) **>
+            UInt16 Uart2Timeout
+            
+            <** @description: UART2 RS485 address (CubeComputer only) **>
+            UInt8 Uart2RS485Addr
+            
+            <** @description: UART2 RS485 transceiver populated (CubeComputer only) **>
+            Boolean Uart2RS485Trans
+            
+            <** @description: CAN1 Address **>
+            UInt8 Can1Addr
+            
+            <** @description: CAN1 slave receive timeout **>
+            UInt16 Can1Timeout
+            
+            <** @description: CAN1 CSP enabled **>
+            Boolean Can1CspEn
+            
+            <** @description: CAN2 Address (CubeComputer only) **>
+            UInt8 Can2Addr
+            
+            <** @description: CAN2 slave receive timeout (CubeComputer only) **>
+            UInt16 Can2Timeout
+            
+            <** @description: CAN2 CSP enabled **>
+            Boolean Can2CspEn
+            
+            <** @description: I2C Address **>
+            UInt8 I2cAddr
+            
+            <** @description: I2C slave receive timeout **>
+            UInt16 I2cTimeout
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Set/Get the default application the bootloader will jump to if not specifically commanded
+        @details: id = 3
+    **>
+    method setDefaultAppTarget
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: File handle of the default app to jump to. Must request FileInfo to get the handle. The selected file must be of type bin. **>
+            UInt8 FileHandle
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Trigger Bootloader to jump to the default application
+        @details: id = 4
+    **>
+    method setJumpToDefaultApp
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Trigger Bootloader to jump to the specified application
+        @details: id = 5
+    **>
+    method setJumpToApp
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: File handle of the app to jump to. Must request FileInfo to get the handle. The selected file must be of type bin. **>
+            UInt8 FileHandle
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Trigger Bootloader to jump to the specified address - DO NOT use under normal circumstances
+        @details: id = 6
+    **>
+    method setJumpToAddress
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Address to jump to. **>
+            UInt32 Address
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Reset the file info index to start from the first index in the file list. Then request file info to increment the index automatically until last is detected
+        @details: id = 7
+    **>
+    method setResetFileInfoIdx
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Setup a file write
+        @details: id = 8
+    **>
+    method setWriteFileSetup
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: CubeSpace File Meta Data. May be less than allocated size (padding required)  
+            @details: size = 128 **>
+            UInt8[] MetaData
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Delete a file entry
+        @details: id = 9
+    **>
+    method setDeleteFileEntry
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: File handle of the entry to delete. **>
+            UInt8 FileHandle
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Setup a memory write - not to be used under normal circumstances
+        @details: id = 10
+    **>
+    method setWriteMemorySetup
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Address of memory to read **>
+            UInt32 Address
+            
+            <** @description: Size of memory to read **>
+            UInt32 Size
+            
+            <** @description: Should the region to be written be automatically erased **>
+            Boolean AutoErase
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Setup a memory read - not to be used under normal circumstances
+        @details: id = 11
+    **>
+    method setReadMemorySetup
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Address of memory to read **>
+            UInt32 Address
+            
+            <** @description: Size of memory to read **>
+            UInt32 Size
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Setup a memory erase - not to be used under normal circumstances
+        @details: id = 12
+    **>
+    method setEraseMemorySetup
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Address of memory to read **>
+            UInt32 Address
+            
+            <** @description: Size of memory to read **>
+            UInt32 Size
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Read/Write - not to be used under normal circumstances
+        @details: id = 13
+    **>
+    method setOptionBytes
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Must be correct to set **>
+            UInt32 MagicNumber
+            
+            <** @description: See reference manual **>
+            UInt8 Rdp
+            
+            <** @description: See reference manual **>
+            UInt8 BorLev
+            
+            <** @description: See reference manual **>
+            Boolean nRstStop
+            
+            <** @description: See reference manual **>
+            Boolean nRstStdby
+            
+            <** @description: See reference manual **>
+            Boolean nRstShdw
+            
+            <** @description: See reference manual **>
+            Boolean iWdgSw
+            
+            <** @description: See reference manual **>
+            Boolean iWdgStop
+            
+            <** @description: See reference manual **>
+            Boolean iWdgStdby
+            
+            <** @description: See reference manual **>
+            Boolean wWdgSw
+            
+            <** @description: See reference manual **>
+            Boolean bfb2
+            
+            <** @description: See reference manual **>
+            Boolean dBank
+            
+            <** @description: See reference manual **>
+            Boolean nBoot1
+            
+            <** @description: See reference manual **>
+            Boolean Sram2Pe
+            
+            <** @description: See reference manual **>
+            Boolean Sram2Rst
+            
+            <** @description: See reference manual **>
+            Boolean nSwBoot0
+            
+            <** @description: See reference manual **>
+            Boolean nBoot0
+            
+            <** @description: See reference manual **>
+            Boolean PcRopRdp
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopStrt1
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopEnd1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAStrt1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAEnd1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBStrt1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBEnd1
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopStrt2
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopEnd2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAStrt2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAEnd2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBStrt2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBEnd2
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Commit option bytes. Will cause reset if successful
+        @details: id = 14
+    **>
+    method setCommitOptionBytes
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Must be correct to trigger **>
+            UInt32 MagicNumber
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Identification information for this node
+        @details: id = 15
+    **>
+    method getIdentification
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Node type identifier **>
+            CommonFrameworkEnums_NodeType NodeType
+            
+            <** @description: Program type identifier **>
+            CommonFrameworkEnums_ProgramType ProgramType
+            
+            <** @description: Interface version **>
+            UInt8 InterfaceVersion
+            
+            <** @description: Firmware version (Major) **>
+            UInt8 FirmwareMajorVersion
+            
+            <** @description: Firmware version (Minor) **>
+            UInt8 FirmwareMinorVersion
+            
+            <** @description: Seconds since processor start-up **>
+            UInt16 RuntimeSeconds
+            
+            <** @description: Milliseconds (after the integer second) since processor start-up **>
+            UInt16 RuntimeMilliseconds
+            
+            
+        }
+    }
+    
+    <**
+        @description: Unique serial number of the CubeSpace Component
+        @details: id = 16
+    **>
+    method getSerialNumber
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: OTP ASCII string of chars denoting the serial number of this module  
+            @details: size = 32 **>
+            UInt8[] OtpSerial
+            
+            <** @description: Config ASCII string of chars denoting the serial number of this module  
+            @details: size = 32 **>
+            UInt8[] CfgSerial
+            
+            <** @description: Which serial number (OTP/Config) should be used for identification **>
+            CommonFrameworkEnums_SerialSource ActiveSerial
+            
+            
+        }
+    }
+    
+    <**
+        @description: Configuration of base bootloader
+        @details: id = 17
+    **>
+    method getConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Configurable serial number - used only if OtpOverride==TRUE  
+            @details: size = 32 **>
+            UInt8[] SerialNumber
+            
+            <** @description: The amount of time the bootloader waits before automatically jumping to the default app target. Ensure that this value is large enough to be able to halt the bootloader **>
+            UInt16 Backoff
+            
+            <** @description: If set, the node will always ignore OTP and use the serial number in config (NodeType+SerialInt) **>
+            Boolean OtpOverride
+            
+            <** @description: UART1 baud rate **>
+            CubeCommonBaseBootloader5_UartBaud Uart1Baud
+            
+            <** @description: UART1 slave receive timeout **>
+            UInt16 Uart1Timeout
+            
+            <** @description: UART1 RS485 address **>
+            UInt8 Uart1RS485Addr
+            
+            <** @description: UART1 RS485 transceiver populated **>
+            Boolean Uart1RS485Trans
+            
+            <** @description: UART2 baud rate (CubeComputer only) **>
+            CubeCommonBaseBootloader5_UartBaud Uart2Baud
+            
+            <** @description: UART2 slave receive timeout (CubeComputer only) **>
+            UInt16 Uart2Timeout
+            
+            <** @description: UART2 RS485 address (CubeComputer only) **>
+            UInt8 Uart2RS485Addr
+            
+            <** @description: UART2 RS485 transceiver populated (CubeComputer only) **>
+            Boolean Uart2RS485Trans
+            
+            <** @description: CAN1 Address **>
+            UInt8 Can1Addr
+            
+            <** @description: CAN1 slave receive timeout **>
+            UInt16 Can1Timeout
+            
+            <** @description: CAN1 CSP enabled **>
+            Boolean Can1CspEn
+            
+            <** @description: CAN2 Address (CubeComputer only) **>
+            UInt8 Can2Addr
+            
+            <** @description: CAN2 slave receive timeout (CubeComputer only) **>
+            UInt16 Can2Timeout
+            
+            <** @description: CAN2 CSP enabled **>
+            Boolean Can2CspEn
+            
+            <** @description: I2C Address **>
+            UInt8 I2cAddr
+            
+            <** @description: I2C slave receive timeout **>
+            UInt16 I2cTimeout
+            
+            
+        }
+    }
+    
+    <**
+        @description: State information of the application
+        @details: id = 18
+    **>
+    method getState
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Current state of the application **>
+            CubeCommonBaseBootloader5_States AppState
+            
+            <** @description: Previous state of the application **>
+            CubeCommonBaseBootloader5_States AppStatePrev
+            
+            <** @description: Error code for the last operation - gets reset to 0 at start of new operation **>
+            UInt32 Result
+            
+            <** @description: The current address being used for the operation, if applicable **>
+            UInt32 OpAddress
+            
+            <** @description: The current bank being used for erase operation, if applicable **>
+            UInt8 OpEBank
+            
+            <** @description: The current page being used for erase operation, if applicable **>
+            UInt16 OpEPage
+            
+            <** @description: The amount of data remaining for operation, if applicable **>
+            UInt32 OpDataRemain
+            
+            
+        }
+    }
+    
+    <**
+        @description: Error information of the application
+        @details: id = 19
+    **>
+    method getErrors
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Error code for the last operation - gets reset to 0 at start of new operation **>
+            UInt32 Result
+            
+            <** @description: Error code for HAL initialization (0 = OK) **>
+            UInt32 HalInit
+            
+            <** @description: Error code for Flash initialization (0 = OK) **>
+            UInt32 FlashInit
+            
+            <** @description: Error code for UART1 initialization (0 = OK) **>
+            UInt32 Uart1Init
+            
+            <** @description: Error code for UART2 initialization (0 = OK) **>
+            UInt32 Uart2Init
+            
+            <** @description: Error code for CAN1 initialization (0 = OK) **>
+            UInt32 Can1Init
+            
+            <** @description: Error code for CAN2 initialization (0 = OK) **>
+            UInt32 Can2Init
+            
+            <** @description: Error code for I2C initialization (0 = OK) **>
+            UInt32 I2cInit
+            
+            <** @description: Config error flag set if configuration CRC failed and default config is being used **>
+            Boolean ConfigInit
+            
+            <** @description: Timeout error flag on last operation **>
+            Boolean Timeout
+            
+            <** @description: Data overrun error flag on last operation **>
+            Boolean Overrun
+            
+            <** @description: Page erase error flag on last operation **>
+            Boolean ErasePage
+            
+            <** @description: Write error flag on last operation **>
+            Boolean Write
+            
+            <** @description: File CRC error flag on upload complete **>
+            Boolean FileCrc
+            
+            <** @description: Set if failure to write file table to flash **>
+            Boolean CommitFileTable
+            
+            <** @description: Set if failure to write config table to flash **>
+            Boolean CommitConfigTable
+            
+            <** @description: Set if the jump target is invalid **>
+            Boolean JumpTarget
+            
+            
+        }
+    }
+    
+    <**
+        @description: Get information on the current file entry index. The index will automatically increment every time this telemetry is requested, and wrap back to first entry
+        @details: id = 20
+    **>
+    method getFileInfo
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Handle identifier of the file **>
+            UInt8 FileHandle
+            
+            <** @description: Set if the file associated with this entry failed CRC check. Use file handle to delete the entry **>
+            Boolean IsCorrupt
+            
+            <** @description: The type of the file **>
+            CubeCommonBaseBootloader5_FileType Type
+            
+            <** @description: The Program Type associated with the file **>
+            CommonFrameworkEnums_ProgramType Program
+            
+            <** @description: The adddress in flash where the file is located **>
+            UInt32 Address
+            
+            <** @description: File Size **>
+            UInt32 Size
+            
+            <** @description: File CRC **>
+            UInt32 Crc
+            
+            <** @description: Firmware version (Major) that this file is for/from **>
+            UInt8 FirmwareMajorVersion
+            
+            <** @description: Firmware version (Minor) that this file is for/from **>
+            UInt8 FirmwareMinorVersion
+            
+            <** @description: Firmware version (Patch) that this file is for/from **>
+            UInt16 FirmwarePatchVersion
+            
+            <** @description: System version (Major) that this file is for/from **>
+            UInt8 SystemMajorVersion
+            
+            <** @description: System version (Minor) that this file is for/from **>
+            UInt8 SystemMinorVersion
+            
+            <** @description: System version (Patch) that this file is for/from **>
+            UInt16 SystemPatchVersion
+            
+            <** @description: ASCII string of chars denoting the serial number this file is associated with  
+            @details: size = 32 **>
+            UInt8[] Serial
+            
+            <** @description: Signals if the fil list is empty **>
+            Boolean Empty
+            
+            <** @description: Signals if this returned entry is the first in the file list - used to manage wrapping **>
+            Boolean First
+            
+            <** @description: Signals if this returned entry is the last in the file list - used to manage wrapping **>
+            Boolean Last
+            
+            
+        }
+    }
+    
+    <**
+        @description: Set/Get the default application the bootloader will jump to if not specifically commanded
+        @details: id = 21
+    **>
+    method getDefaultAppTarget
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: File handle of the default app to jump to. Must request FileInfo to get the handle. The selected file must be of type bin. **>
+            UInt8 FileHandle
+            
+            
+        }
+    }
+    
+    <**
+        @description: Read/Write - not to be used under normal circumstances
+        @details: id = 22
+    **>
+    method getOptionBytes
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Must be correct to set **>
+            UInt32 MagicNumber
+            
+            <** @description: See reference manual **>
+            UInt8 Rdp
+            
+            <** @description: See reference manual **>
+            UInt8 BorLev
+            
+            <** @description: See reference manual **>
+            Boolean nRstStop
+            
+            <** @description: See reference manual **>
+            Boolean nRstStdby
+            
+            <** @description: See reference manual **>
+            Boolean nRstShdw
+            
+            <** @description: See reference manual **>
+            Boolean iWdgSw
+            
+            <** @description: See reference manual **>
+            Boolean iWdgStop
+            
+            <** @description: See reference manual **>
+            Boolean iWdgStdby
+            
+            <** @description: See reference manual **>
+            Boolean wWdgSw
+            
+            <** @description: See reference manual **>
+            Boolean bfb2
+            
+            <** @description: See reference manual **>
+            Boolean dBank
+            
+            <** @description: See reference manual **>
+            Boolean nBoot1
+            
+            <** @description: See reference manual **>
+            Boolean Sram2Pe
+            
+            <** @description: See reference manual **>
+            Boolean Sram2Rst
+            
+            <** @description: See reference manual **>
+            Boolean nSwBoot0
+            
+            <** @description: See reference manual **>
+            Boolean nBoot0
+            
+            <** @description: See reference manual **>
+            Boolean PcRopRdp
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopStrt1
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopEnd1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAStrt1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAEnd1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBStrt1
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBEnd1
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopStrt2
+            
+            <** @description: See reference manual **>
+            UInt32 PcRopEnd2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAStrt2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpAEnd2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBStrt2
+            
+            <** @description: See reference manual **>
+            UInt8 WrpBEnd2
+            
+            
+        }
+    }
+    
+    <**
+        @description: Communication Status
+        @details: id = 23
+    **>
+    method getCommsStatus
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: UART1 No. of telecommands received **>
+            UInt16 uart1TcCounter
+            
+            <** @description: UART1 No. of telemetry requests received **>
+            UInt16 uart1TlmCounter
+            
+            <** @description: UART1 Errors reported in SW checks **>
+            UInt16 uart1SoftwareProtoErrors
+            
+            <** @description: UART1 Errors reported by HW Flags **>
+            UInt16 uart1HardwareFlagErrors
+            
+            <** @description: UART2 No. of telecommands received **>
+            UInt16 uart2TcCounter
+            
+            <** @description: UART2 No. of telemetry requests received **>
+            UInt16 uart2TlmCounter
+            
+            <** @description: UART2 Errors reported in SW checks **>
+            UInt16 uart2SoftwareProtoErrors
+            
+            <** @description: UART2 Errors reported by HW Flags **>
+            UInt16 uart2HardwareFlagErrors
+            
+            <** @description: CAN1 No. of telecommands received **>
+            UInt16 can1TcCounter
+            
+            <** @description: CAN1 No. of telemetry requests received **>
+            UInt16 can1TlmCounter
+            
+            <** @description: CAN1 Errors reported in SW checks **>
+            UInt16 can1SoftwareProtoErrors
+            
+            <** @description: CAN1 Errors reported by HW Flags **>
+            UInt16 can1HardwareFlagErrors
+            
+            <** @description: CAN2 No. of telecommands received **>
+            UInt16 can2TcCounter
+            
+            <** @description: CAN2 No. of telemetry requests received **>
+            UInt16 can2TlmCounter
+            
+            <** @description: CAN2 Errors reported in SW checks **>
+            UInt16 can2SoftwareProtoErrors
+            
+            <** @description: CAN2 Errors reported by HW Flags **>
+            UInt16 can2HardwareFlagErrors
+            
+            <** @description: I2C No. of telecommands received **>
+            UInt16 i2cTcCounter
+            
+            <** @description: I2C No. of telemetry requests received **>
+            UInt16 i2cTlmCounter
+            
+            <** @description: I2C Errors reported in SW checks **>
+            UInt16 i2cSoftwareProtoErrors
+            
+            <** @description: I2C Errors reported by HW Flags **>
+            UInt16 i2cHardwareFlagErrors
+            
+            
+        }
+    }
+    
+    <**
+        @description: Used with the I2C protocol to receive Telecommand Ack/Nack
+        @details: id = 24
+    **>
+    method getTelecommandAcknowledge
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Last TcTlm ID **>
+            UInt8 Id
+            
+            <** @description: Last TcTlm Error **>
+            CommonFrameworkEnums_TcTlmError Error
+            
+            <** @description: Buffer index of error **>
+            UInt8 ErrorIndex
+            
+            <** @description: Flag indicating if this acknowledgement has been read sinc the last TCTLM **>
+            Boolean Read
+            
+            
+        }
+    }
+    
+}

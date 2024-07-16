@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="895px" preserveAspectRatio="none" style="width:1199px;height:895px;background:#FFFFFF;" version="1.1" viewBox="0 0 1199 895" width="1199px" zoomAndPan="magnify"><defs><filter height="300%" id="f1xi4wozvxojb3" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="249" x="468.755" y="18.6855">ESPS Driver TX State Machine</text><!--MD5=[e56e5b79f0fae608c0a2808604f8beb5]
+entity eMACTransmit_Off--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="160" x="197.51" y="29.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="337.51" y="34.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="335.51" y="36.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="335.51" y="40.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="120" x="212.51" y="64.1738">eMACTransmit_Off</text><!--MD5=[261321e063cae6f73a51d895bce74ac6]
+entity eMACTransmit_Idle--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="163" x="196.01" y="155.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="339.01" y="160.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="337.01" y="162.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="337.01" y="166.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="123" x="211.01" y="190.1738">eMACTransmit_Idle</text><!--MD5=[6cb90a9a3272c5fcbd05153c9075f349]
+entity eMACTransmit_WaitPriority--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="213" x="261.01" y="407.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="454.01" y="412.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="452.01" y="414.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="452.01" y="418.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="173" x="276.01" y="442.1738">eMACTransmit_WaitPriority</text><!--MD5=[787ced3d91d544f2468f0e6401ce5b93]
+entity eMACTransmit_Active--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="179" x="682.01" y="533.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="841.01" y="538.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="839.01" y="540.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="839.01" y="544.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="139" x="697.01" y="568.1738">eMACTransmit_Active</text><!--MD5=[6932b5c1d7279a699c5ba17f8d730ca3]
+entity eMACTransmit_ProcessNext--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="219" x="348.01" y="281.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="547.01" y="286.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="545.01" y="288.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="545.01" y="292.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="179" x="363.01" y="316.1738">eMACTransmit_ProcessNext</text><!--MD5=[b75dee02531d4549ae0b87c4d32c546e]
+entity eMACTransmit_Retry--><rect fill="#FEFECE" filter="url(#f1xi4wozvxojb3)" height="47.6094" style="stroke:#A80036;stroke-width:1.5;" width="175" x="658.01" y="659.6406"/><rect fill="#FEFECE" height="10" style="stroke:#A80036;stroke-width:1.5;" width="15" x="813.01" y="664.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="811.01" y="666.6406"/><rect fill="#FEFECE" height="2" style="stroke:#A80036;stroke-width:1.5;" width="4" x="811.01" y="670.6406"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="135" x="673.01" y="694.1738">eMACTransmit_Retry</text><!--MD5=[16638b84bfaa60090669a0232c1bbcf0]
+link eMACTransmit_Off to eMACTransmit_Idle--><path d="M277.51,77.6706 C277.51,98.1606 277.51,128.2006 277.51,150.1906 " fill="none" id="eMACTransmit_Off-to-eMACTransmit_Idle" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="277.51,155.3106,281.51,146.3106,277.51,150.3106,273.51,146.3106,277.51,155.3106" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="96" x="278.51" y="122.1357">fs_vInitInterface()</text><!--MD5=[b37429e4715617f0817a0e7a9d3aa6ce]
+link eMACTransmit_Idle to eMACTransmit_ProcessNext--><path d="M269.58,203.6406 C265.93,218.7406 264.35,238.1306 274.51,251.6406 C283.94,264.1906 311.53,274.7206 342.53,283.0006 " fill="none" id="eMACTransmit_Idle-to-eMACTransmit_ProcessNext" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="347.53,284.3106,339.8407,278.1564,342.6939,283.041,337.8093,285.8941,347.53,284.3106" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="138" x="275.51" y="248.1357">eTXEvent_NewMessage</text><!--MD5=[10119946b349a8bac893ff7f5fda0372]
+link eMACTransmit_ProcessNext to eMACTransmit_Idle--><path d="M449.64,281.3906 C443.36,265.9906 433.17,246.3506 418.51,233.6406 C402.93,220.1406 383.58,209.9306 364.25,202.2606 " fill="none" id="eMACTransmit_ProcessNext-to-eMACTransmit_Idle" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="359.34,200.3706,366.2927,207.3463,364.0038,202.1732,369.1768,199.8842,359.34,200.3706" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="146" x="434.51" y="248.1357">eTXEvent_QueueEmptied</text><!--MD5=[129ef215f1954dc75d23df1a6bed4b60]
+link eMACTransmit_WaitPriority to eMACTransmit_Retry--><path d="M260.59,450.2706 C159.49,471.4906 31.15,513.1006 88.51,581.6406 C159.07,665.9606 488.61,680.7106 652.48,682.7506 " fill="none" id="eMACTransmit_WaitPriority-to-eMACTransmit_Retry" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="657.76,682.8106,648.8063,678.708,652.7603,682.7535,648.7149,686.7075,657.76,682.8106" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="249" x="89.51" y="563.1357">eTXEvent_BusBusy (Should restart Timers)</text><!--MD5=[129ef215f1954dc75d23df1a6bed4b60]
+link eMACTransmit_WaitPriority to eMACTransmit_Retry--><path d="M365.87,455.8406 C364.9,488.2906 368.2,547.1006 400.51,581.6406 C465.17,650.7706 574.31,673.4406 652.53,680.4306 " fill="none" id="eMACTransmit_WaitPriority-to-eMACTransmit_Retry-1" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="657.63,680.8706,649.0056,676.1145,652.6484,680.4424,648.3205,684.0851,657.63,680.8706" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="262" x="401.51" y="563.1357">eTXEvent_PriorityWaitFinished AND receiving</text><!--MD5=[ceee8b9ae889f5af7184273a91506109]
+link eMACTransmit_Retry to eMACTransmit_WaitPriority--><path d="M833.08,674.8606 C862.16,667.6106 891.64,654.2006 909.51,629.6406 C952.97,569.9106 893.65,516.4506 826.51,485.6406 C766.66,458.1806 594.78,444.1406 479.19,437.6006 " fill="none" id="eMACTransmit_Retry-to-eMACTransmit_WaitPriority" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="474.07,437.3206,482.8264,441.829,479.0618,437.6067,483.2841,433.8421,474.07,437.3206" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="91" x="924.51" y="563.1357">eTXEvent_Retry</text><!--MD5=[27c5bca4dfc046982dfbe97d79da3690]
+link eMACTransmit_WaitPriority to eMACTransmit_Idle--><path d="M260.9,426.2406 C183.69,420.5606 88.63,407.5206 63.51,377.6406 C6,309.2306 130.27,241.2606 212.48,205.8106 " fill="none" id="eMACTransmit_WaitPriority-to-eMACTransmit_Idle" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="217.34,203.7306,207.492,203.5993,212.7443,205.7002,210.6434,210.9525,217.34,203.7306" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="161" x="83.51" y="311.1357">eTXEvent_CollisionDetected</text><!--MD5=[5e22ba797a08105b0d098c7a215177e8]
+link eMACTransmit_WaitPriority to eMACTransmit_Active--><path d="M411.83,455.7606 C442.74,471.1106 485.3,490.7306 524.51,503.6406 C539.3,508.5106 613.73,524.2906 677.05,537.3806 " fill="none" id="eMACTransmit_WaitPriority-to-eMACTransmit_Active" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="681.98,538.4006,673.9616,532.6818,677.081,537.4008,672.3619,540.5202,681.98,538.4006" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="292" x="525.51" y="500.1357">eTXEvent_PriorityWaitFinished AND NOT receiving</text><!--MD5=[42c1ccd815a2bc62e6a63bebb79bbb11]
+link eMACTransmit_Active to eMACTransmit_Retry--><path d="M755.53,581.8506 C750.3,590.7606 745.16,601.2706 742.51,611.6406 C738.97,625.4606 739.24,641.2906 740.6,654.4806 " fill="none" id="eMACTransmit_Active-to-eMACTransmit_Retry" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="741.2,659.5906,744.1461,650.1927,740.629,654.6233,736.1984,651.1063,741.2,659.5906" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="161" x="743.51" y="626.1357">eTXEvent_CollisionDetected</text><!--MD5=[d13838514c463d8c7d12a69c3779f095]
+link eMACTransmit_Active to eMACTransmit_ProcessNext--><path d="M801.27,533.4706 C809.78,525.0906 817.97,514.8906 822.51,503.6406 C846.85,443.2406 842.81,404.3906 795.51,359.6406 C763.83,329.6706 657.31,316.6506 572.21,310.9906 " fill="none" id="eMACTransmit_Active-to-eMACTransmit_ProcessNext" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="567.15,310.6606,575.8805,315.2189,572.1401,310.9752,576.3838,307.2348,567.15,310.6606" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="192" x="837.51" y="437.1357">eTXEvent_MessageSendFinished</text><!--MD5=[c589e6ecdda028697f7f3365b77a1b5f]
+link eMACTransmit_ProcessNext to eMACTransmit_WaitPriority--><path d="M347.74,314.5406 C240.99,323.3606 92.36,339.1406 74.51,359.6406 C69.25,365.6706 69.38,371.5006 74.51,377.6406 C97.69,405.3906 183.03,418.6406 255.67,424.9506 " fill="none" id="eMACTransmit_ProcessNext-to-eMACTransmit_WaitPriority" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="260.88,425.3906,252.2421,420.6591,255.8972,424.9766,251.5797,428.6316,260.88,425.3906" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="220" x="75.51" y="374.1357">eTXEvent_NewMessage (Reset Timer)</text><!--MD5=[c589e6ecdda028697f7f3365b77a1b5f]
+link eMACTransmit_ProcessNext to eMACTransmit_WaitPriority--><path d="M370.48,329.7806 C357.03,337.1606 344.85,346.8706 336.51,359.6406 C327.64,373.2106 333.99,389.7406 343.2,403.4406 " fill="none" id="eMACTransmit_ProcessNext-to-eMACTransmit_WaitPriority-1" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="346.14,407.5906,344.2151,397.9317,343.2555,403.5066,337.6806,402.547,346.14,407.5906" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="195" x="337.51" y="374.1357">eTXEvent_BusBusy (Reset Timer)</text><!--MD5=[c589e6ecdda028697f7f3365b77a1b5f]
+link eMACTransmit_ProcessNext to eMACTransmit_WaitPriority--><path d="M511.62,329.7906 C533.54,342.5506 550.88,359.4706 537.51,377.6406 C523.23,397.0506 501.88,409.5606 479.09,417.5606 " fill="none" id="eMACTransmit_ProcessNext-to-eMACTransmit_WaitPriority-2" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="474.21,419.2006,484.0164,420.1139,478.9477,417.6024,481.4592,412.5336,474.21,419.2006" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="243" x="543.51" y="374.1357">eTXEvent_CollisionDetected (Reset Timer)</text><!--MD5=[b37ba7b1a5c42f92360be02e665a6dfb]
+link eMACTransmit_Retry to eMACTransmit_ProcessNext--><path d="M833.24,677.4906 C898.57,668.4306 983.29,644.4006 1024.51,581.6406 C1061.31,525.6106 1060.4,435.1306 1038.51,407.6406 C981.98,336.6506 725.14,315.5506 572.51,309.2806 " fill="none" id="eMACTransmit_Retry-to-eMACTransmit_ProcessNext" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="567.13,309.0606,575.9499,313.4434,572.1254,309.2753,576.2935,305.4508,567.13,309.0606" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="138" x="1053.51" y="500.1357">eTXEvent_NewMessage</text><rect fill="#DDDDDD" height="150.875" rx="5" ry="5" style="stroke:#000000;stroke-width:1.0;" width="765" x="412.51" y="728.25"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="298" x="418.51" y="747.7832">- eTXEvent_None: After a transition is complete</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="753" x="418.51" y="765.3926">- eTXEvent_NewMessage: When a message is added to the queue. After exhaust all retries. Triggered by Process Next.</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="743" x="418.51" y="783.002">- eTXEvent_CollisionDetected: On UART Events (OverRun Error Flag, Framing Error Flag, Noise error detected Flag).</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="456" x="418.51" y="800.6113">- eTXEvent_PriorityWaitFinished: When TX timer expires (not cancelled).</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="444" x="418.51" y="818.2207">- eTXEvent_MessageSendFinished: Uart Transmission Complete Flag.</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="632" x="418.51" y="835.8301">- eTXEvent_Retry: Tx global timeout hasn't yet elapsed or it did, but the message still has retries left.</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="681" x="418.51" y="853.4395">- eTXEvent_QueueEmptied: When try to process the next message but TX Context doesn't have a message.</text><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="530" x="418.51" y="871.0488">- eTXEvent_BusBusy: Triggered from MAC_IRQ_vRXIndication (on UART RX event).</text><!--MD5=[848446ab4161c5d72b3b17afdee84cd1]
+@startuml
+
+title ESPS Driver TX State Machine
+
+' List of states
+[eMACTransmit_Off]
+[eMACTransmit_Idle]
+[eMACTransmit_WaitPriority]
+[eMACTransmit_Active]
+[eMACTransmit_ProcessNext]
+[eMACTransmit_Retry]
+
+legend right
+- eTXEvent_None: After a transition is complete
+- eTXEvent_NewMessage: When a message is added to the queue. After exhaust all retries. Triggered by Process Next.
+- eTXEvent_CollisionDetected: On UART Events (OverRun Error Flag, Framing Error Flag, Noise error detected Flag).
+- eTXEvent_PriorityWaitFinished: When TX timer expires (not cancelled).
+- eTXEvent_MessageSendFinished: Uart Transmission Complete Flag.
+- eTXEvent_Retry: Tx global timeout hasn't yet elapsed or it did, but the message still has retries left.
+- eTXEvent_QueueEmptied: When try to process the next message but TX Context doesn't have a message.
+- eTXEvent_BusBusy: Triggered from MAC_IRQ_vRXIndication (on UART RX event).
+endlegend
+
+[eMACTransmit_Off]          - -> [eMACTransmit_Idle]          : fs_vInitInterface()
+
+[eMACTransmit_Idle]         - -> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Retry]         : eTXEvent_BusBusy (Should restart Timers)
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Idle]          : eTXEvent_CollisionDetected
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Active]        : eTXEvent_PriorityWaitFinished AND NOT receiving
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Retry]         : eTXEvent_PriorityWaitFinished AND receiving
+
+[eMACTransmit_Active]       - -> [eMACTransmit_Retry]         : eTXEvent_CollisionDetected
+[eMACTransmit_Active]       - -> [eMACTransmit_ProcessNext]   : eTXEvent_MessageSendFinished
+
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_Idle]          : eTXEvent_QueueEmptied
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_NewMessage (Reset Timer)
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_BusBusy (Reset Timer)
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_CollisionDetected (Reset Timer)
+
+[eMACTransmit_Retry]        - -> [eMACTransmit_WaitPriority]  : eTXEvent_Retry
+[eMACTransmit_Retry]        - -> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+@enduml
+
+@startuml
+
+title ESPS Driver TX State Machine
+
+[eMACTransmit_Off]
+[eMACTransmit_Idle]
+[eMACTransmit_WaitPriority]
+[eMACTransmit_Active]
+[eMACTransmit_ProcessNext]
+[eMACTransmit_Retry]
+
+legend right
+- eTXEvent_None: After a transition is complete
+- eTXEvent_NewMessage: When a message is added to the queue. After exhaust all retries. Triggered by Process Next.
+- eTXEvent_CollisionDetected: On UART Events (OverRun Error Flag, Framing Error Flag, Noise error detected Flag).
+- eTXEvent_PriorityWaitFinished: When TX timer expires (not cancelled).
+- eTXEvent_MessageSendFinished: Uart Transmission Complete Flag.
+- eTXEvent_Retry: Tx global timeout hasn't yet elapsed or it did, but the message still has retries left.
+- eTXEvent_QueueEmptied: When try to process the next message but TX Context doesn't have a message.
+- eTXEvent_BusBusy: Triggered from MAC_IRQ_vRXIndication (on UART RX event).
+endlegend
+
+[eMACTransmit_Off]          - -> [eMACTransmit_Idle]          : fs_vInitInterface()
+
+[eMACTransmit_Idle]         - -> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Retry]         : eTXEvent_BusBusy (Should restart Timers)
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Idle]          : eTXEvent_CollisionDetected
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Active]        : eTXEvent_PriorityWaitFinished AND NOT receiving
+[eMACTransmit_WaitPriority] - -> [eMACTransmit_Retry]         : eTXEvent_PriorityWaitFinished AND receiving
+
+[eMACTransmit_Active]       - -> [eMACTransmit_Retry]         : eTXEvent_CollisionDetected
+[eMACTransmit_Active]       - -> [eMACTransmit_ProcessNext]   : eTXEvent_MessageSendFinished
+
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_Idle]          : eTXEvent_QueueEmptied
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_NewMessage (Reset Timer)
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_BusBusy (Reset Timer)
+[eMACTransmit_ProcessNext]  - -> [eMACTransmit_WaitPriority]  : eTXEvent_CollisionDetected (Reset Timer)
+
+[eMACTransmit_Retry]        - -> [eMACTransmit_WaitPriority]  : eTXEvent_Retry
+[eMACTransmit_Retry]        - -> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+@enduml
+
+PlantUML version 1.2021.12(Tue Oct 05 19:01:58 EEST 2021)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: GB
+--></g></svg>

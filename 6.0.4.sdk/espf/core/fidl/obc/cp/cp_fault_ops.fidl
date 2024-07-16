@@ -1,0 +1,29 @@
+package endurosat.faults.cp
+
+<** @description: Onboard Computer Command Protocol Fault-related commands 
+    @details: id = 200 
+**>
+interface cp_faultops
+{
+    version { major 0 minor 1 }
+
+    <** 
+        @description: Reads all stored HW exception faults in the persistent storage
+        @details: id = 1027  
+    **>
+    method read_all
+    {
+        in
+        {
+            <** @description: True: clear persistent storage after reading all stored exceptions; False - keep the exceptions in the persistent storage **>
+            Boolean clear_storage
+        }
+        out
+        {
+            <** @description: 5 HW exceptions max (152 bytes each)                
+                @details: size = DataLen 
+            **>
+            UInt8[] exceptions_data
+        }
+    }
+}

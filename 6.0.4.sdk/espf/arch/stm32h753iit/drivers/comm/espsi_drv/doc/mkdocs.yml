@@ -1,0 +1,85 @@
+site_name: ESPS I Drivers Integration Manual
+site_url: https://endurosat.com/
+site_dir: esps_drv_user_guide
+# uncomment the following line if documentation will be shipped for offline reading
+use_directory_urls: false
+theme:
+  name: material
+  custom_dir: theme
+  logo: assets/img/EnduroSat_horLogo_symbol@2x-min.png
+  palette:
+    primary: black
+  features:
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - localsearch
+    - navigation.instant
+    - navigation.tabs
+    - navigation.top
+    - toc.integrate
+copyright: "FW: <i>v1.0.2</i><br><b>Privileged and confidential</b>"
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      linenums: true
+  - footnotes
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - pymdownx.critic
+  - abbr
+  - admonition
+  - pymdownx.tabbed
+  - pymdownx.snippets
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.smartsymbols
+  - def_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+nav:
+  - Home: index.md
+  - MAC Drivers:
+    - Introduction: 'mac_layer/mac_introduction.md'
+    - Modules: 'mac_layer/mac_modules.md'
+    - Configuration: 'mac_layer/mac_configuration.md'
+    - Libraries: 'mac_layer/mac_lib.md'
+  - Integration Guide:
+    - Introduction: 'guide/int_introduction.md'
+    - Directory structure: 'guide/int_dir_structure.md'
+    - Configuration: 'guide/int_configuration.md'
+    - ESPS I: 'guide/int_esps_i_stack.md'
+    - Function Protocol: 'guide/int_function_protocol.md'
+    - Debug and trace: 'guide/int_debug_trace.md'
+  - Inter-Module Only:
+    - Introduction: 'im_only/im_introduction.md'
+    - ESPS I: 'im_only/im_esps_i_stack.md'
+  - Source Code Reference: doxygen.md
+  - Change history: change_history.md
+  - Contacts: contacts.md
+plugins:
+  - search
+  - localsearch
+  - build_plantuml:
+      render: "local" # or "local" for local rendering
+      bin_path: "plantuml.bat" # ignored when render: server
+      server: "http://www.plantuml.com/plantuml" # offical plantuml server
+      output_format: "svg" # or "png"
+      diagram_root: "docs/assets/plantuml" # should reside under docs_dir
+      output_folder: "img"
+      input_folder: ""
+      input_extensions: "puml" # comma separated list of extensions to parse, by default every file is parsed
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/endurosat/
+      name: EnduroSat on LinkedIn

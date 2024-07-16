@@ -1,0 +1,91 @@
+package endurosat.macif
+
+<** @description: EnduroSat Actuator Control Service as part of the Onboard Computer
+    @details: id = 70
+**>
+interface OBC_ACTUATOR_CONTROL_SERVICE
+{
+    version { major 3 minor 0 }
+
+    enumeration RESULT
+    {
+        OK,
+        FAIL
+    }
+    
+    <** @description: This corresponds to enum actuator_control_service_state_t **>
+    enumeration STATE
+    {
+    	ACTIVE,
+    	INACTIVE
+    }
+    
+    <** @description: This corresponds to enum actuator_control_service_error_t **>
+    enumeration ERROR
+    {
+    	NONE,
+    	DATA_CACHE_GET
+    	COORD_SYS_TRANSFORM,
+    	GENERAL
+    }
+    
+    struct STATUS 
+    {
+    	STATE activeState
+    	ERROR lastError
+    }
+    
+    
+    struct LAST_MTQ_DATA
+    {
+    	Int8 MTQ_X
+    	Int8 MTQ_Y
+    	Int8 MTQ_Z
+    }
+    
+    <** @description: Attempt to change the state of actuator control service to ACTIVE.
+        @details: id = 0x00000001, esttc_id = X 
+    **>
+    method START
+    {
+        out
+        {
+            RESULT opResult
+        }
+    }
+    
+    <** @description: Attempt to change the state of the actuator control service to INACTIVE. This also stops the magnetorquers.
+        @details: id = 0x00000002, esttc_id = X
+    **>
+    method STOP
+    {
+        out
+        {
+            RESULT opResult
+        }
+    }
+    
+    <** @description: Get the general status of the Actuator Control Service
+        @details: id = 0x00000003, esttc_id = X
+    **>
+    method GET_STATUS
+    {
+        out
+        {
+        	STATUS currentStatus
+            RESULT opResult
+        }
+    }
+    
+    <** @description: Get the last control values of the magnetorquers. The values are in percentage and signed.
+        @details: id = 0x0000004, esttc_id = X
+    **>
+    method GET_LAST_MTQ_CONTROL
+    {
+        out
+        {
+        	LAST_MTQ_DATA lastMagnetorquerValues
+            RESULT opResult
+        }
+    }
+}

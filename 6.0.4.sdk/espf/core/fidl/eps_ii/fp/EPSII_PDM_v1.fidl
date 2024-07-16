@@ -1,0 +1,1270 @@
+package endurosat.macif
+
+<** 
+    @description: EnduroSat EPSII PDM
+    @details: id = 0x14
+**>
+
+interface EPSII_PDM_1
+{
+    // This protocol version
+    version { major 1 minor 0 }
+
+// ============================================================================================
+// Global types - TODO: Export in separate fidl, included here and there
+// ============================================================================================
+
+    <** @description: Units are signed mA, mV, mC, mT, etc.
+    @details: size = 4 **>
+    enumeration ESEPSII_PDM_ReservedValues
+    {
+        <** @description: Use if (VAL > ESEPSIISSV), then error or unknown value **>
+        ESEPSIISSVPDM_MAX_VAL                       = 0x7FFFFFF0
+        ESEPSIISSVPDM_UNKNOWN_VAL                   = 0x7FFFFFFF
+        ESEPSIISSVPDM_ERROR_VAL                     = 0x7FFFFFFE
+    }
+
+    <** @description: Telemetry sensors IDs
+    @details: size = 2 **>
+    enumeration ESEPSII_PDM_SensorIDs
+    {
+    	 <** @description: Ignore **>
+        ESEPSIISSVPDM_NULL_ID                   = 0
+        
+    	 <** @description: Current for primary channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_I_ID    = 1
+    	 <** @description: Voltage for primary channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_U_ID    = 2
+    	 <** @description: Power for primary channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_P_ID    = 3
+    	 <** @description: Temperature for primary channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_T_ID    = 4
+    	 <** @description: Current for redundance channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_I_ID    = 5
+    	 <** @description: Voltage for redundance channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_U_ID    = 6
+    	 <** @description: Power for redundance channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_P_ID    = 7
+    	 <** @description: Temperature for redundance channel_1 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_T_ID    = 8
+        
+         <** @description: Current for primary channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_I_ID    = 9
+    	 <** @description: Voltage for primary channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_U_ID    = 10
+    	 <** @description: Power for primary channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_P_ID    = 11
+    	 <** @description: Temperature for primary channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_T_ID    = 12
+         <** @description: Current for redundance channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_I_ID    = 13
+    	 <** @description: Voltage for redundance channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_U_ID    = 14
+    	 <** @description: Power for redundance channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_P_ID    = 15
+    	 <** @description: Temperature for redundance channel_2 for 3.3V **>
+        ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_T_ID    = 16
+        
+         <** @description: Current for primary channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1P_I_ID     = 17
+    	 <** @description: Voltage for primary channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1P_U_ID     = 18
+    	 <** @description: Power for primary channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1P_P_ID     = 19
+    	 <** @description: Temperature for primary channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1P_T_ID     = 20
+         <** @description: Current for redundance channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1R_I_ID     = 21
+    	 <** @description: Voltage for redundance channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1R_U_ID     = 22
+    	 <** @description: Power for redundance channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1R_P_ID     = 23
+    	 <** @description: Temperature for redundance channel_1 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_1R_T_ID     = 24
+        
+        
+         <** @description: Current for primary channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2P_I_ID     = 25
+    	 <** @description: Voltage for primary channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2P_U_ID     = 26
+    	 <** @description: Power for primary channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2P_P_ID     = 27
+    	 <** @description: Temperature for primary channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2P_T_ID     = 28
+
+    	 <** @description: Current for redundance channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2R_I_ID     = 29
+    	 <** @description: Voltage for redundance channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2R_U_ID     = 30
+    	 <** @description: Power for redundance channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2R_P_ID     = 31
+    	 <** @description: Temperature for redundance channel_2 for 5V **>
+        ESEPSIISSVPDM_INA_LUP_IN_5V_2R_T_ID     = 32
+    	 
+    	 <** @description: Current for primary channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_P_I_ID     = 33
+    	 <** @description: Voltage for primary channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_P_U_ID     = 34
+    	 <** @description: Power for primary channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_P_P_ID     = 35
+    	 <** @description: Temperature for primary channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_P_T_ID     = 36
+
+    	 <** @description: Current for redundance channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_R_I_ID     = 37
+    	 <** @description: Voltage for redundance channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_R_U_ID     = 38
+    	 <** @description: Power for redundance channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_R_P_ID     = 39
+    	 <** @description: Temperature for redundance channel_1 for 12V **>
+        ESEPSIISSVPDM_INA_LUP_IN_12V_R_T_ID     = 40
+        
+         <** @description: Temperature sensor 1 on PCB **>
+        ESEPSIISSVPDM_TEMPERATURE_PCB_1_ID      = 41
+         <** @description: Temperature sensor 2 on PCB **>
+        ESEPSIISSVPDM_TEMPERATURE_PCB_2_ID      = 42
+         <** @description: CPU temperature sensor 2 on PCB **>
+        ESEPSIISSVPDM_ADC_CPU_T_ID              = 43
+         <** @description: CProcessor AVCC voltage **>
+        ESEPSIISSVPDM_ADC_CPU_AVCC_U_ID         = 44
+         <** @description: Battery System bus input voltage **>
+        ESEPSIISSVPDM_ADC_SYS_BUS_V_IN_MON      = 45
+         <** @description: Battery raw bus output voltage **>
+        ESEPSIISSVPDM_ADC_BAT_RAW_V_OUT_MON     = 46
+         <** @description: Battery raw bus output current HSS 1 **>
+        ESEPSIISSVPDM_ADC_BAT_RAW_I_1_OUT_MON   = 47
+         <** @description: Battery raw bus output current HSS 2 **>
+        ESEPSIISSVPDM_ADC_BAT_RAW_I_2_OUT_MON   = 48
+         <** @description: 12V bus output voltage **>
+        ESEPSIISSVPDM_ADC_12V_OUT_MON           = 49
+         <** @description: 5V bus output voltage ch. 1 **>
+        ESEPSIISSVPDM_ADC_5V_OUT_MON_1          = 50
+         <** @description: 5V bus output voltage ch. 2 **>
+        ESEPSIISSVPDM_ADC_5V_OUT_MON_2          = 51
+         <** @description: 5V bus output voltage ch. 1 **>
+        ESEPSIISSVPDM_ADC_3V3_OUT_MON_1         = 52
+         <** @description: 5V bus output voltage ch. 2 **>
+        ESEPSIISSVPDM_ADC_3V3_OUT_MON_2         = 53
+    }
+
+    <** 
+        @description: Structure for Voltage, Current, Power
+        @description: Uses ESEPSII_PDM_ReservedValues on error 
+    **>
+    struct ESEPSII_UIP
+    {
+            <** @description: in mV **>
+        Int32 U          
+            <** @description: in mA **>
+        Int32 I          
+            <** @description: in mW **>
+        Int32 P          
+    }
+
+    <** @description: List with error types **>
+    struct SDiagErrCounter
+    {
+		<** @description: NULL ID, not returned by command **>
+		UInt16 EDC_NONE
+		<** @description: External oscillator single failure event **>
+		UInt16 EDC_OSC_EXT_SINGLE_FAILED_CNTR
+		<** @description: External oscillator permanent failure event (after X single failures) **>
+		UInt16 EDC_OSC_EXT_PERMANENT_FAILED_CNTR
+		<** @description: Low Frequency oscillator failures and run on backup one **>
+		UInt16 EDC_LF_OSC_BACKUP_CNTR
+		<** @description: FRAM Access Time Error **>
+		UInt16 EDC_SYSSNIV__ACCTEIFG
+		<** @description: MPUSEGPIFG encapsulated IP memory segment violation **>
+		UInt16 EDC_SYSSNIV__MPUSEGPIFG
+		<** @description: MPUSEGIIFG information memory segment violation **>
+		UInt16 EDC_SYSSNIV__MPUSEGIIFG
+		<** @description: MPUSEG1IFG segment 1 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG1IFG
+		<** @description: MPUSEG1IFG segment 2 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG2IFG
+		<** @description: MPUSEG1IFG segment 3 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG3IFG
+		<** @description: VMAIFG Vacant memory access **>
+		UInt16 EDC_SYSSNIV__VMAIFG
+		<** @description: JMBOUTIFG JTAG mailbox input **>
+		UInt16 EDC_SYSSNIV__JMBINIFG
+		<** @description: JMBOUTIFG JTAG mailbox output **>
+		UInt16 EDC_SYSSNIV__JMBOUTIFG
+		<** @description: Correctable FRAM bit error detection **>
+		UInt16 EDC_SYSSNIV__CBDIFG
+		<** @description: FRAM write protection detection **>
+		UInt16 EDC_SYSSNIV__WPROT
+		<** @description: LEA time-out fault **>
+		UInt16 EDC_SYSSNIV__LEATO
+		<** @description: LEA command fault **>
+		UInt16 EDC_SYSSNIV__LEACMD
+		<** @description: ADC Reference voltage settle timeout **>
+		UInt16 EDC_ADC_REF_SETTLE_FAIL_CNTR
+		<** @description: ADC Conversion timeout **>
+		UInt16 EDC_ADC_CONV_TIMEOUT
+		<** @description: ADC Reference voltage regulator bussy error **>
+		UInt16 EDC_ADC_REF_BUSSY_CNTR
+		<** @description: ADC Bussy with previous conversion **>
+		UInt16 EDC_ADC_STUCK_IN_PREV_CONV
+		<** @description: NVM No free memory **>
+		UInt16 EDC_NVM_NO_FREE_MEMORY
+		<** @description: NVM Sgment not found **>
+		UInt16 EDC_NVM_SEGMENT_NOT_FOUND
+		<** @description: BL Checker partition 1 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART1_CORRUPTED
+		<** @description: BL Checker partition 2 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART2_CORRUPTED
+		<** @description: BL Checker partition 3 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART3_CORRUPTED
+		<** @description: BL Checker partition 4 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART4_CORRUPTED
+		<** @description: BL Implementation partition 1 corrupted **>
+		UInt16 EDC_BL_IMPLEMENTATION_PART1_CORRUPTED
+		<** @description: BL Implementation partition 2 corrupted **>
+		UInt16 EDC_BL_IMPLEMENTATION_PART2_CORRUPTED
+		<** @description: NVM partition 1 corrupted **>
+		UInt16 EDC_NVM_PART1_CORRUPTED
+		<** @description: NVM partition 2 corrupted **>
+		UInt16 EDC_NVM_PART2_CORRUPTED
+		<** @description: External BasicApp partition 1 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART1_CORRUPTED
+		<** @description: External BasicApp partition 2 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART2_CORRUPTED
+		<** @description: External BasicApp partition 3 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART3_CORRUPTED
+		<** @description: External Main app partition 1 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART1_CORRUPTED
+		<** @description: External Main app partition 2 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART2_CORRUPTED
+		<** @description: External Main app partition 3 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART3_CORRUPTED
+		<** @description: CPU FRAM Correctable bit error (duplicated) **>
+		UInt16 EDC_CBDIFG_FRAM_CORRECTABLE_BIT
+		<** @description: CPU RESET: Total reset counter **>
+		UInt16 EDC_RST_TOTAL
+		<** @description: CPU RESET: Brownout (BOR) **>
+		UInt16 EDC_RST_BROWNOUT
+		<** @description: CPU RESET: RSTIFG RST/NMI (BOR) **>
+		UInt16 EDC_RST_RSTIFG
+		<** @description: CPU RESET: PMMSWBOR software BOR (BOR) **>
+		UInt16 EDC_RST_PMMSWBOR
+		<** @description: CPU RESET: LPMx.5 wake up (BOR) **>
+		UInt16 EDC_RST_LPM_X_5_WAKE
+		<** @description: CPU RESET: Security violation (BOR) **>
+		UInt16 EDC_RST_SECURITY_VIOLATION
+		<** @description: CPU RESET: Reserved (0x0C) **>
+		UInt16 EDC_RST_RES1
+		<** @description: CPU RESET: SVSHIFG SVSH event (BOR) **>
+		UInt16 EDC_RST_SVSHIFG
+		<** @description: CPU RESET: Reserved (0x10) **>
+		UInt16 EDC_RST_RES2
+		<** @description: CPU RESET: Reserved (0x12) **>
+		UInt16 EDC_RST_RES3
+		<** @description: CPU RESET: PMMSWPOR software POR (POR) **>
+		UInt16 EDC_RST_PMMSWPOR
+		<** @description: CPU RESET: WDTIFG watchdog timeout (PUC) **>
+		UInt16 EDC_RST_WDTIFG
+		<** @description: CPU RESET: WDTPW password violation (PUC) **>
+		UInt16 EDC_RST_WDTPW
+		<** @description: CPU RESET: FRCTLPW password violation (PUC) **>
+		UInt16 EDC_RST_FRCTLPW
+		<** @description: CPU RESET: Uncorrectable FRAM bit error detection (PUC) **>
+		UInt16 EDC_RST_FRAM_BIT_ERR
+		<** @description: CPU RESET: Peripheral area fetch (PUC) **>
+		UInt16 EDC_RST_PER_FETCH
+		<** @description: CPU RESET: PMMPW PMM password violation (PUC) **>
+		UInt16 EDC_RST_PMMPW
+		<** @description: CPU RESET: MPUPW MPU password violation (PUC) **>
+		UInt16 EDC_RST_MPUPW
+		<** @description: CPU RESET: CSPW CS password violation (PUC) **>
+		UInt16 EDC_RST_CSPW
+		<** @description: CPU RESET: MPUSEGIPIFG encapsulated IP memory segment violation (PUC) **>
+		UInt16 EDC_RST_MPUSEGIPIFG
+		<** @description: CPU RESET: MPUSEGIIFG information memory segment violation (PUC) **>
+		UInt16 EDC_RST_MPUSEGIIFG
+		<** @description: CPU RESET: MPUSEG1IFG segment 1 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG1IFG
+		<** @description: CPU RESET: MPUSEG2IFG segment 2 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG2IFG
+		<** @description: CPU RESET: MPUSEG3IFG segment 3 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG3IFG
+		<** @description: MAC SYS1: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_SYS1_TX_COLLISION
+		<** @description: MAC SYS1: TX Timeout **>
+		UInt16 EDC_MAC_SYS1_TX_TIMEOUT
+		<** @description: MAC SYS1: RX Message with zerro size **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: MAC SYS1: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: MAC SYS1: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: MAC SYS1: RX Collision detected **>
+		UInt16 EDC_MAC_SYS1_RX_COLLISION
+		<** @description: MAC SYS1: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_MISS_NO_BUFFER
+		<** @description: MAC SYS1: RX Timeout counter **>
+		UInt16 EDC_MAC_SYS1_RX_TIMEOUT
+		<** @description: MAC SYS1: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_SYS1_RX_RESTARTED_MSGS
+		<** @description: MAC SYS1: RX byte to byte timeout **>
+		UInt16 EDC_MAC_SYS1_RX_INTER_BYTE_MAX_TIME
+		<** @description: MAC SYS2: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_SYS2_TX_COLLISION
+		<** @description: MAC SYS2: TX Timeout **>
+		UInt16 EDC_MAC_SYS2_TX_TIMEOUT
+		<** @description: MAC SYS2: RX Message with zerro size **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: MAC SYS2: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: MAC SYS2: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: MAC SYS2: RX Collision detected **>
+		UInt16 EDC_MAC_SYS2_RX_COLLISION
+		<** @description: MAC SYS2: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_MISS_NO_BUFFER
+		<** @description: MAC SYS2: RX Timeout counter **>
+		UInt16 EDC_MAC_SYS2_RX_TIMEOUT
+		<** @description: MAC SYS2: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_SYS2_RX_RESTARTED_MSGS
+		<** @description: MAC SYS2: RX byte to byte timeout **>
+		UInt16 EDC_MAC_SYS2_RX_INTER_BYTE_MAX_TIME
+		<** @description: MAC PAY1: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_PAY1_TX_COLLISION
+		<** @description: MAC PAY1: TX Timeout **>
+		UInt16 EDC_MAC_PAY1_TX_TIMEOUT
+		<** @description: MAC PAY1: RX Message with zerro size **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: MAC PAY1: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: MAC PAY1: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: MAC PAY1: RX Collision detected **>
+		UInt16 EDC_MAC_PAY1_RX_COLLISION
+		<** @description: MAC PAY1: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_MISS_NO_BUFFER
+		<** @description: MAC PAY1: RX Timeout counter **>
+		UInt16 EDC_MAC_PAY1_RX_TIMEOUT
+		<** @description: MAC PAY1: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_PAY1_RX_RESTARTED_MSGS
+		<** @description: MAC PAY1: RX byte to byte timeout **>
+		UInt16 EDC_MAC_PAY1_RX_INTER_BYTE_MAX_TIME
+		<** @description: MAC PAY2: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_PAY2_TX_COLLISION
+		<** @description: MAC PAY2: TX Timeout **>
+		UInt16 EDC_MAC_PAY2_TX_TIMEOUT
+		<** @description: MAC PAY2: RX Message with zerro size **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: MAC PAY2: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: MAC PAY2: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: MAC PAY2: RX Collision detected **>
+		UInt16 EDC_MAC_PAY2_RX_COLLISION
+		<** @description: MAC PAY2: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_MISS_NO_BUFFER
+		<** @description: MAC PAY2: RX Timeout counter **>
+		UInt16 EDC_MAC_PAY2_RX_TIMEOUT
+		<** @description: MAC PAY2: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_PAY2_RX_RESTARTED_MSGS
+		<** @description: MAC PAY2: RX byte to byte timeout **>
+		UInt16 EDC_MAC_PAY2_RX_INTER_BYTE_MAX_TIME
+		<** @description: CPU time since last reset in seconds (Low 2 bytes) **>
+		UInt16 EDC_CPU_UP_TIME_LO
+		<** @description: CPU time since last reset in seconds (High 2 bytes) **>
+		UInt16 EDC_CPU_UP_TIME_HI
+		<** @description: CPU cooperative loop max time in ms **>
+		UInt16 EDC_CPU_MAIN_LOOP_MAX_TIME
+		<** @description: NVM Initial device configuration partition 1 corrupted counter **>
+		UInt16 EDC_INIT_CONFIG_NVM_1_CORRUPTED
+		<** @description: NVM Initial device configuration partition 2 corrupted counter **>
+		UInt16 EDC_INIT_CONFIG_NVM_2_CORRUPTED
+		<** @description: External FRAM chip probe during CPU boot failed **>
+		UInt16 EDC_EXT_FRAM_PROBE_FAILED
+		<** @description: Current NVM allocated size **>
+		UInt16 EDC_NVM_ALLOCATED_SIZE
+		<** @description: Current NVM used size **>
+		UInt16 EDC_NVM_USED_SIZE
+		<** @description: Device basic settings in NVM corrupted **>
+		UInt16 EDC_BASIC_SETTINGS_NVM_CORRUPTED
+    }
+
+// ============================================================================================
+// Get device information
+// ============================================================================================
+
+    <** @description: Firmware types **>
+    enumeration ESDI_FirmwareType
+    {
+    	 <** @description: Production firmware **>
+        ESDIFT_Production
+    	 <** @description: BasicApp firmware **>
+        ESDIFT_BasicApp
+    }
+
+    <** 
+        @description: Get basic device information: device type, serial number, current operational mode, software version, etc.
+        @details: id = 1
+    **>
+    method GetDeviceInfo
+    {
+        out
+        {
+            <** @description: From ESPLATFORM_COMMON/ESSAT_ModuleTypes.h **>
+            UInt16 ModuleTypeID                      
+            <** @details: size = 20 **>
+            String ModuleType
+            <** @description: HW PCB Sample **>
+            UInt16 ModuleHWVersion                       
+            <** @details: size = 30 **>
+            String DeviceSerialNumber
+            <** @description: Currently running firmware Type **>
+            ESDI_FirmwareType FWTypeID                   
+            <** @details: size = 20 **>
+            String FWType
+            <** @description: Major Firmware Version **>
+            UInt16 FWVersionMaj                      
+            <** @description: Minor Firmware Version **>
+            UInt16 FWVersionMin
+        }
+    }
+
+// ============================================================================================
+// Get Power Distribution Info
+// ============================================================================================
+    <** 
+        @description: Get current U/I/P and current (I) limit for all output channels
+        @details: id = 2
+    **>
+    method GetPowerDistributionInfo
+    {
+        out
+        {
+        	 <** @description: Information about the power used on all channels **>
+        	SPowerDistributionInfo	PowerDistributionInfo               
+        }
+    }
+
+// ============================================================================================
+// Get device health info
+// ============================================================================================
+
+    <** @description: Get information about all chip statuses (driver state) and CPU temperature, voltage and running time
+        @details: id = 3
+    **>
+    method GetDeviceHealthInfo
+    {
+        out
+        {
+        	<** @description: Information about the communication with all chips **>
+        	SGetDeviceHealthInfo	GetDeviceHealthInfo
+        }
+    }
+
+// ============================================================================================
+// Set/Get PC104 GPIO
+// ============================================================================================
+    <** @description: Set/Get GPIO mask, use as bitmask **>
+    enumeration SGGPIO_Bitmask
+    {
+        <** @description: Digital Output 1 **> 
+        SGGPIOBM_DigOUT1 = 0x01
+        <** @description: Digital Output 2 **> 
+        SGGPIOBM_DigOUT2 = 0x02
+        <** @description: Digital Output 3 **> 
+        SGGPIOBM_DigOUT3 = 0x04
+        <** @description: Digital Output 4 **> 
+        SGGPIOBM_DigOUT4 = 0x08
+        <** @description: Digital Output 5 **> 
+        SGGPIOBM_DigOUT5 = 0x10
+        <** @description: Digital Output 6 **> 
+        SGGPIOBM_DigOUT6 = 0x20
+        <** @description: Digital Output 7 **> 
+        SGGPIOBM_DigOUT7 = 0x40
+        <** @description: Digital Output 8 **> 
+        SGGPIOBM_DigOUT8 = 0x80
+    }
+    
+    <** @description: Set/Get GPIO mask, use as bitmask **>
+    enumeration SGGPIO_OnOff_mask
+    {
+        <** @description: Digital Output turn Off **> 
+        SGGPIOBM_DigOUT_OFF = 0x00
+        <** @description: Digital Output 1 **> 
+        SGGPIOBM_DigOUT1 = 0x01
+        <** @description: Digital Output 2 **> 
+        SGGPIOBM_DigOUT2 = 0x02
+        <** @description: Digital Output 3 **> 
+        SGGPIOBM_DigOUT3 = 0x04
+        <** @description: Digital Output 4 **> 
+        SGGPIOBM_DigOUT4 = 0x08
+        <** @description: Digital Output 5 **> 
+        SGGPIOBM_DigOUT5 = 0x10
+        <** @description: Digital Output 6 **> 
+        SGGPIOBM_DigOUT6 = 0x20
+        <** @description: Digital Output 7 **> 
+        SGGPIOBM_DigOUT7 = 0x40
+        <** @description: Digital Output 8 **> 
+        SGGPIOBM_DigOUT8 = 0x80
+    }
+
+    <** @description: Response error of SetPC104GPIO command **>
+    enumeration SGGPIO_SetError
+    {
+        SGGPIOE_SUCCESS
+            <** @description: If in low power state or in temperature protection, setting outputs is disabled and controlled by EPS II itself **>
+        SGGPIOE_BAD_STATE                           
+            <** @description: Driver of some outputs is not able to speak with GPIO chip (temporarily or permanently). Some outputs may not be set! **>
+        SGGPIOE_CHIP_ERR                             
+    }
+
+     <** 
+        @description: Set PC104GPIO outputs with mask. Refer to the description for ConOps operation 
+        @details: id = 4
+    **>
+    method SetPC104GPIO
+    {
+        in
+        {
+            <** @description: Bits set, define which values to be changed from ValuesMask  **>
+            SGGPIO_Bitmask FilterMask               
+            <** @description: Bits set, define which values to be changed from ValuesMask  **>
+            SGGPIO_OnOff_mask ValuesMaskReq
+        }
+
+        out
+        {
+        	 <** @description: result status **>
+            SGGPIO_SetError Err
+        }
+    }
+
+     <** 
+        @description: Get current GPIO outputs. The value returned may be different from the last SetPC104GPIO call. 
+        @details: id = 5
+    **>
+    method GetPC104GPIO
+    {
+        out
+        {
+            <** @description: Current output values **>
+            UInt8 CurrentValues             
+        }
+    }
+
+// ============================================================================================
+// Get RAW Sensors settings
+// ============================================================================================
+
+    <** 
+        @description: Get RAW sensor values by ID. Up to 50 (out of 53) different sensor values may be got.
+        @details: id = 6
+    **>
+    method GetRAWSensors
+    {
+        in
+        {
+            <** @description: Random value to identify Request - Response **>
+            UInt32 PktIDReq                 
+
+            <** @description: IDs of sensors to get
+                @details: size = 50 
+             **>
+            ESEPSII_PDM_SensorIDs[] SensorsIDs       
+        }
+
+        out
+        {
+            <** @description: Random value to identify Request - Response **>
+            UInt32 PktID                          
+
+            <** @description: uses ESEPSII_PDM_ReservedValues on error. The sensors are arranged as requested in by the input parameters
+                @details: size = 50 
+            **>
+            Int32[] SensorValues                     
+        }
+    }
+
+// ============================================================================================
+// Set/Get PowerOutputs
+// Default values for low power modes are configured separately with Set/Get BasicSettings
+// ============================================================================================
+    <** @description: Set/Get masks, use as bitmask
+    @details: size = 4 **>
+    enumeration SGPO_Bitmask
+    {
+
+            <** @description: Enable battery bus RAW output (banana) **> 
+        SGPOBM_BBUS_RAWOutputEnable          = 0x00000001       
+            <** @description: Enable or disable all 12V channels **> 
+        SGPOBM_12V_MasterEnable              = 0x00000002        
+            <** @description: Enable 12V on side POWER 2 connector, pin 3 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_3_Enable              = 0x00000004        
+            <** @description: Enable 12V on side POWER 2 connector, pin 4 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_4_Enable              = 0x00000008        
+            <** @description: Enable 12V on side POWER 2 connector, pin 5 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_5_Enable              = 0x00000010        
+            <** @description: Enable or disable all 5V1 channels  **> 
+        SGPOBM_5V_Ch1_MasterEnable           = 0x00000020        
+            <** @description: Enable 5V1 on side POWER 1 connector, pin 3 (requires SGPOBM_5V_Ch1_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch1_SP2_3_Enable           = 0x00000040        
+            <** @description: Enable 5V_Channel1 on side POWER 1 connector, pin 4 (requires SGPOBM_5V_Ch1_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch1_SP2_4_Enable           = 0x00000080        
+            <** @description: Enable or disable all 5V_Channel2 channels **> 
+        SGPOBM_5V_Ch2_MasterEnable           = 0x00000100        
+            <** @description: Enable 5V2 on side POWER 2 connector, pin 6 (requires SGPOBM_5V_Ch2_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch2_SP1_6_Enable           = 0x00000200        
+            <** @description: Enable 5V2 on side POWER 2 connector, pin 7 (requires SGPOBM_5V_Ch2_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch2_SP1_7_Enable           = 0x00000400       
+            <** @description: Enable or disable all 3.3V1 channels **> 
+        SGPOBM_3V3_Ch1_MasterEnable          = 0x00000800        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 5 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_5_Enable          = 0x00001000        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 6 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_6_Enable          = 0x00002000        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 7 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_7_Enable          = 0x00004000        
+            <** @description: Enable or disable all 3V3_Channel2 channels **> 
+        SGPOBM_3V3_Ch2_MasterEnable          = 0x00008000        
+    }
+    
+        <** @description: Set/Get masks, use as bitmask
+    @details: size = 4 **>
+    enumeration SGPO_ON_Off_Bitmask
+    {
+   			<** @description: Disable the output **> 
+        SGPOBM_Switch_OFF                    = 0x00000000 
+            <** @description: Enable battery bus RAW output (banana) **> 
+        SGPOBM_BBUS_RAWOutputEnable          = 0x00000001       
+            <** @description: Enable or disable all 12V channels **> 
+        SGPOBM_12V_MasterEnable              = 0x00000002        
+            <** @description: Enable 12V on side POWER 2 connector, pin 3 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_3_Enable              = 0x00000004        
+            <** @description: Enable 12V on side POWER 2 connector, pin 4 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_4_Enable              = 0x00000008        
+            <** @description: Enable 12V on side POWER 2 connector, pin 5 (requires SGPOBM_12V_MasterEnable = 1)**> 
+        SGPOBM_12V_SP1_5_Enable              = 0x00000010        
+            <** @description: Enable or disable all 5V1 channels  **> 
+        SGPOBM_5V_Ch1_MasterEnable           = 0x00000020        
+            <** @description: Enable 5V1 on side POWER 1 connector, pin 3 (requires SGPOBM_5V_Ch1_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch1_SP2_3_Enable           = 0x00000040        
+            <** @description: Enable 5V_Channel1 on side POWER 1 connector, pin 4 (requires SGPOBM_5V_Ch1_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch1_SP2_4_Enable           = 0x00000080        
+            <** @description: Enable or disable all 5V_Channel2 channels **> 
+        SGPOBM_5V_Ch2_MasterEnable           = 0x00000100        
+            <** @description: Enable 5V2 on side POWER 2 connector, pin 6 (requires SGPOBM_5V_Ch2_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch2_SP1_6_Enable           = 0x00000200        
+            <** @description: Enable 5V2 on side POWER 2 connector, pin 7 (requires SGPOBM_5V_Ch2_MasterEnable = 1)**> 
+        SGPOBM_5V_Ch2_SP1_7_Enable           = 0x00000400       
+            <** @description: Enable or disable all 3.3V1 channels **> 
+        SGPOBM_3V3_Ch1_MasterEnable          = 0x00000800        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 5 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_5_Enable          = 0x00001000        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 6 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_6_Enable          = 0x00002000        
+            <** @description: Enable 3.3V1 on side POWER 1 connector, pin 7 (requires SGPOBM_3V3_Ch1_MasterEnable = 1)**> 
+        SGPOBM_3V3_Ch1_SP2_7_Enable          = 0x00004000        
+            <** @description: Enable or disable all 3V3_Channel2 channels **> 
+        SGPOBM_3V3_Ch2_MasterEnable          = 0x00008000        
+    }
+
+    <** @description: Set power outputs error codes **>
+    enumeration SGPO_SetError
+    {
+        SGPOSE_SUCCESS
+            <** @description: If in low power state or in temperature protection, setting outputs is disabled and controlled by EPSII itself **>
+        SGPOSE_BAD_STATE    
+            <** @description: Driver of some outputs is not able to speak with GPIO chip (temporarily or permanently). Some outputs may not be set! **>                      
+        SGPOSE_CHIP_ERR                          
+    }
+
+    <** 
+        @description: Switches on/off the different power output channels of the device. Refer to the description for ConOps operation. 
+        @details: id = 7
+    **>
+    method SetPowerOutputs
+    {
+        in
+        {
+            <** @description: Bits set - defines which values to be changed by ValuesMask **>
+            SGPO_Bitmask FilterMask                  
+            <** @description: Bits to be set are defined by FilterMask **>
+            SGPO_ON_Off_Bitmask ValuesMask                  
+        }
+
+        out
+        {
+        	<** @description: Command status described in structure SGPO_SetError **>
+            SGPO_SetError Err
+        }
+    }
+
+    <** 
+        @description: Get currently enabled power channels. The value returned may be different from the last SetPowerOutputs call.
+        @details: id = 8
+    **>
+    method GetPowerOutputs
+    {
+        out
+        {
+        	 <** @description: 
+        	 	bit 0 =>  RAWOutput \\
+				bit 1 =>  12V_Master \\
+				bit 2 =>  12V_SP1_3 \\
+				bit 3 =>  12V_SP1_4 \\
+				bit 4 =>  12V_SP1_5 \\
+				bit 5 =>  5V_Ch1_Master \\
+				bit 6 =>  5V_Ch1_SP2_3 \\
+				bit 7 =>  5V_Ch1_SP2_4 \\
+				bit 8 =>  5V_Ch2_Master \\
+				bit 9 =>  5V_Ch2_SP1_6 \\
+				bit 10 =>  5V_Ch2_SP1_7 \\
+				bit 11 =>  3V3_Ch1_Master \\
+				bit 12 =>  3V3_Ch1_SP2_5 \\
+				bit 13 =>  3V3_Ch1_SP2_6 \\
+				bit 14 =>  3V3_Ch1_SP2_7 \\
+				bit 15 =>  3V3_Ch2_Master \\
+ 			**>
+            UInt32 ValuesMask
+        }
+    }
+
+// ============================================================================================
+// Set/Get BasicSettings
+// If the device switches to/from low power modes (Phoenix, bat.overheat, etc.) or device is restarted, these defaults will be loaded.
+// ============================================================================================
+    <** @description: Use as bitmask
+    @details: size = 8 **>
+    enumeration SBSED_Bitmask
+    {
+           <** @description: Disabled channel **>
+        SBSEDBM_DiSABLED                    = 0      
+        //   <** @description: Corresponding value is switched on when entering BAT_OVERHEAT mode **>
+        //SBSEDBM_OVH_MODE                    = 1        
+           <** @description: Corresponding value is switched on when entering PHOENIX mode **>
+        SBSEDBM_PHOENIX_MODE                 = 2      
+           <**@description: Corresponding value is switched on when entering NORMAL mode. Normal for this device means 'SAFE' and up **>
+        SBSEDBM_NORMAL_MODE                 = 4     
+        	<** @description: Corresponding value is switched on when entering PHOENIX mode **>
+        SBSEDBM_PHOENIX_MODE_AND_NORMAL      = 6
+    }
+
+    <** @description: Use as enum
+    @details: size = 8 **>
+    enumeration SBSEDE_ConOpsMode
+    {
+            <** @description: All outputs and PC104 GPIOs are off **>
+        SBSEDE_HELL_MODE                    = 1   
+            <** @description: Overheat mode **>      
+        SBSEDE_OVH_MODE                     = 2
+            <** @description: Phoenix mode **>   
+        SBSEDE_PHOENIX_MODE                  = 3
+            <** @description: Normal for this device means 'SAFE' and up  **>
+        SBSEDE_NORMAL_MODE                  = 4         
+    }
+
+    <** @description: Basic settings fields **>
+    struct SBasicSettings
+    {
+            <** @description: In which mode to start on reboot till ConOps mode is received (this should be HELL as default) **>
+        SBSEDE_ConOpsMode nConOpsStartMode                    
+    
+            <** @description: Enable battery bus RAW output (banana) **>
+        SBSED_Bitmask nBBUS_RAWOutputEnable                   
+
+          // <** @description: 12V **>
+            <** @description: in mV. Output setting (all channels). Range: 5 - 13.6 V **>
+        Int32 n12V_Voltage                           
+           <** @description: in mA. LUP setting (all channels combined). Range: 2 - 6.5 A **>
+        Int32 n12V_CurrentLimit                          
+           <** @description: Enable or disable all 12V channels **>
+        SBSED_Bitmask n12V_MasterEnable                 
+           <** @description: Enable 12V on side POWER 1 connector, pin 3 **>
+        SBSED_Bitmask n12V_SP1_3_Enable                 
+        <** @description: Enable 12V on side POWER 1 connector, pin 4 **>
+        SBSED_Bitmask n12V_SP1_4_Enable                  
+        <** @description: Enable 12V on side POWER 1 connector, pin 5 **>
+        SBSED_Bitmask n12V_SP1_5_Enable                 
+
+        <** @description: in mA. LUP setting (all 5V_Channel1 channels combined). Range: 2 - 6.5 A **>
+        Int32 n5V_Ch1_CurrentLimit                  
+        <** @description: Enable or disable all 5V_Channel1 channels **>
+        SBSED_Bitmask n5V_Ch1_MasterEnable               
+        <** @description: Enable 5V_Channel1 on side POWER 2 connector, pin 3 **>
+        SBSED_Bitmask n5V_Ch1_SP2_3_Enable               
+        <** @description: Enable 5V_Channel1 on side POWER 2 connector, pin 4 **>
+        SBSED_Bitmask n5V_Ch1_SP2_4_Enable              
+
+        <** @description: in mA. LUP setting (all 5V_Channel2 channels combined). Range: 2 - 6.5 A **>
+        Int32 n5V_Ch2_CurrentLimit                  
+        <** @description: Enable or disable all 5V_Channel2 channels **>
+        SBSED_Bitmask n5V_Ch2_MasterEnable              
+        <** @description: Enable 5V_Channel2 on side POWER 1 connector, pin 6 **>
+        SBSED_Bitmask n5V_Ch2_SP1_6_Enable              
+        <** @description: Enable 5V_Channel2 on side POWER 1 connector, pin 7 **>
+        SBSED_Bitmask n5V_Ch2_SP1_7_Enable              
+ 
+        <** @description: in mA. LUP setting (all 3V3_Channel1 channels combined). Range: 2 - 6.5 A **>
+        Int32 n3V3_Ch1_CurrentLimit                  
+        <** @description: Enable or disable all 3V3_Channel1 channels **>
+        SBSED_Bitmask n3V3_Ch1_MasterEnable              
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 5 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_5_Enable              
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 6 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_6_Enable             
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 7 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_7_Enable              
+
+        <** @description: in mA. LUP setting (all 3V3_Channel2 channels combined). Range: 2 - 6.5 A **>
+        Int32 n3V3_Ch2_CurrentLimit
+        <** @description: Enable or disable all 3V3_Channel2 channels **>                   
+        SBSED_Bitmask n3V3_Ch2_MasterEnable         
+
+            <** @description: If bit is inversed in hardware. Bit 0 = DigOUT1...Bit 7 = DigOUT8 **>
+        UInt16 nPC104_GPIO_InversedBitmask                
+            <** @description: Which value to be set, when we enter "Normal" (all above Phoenix) mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_NormalModeValueBitmask               
+            <** @description: Which value to be set, when we enter "Phoenix" mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_PhoenixModeValueBitmask               
+            <** @description: Which value to be set, when we enter "BAT_OVERHEAT" mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_OvhModeValueBitmask            
+    }
+
+    <** @description: SetBasicSettings command error codes **>
+    enumeration SBS_SetError
+    {
+    	<** @description: done **>
+        SBSSE_SUCCESS
+        <** @description: Invalid parameters **>
+        SBSSE_BAD_PARAMS
+    }
+
+    <** 
+        @description: The main and only device operation configuration.
+        @details: id = 9
+    **>
+    method SetBasicSettings
+    {
+        in
+        {
+            <** @description: New basic settings to be set **>
+            SBasicSettings BasicSettings
+        }
+
+		out
+		{
+			<** @description: Status after executing the commands **>
+			SBS_SetError Err
+		}
+    }
+
+	<** @description: Error returned for GetBasicSettings command **>
+	enumeration SBS_GetError
+	{
+		<** @description: Valid settings are read from the NVM **>
+		SBSGE_SUCCESS
+		<** @description: NVM memory error **>
+		SBSGE_NVM_ERR
+		<** @description: Empty memory, the settings have not been set **>
+		SBSGE_CONFIG_NOT_SET
+	}
+
+	struct SPowerDistributionInfo
+	{
+    	 <** @description: System bus input voltage **>
+        Int32 In_SysBUS_Voltage
+
+        <** @description: Sensors for raw bus **>
+        ESEPSII_UIP Out_BatRAW_Output_Sense  
+
+    	 <** @description: System bus output voltage **>
+        ESEPSII_UIP Out_12V_Output_Sense  
+        
+          <** @description: in mA. Maximum current limit for 12V channel bus. Uses ESEPSII_PDM_ReservedValues on error, if ESEPSIISSVPDM_UNKNOWN_VAL channel is disabled **>
+        Int32 Out_12V_Output_ILimit                 
+
+		 <** @description: Sensors for 5V channel_1 bus**>
+        ESEPSII_UIP Out_5V_Output1_Sense
+        
+          <** @description: in mA. Maximum current limit for 5V channel_1 bus **>
+        Int32 Out_5V_Output1_ILimit 
+        
+          <** @description: Sensors for 5V channel_2 bus. Can provide also 28V with HW configuration **>              
+        ESEPSII_UIP Out_5V_Output2_Sense    
+        
+          <** @description: in mA. Maximum current limit for 5V channel_2 bus. Uses ESEPSII_PDM_ReservedValues on error, if ESEPSIISSVPDM_UNKNOWN_VAL channel is disabled **>
+        Int32 Out_5V_Output2_ILimit                 
+
+		 <** @description: Sensors for 3.3V channel_1 bus **>
+        ESEPSII_UIP Out_3V3_Output1_Sense
+        
+          <** @description: in mA. Maximum current limit for 3.3V channel_1 bus. Uses ESEPSII_PDM_ReservedValues on error, if ESEPSIISSVPDM_UNKNOWN_VAL channel is disabled **>
+        Int32 Out_3V3_Output1_ILimit    
+                          
+		 <** @description: Sensors for 3.3V channel_2 bus **>
+        ESEPSII_UIP Out_3V3_Output2_Sense
+        
+              <** @description: in mA. Maximum current limit for 3.3V channel_2 bus. Uses ESEPSII_PDM_ReservedValues on error, if ESEPSIISSVPDM_UNKNOWN_VAL channel is disabled **>
+        Int32 Out_3V3_Output2_ILimit                   
+    }
+    
+    <** @description: Status of chips as seen by CPU **>
+    enumeration EDHI_ChipStatus
+    {
+
+            <** @description: Chip state and/or communication state is unknown at the moment **>
+        EDHICS_EMDCS_UNKNOWN        = 0                  
+            <** @description: Chip state and communication is currently ok **>
+        EDHICS_EMDCS_ONLINE         = 1                    
+            <** @description: Chip communication error, NACK or else **>
+        EDHICS_EMDCS_COM_ERR        = 2                  
+            <** @description: Chip communication error, timeout **>
+        EDHICS_EMDCS_COM_TIMEOUT    = 3                  
+            <** @description: Driver disabled **>
+        EDHICS_EMDCS_DRV_DISABLED   = 4                 
+    }
+    
+    struct SGetDeviceHealthInfo
+    {
+    		<** @description: After last reset in seconds. Uses ESEPSII_PDM_ReservedValues on error **>
+        Int32 ActiveCPU_RunningTime
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error **>
+        Int32 ActiveCPU_Voltage
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>
+        Int32 ActiveCPU_Temperature                 
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>
+        Int32 PCB_Temperature_1   
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>
+        Int32 PCB_Temperature_2                     
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>
+        Int32 NVM_AllocatedSize 
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>                   
+        Int32 NVM_UsedSize  
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>                   
+        Int32 Stack_AllocatedSize
+    		<** @description: Uses ESEPSII_PDM_ReservedValues on error**>                   
+        Int32 Stack_UsedSize                        
+
+			<** @description: Digital potentiometer 3.3V Primary 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_3V3_1P
+			<** @description: Digital potentiometer 3.3V Redundant 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_3V3_1R
+			<** @description: Digital potentiometer 3.3V Primary 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_3V3_2P
+			<** @description: Digital potentiometer 3.3V Redundant 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_3V3_2R
+        
+			<** @description: Digital potentiometer 5V Primary 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_5V_1P
+			<** @description: Digital potentiometer 5V Redundant 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_5V_1R
+			<** @description: Digital potentiometer 5V Primary 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_5V_2P
+			<** @description: Digital potentiometer 5V Redundant 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_5V_2R
+        
+			<** @description: Digital potentiometer 12V Primary 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_12V_P
+			<** @description: Digital potentiometer 12V Redundant 1 **>
+        EDHI_ChipStatus DPOT_MCP4562_LUP_12V_R
+			<** @description: Digital potentiometer 12V Primary 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_OUTU_12V_P
+			<** @description: Digital potentiometer 12V Redundant 2 **>
+        EDHI_ChipStatus DPOT_MCP4562_OUTU_12V_R
+        
+        	<** @description: I/O expander 1 **>
+        EDHI_ChipStatus GPIO_PCA9538_U1001
+        	<** @description: I/O expander 2 **>
+        EDHI_ChipStatus GPIO_PCA9538_U1000
+        	<** @description: I/O expander 3 **>
+        EDHI_ChipStatus GPIO_PCA9538_U1004
+        	<** @description: I/O expander 4 **>
+        EDHI_ChipStatus GPIO_PCA9538_U1011
+        
+         	<** @description:  Bidirectional Current and Power Monitor 3.3V Primary channel 1 **>
+        EDHI_ChipStatus INA_LUP_IN_3V3_1P
+         	<** @description:  Bidirectional Current and Power Monitor 3.3V Redundant channel 1 **>
+        EDHI_ChipStatus INA_LUP_IN_3V3_1R
+         	<** @description:  Bidirectional Current and Power Monitor 3.3V Primary channel 2 **>
+        EDHI_ChipStatus INA_LUP_IN_3V3_2P
+         	<** @description:  Bidirectional Current and Power Monitor 3.3V Redundant channel 2 **>
+        EDHI_ChipStatus INA_LUP_IN_3V3_2R
+         	<** @description:  Bidirectional Current and Power Monitor 5V Primary channel 1 **>
+        EDHI_ChipStatus INA_LUP_IN_5V_1P
+         	<** @description:  Bidirectional Current and Power Monitor 5V Redundant channel 1 **>
+        EDHI_ChipStatus INA_LUP_IN_5V_1R
+         	<** @description:  Bidirectional Current and Power Monitor 5V Primary channel 2 **>
+        EDHI_ChipStatus INA_LUP_IN_5V_2P
+         	<** @description:  Bidirectional Current and Power Monitor 5V Redundant channel 2 **>
+        EDHI_ChipStatus INA_LUP_IN_5V_2R
+         	<** @description:  Bidirectional Current and Power Monitor 12V Primary channel **>
+        EDHI_ChipStatus INA_LUP_IN_12V_P
+         	<** @description:  Bidirectional Current and Power Monitor 12V Redundant channel **>
+        EDHI_ChipStatus INA_LUP_IN_12V_R
+        
+            <** @description: Digital Temperature Sensor 1 **>
+        EDHI_ChipStatus TMP117_U1014
+            <** @description: Digital Temperature Sensor 2 **>
+        EDHI_ChipStatus TMP117_U1031
+    }
+    
+    struct SResetBootLdrErrCounters
+    {
+		 <** @description: Application continuous running at start up failures **>
+		UInt16 c_app_restart_errors
+		 <** @description: Application freeze failures **>
+		UInt8  g_pAppCyclesErrors
+		 <** @description: unused **>
+	    UInt8  reserved
+		 <** @description: Memory health checks failures **>
+	    UInt16 g_pIntegrityCheckStates
+    }
+        
+    <** 
+        @description: Read default settings 
+        @details: id = 10
+    **>
+    method GetBasicSettings
+    {
+        out
+        {
+        	 <** @description: Result status **>
+            SBS_GetError Err
+        	 <** @description: Currently set basic settings **>
+            SBasicSettings BasicSettings
+        }
+    }
+    
+
+    /////=====================================////
+    
+    <** @description: Structure of the data about the exceptions **>
+	struct SMSP_Exception
+	{
+		<** @description: ID of a file **> 
+		UInt16 m_nFileID	
+		<** @description: number of line in the file **> 
+		UInt16 m_nLineNum
+	
+	} 
+
+    <** 
+    @description: Get last 16 ASSERT fails
+    @details: id = 11
+    **>
+    method GetBasicAppExceptions //enum EDiagFileIDs
+    {
+        out
+        {
+			<** @description: last 16 assert fails with their IDs
+			 	@details: size = 16 **>
+            SMSP_Exception[] exceptions
+        }
+    }
+    
+        <** 
+    @description: Counters for different diagnostic parameters
+    @details: id = 12
+    **>
+    method GetBasicAppErrCounters	//enum EDiagCntrs
+    {
+        out
+        {
+        	<** @description: number of errors occurred for each diagnostic counter **>
+            SDiagErrCounter errorCounters
+        }
+    }
+
+    <** 
+    @description: Get last 16 ASSERT fails
+    @details: id = 13
+    **>
+    method GetMainAppExceptions //enum EDiagFileIDs
+    {
+        out
+        {
+			<** @description: last 16 assert fails with their IDs
+			 	@details: size = 16 **>
+            SMSP_Exception[] exceptions
+        }
+    }
+    
+        <** 
+    @description: Counters for different diagnostic parameters
+    @details: id = 14
+    **>
+    method GetMainAppErrCounters	//enum EDiagCntrs
+    {
+        out
+        {
+        	<** @description: number of errors occurred for each diagnostic counter **>
+            SDiagErrCounter errorCounters
+        }
+    }
+    
+        <** 
+    @description: Clear all error counters in the Main application
+    @details: id = 15
+    **>
+    method OnESCP_ResetMainAppErrCounters
+    {
+        out
+        {
+        	 <** @description: true = success, false = error **>
+        	Boolean result
+        }
+    }
+    
+        <** 
+    @description: Clear all exceptions in the Main application
+    @details: id = 16
+    **>
+    method OnESCP_ResetMainAppExceptions
+    {
+        out
+        {
+        	 <** @description: true = success, false = error **>
+        	Boolean result
+        }
+    }
+    
+        <** 
+    @description: Clear all error counters in the BasicApp
+    @details: id = 17
+    **>
+    method OnESCP_ResetBasicAppErrCounters
+    {
+        out
+        {
+        	 <** @description: true = success, false = error **>
+        	Boolean result
+        }
+    }
+    
+        <** 
+    @description: Clear all exceptions in the BasicApp
+    @details: id = 18
+    **>
+    method OnESCP_ResetBasicAppExceptions
+    {
+        out
+        {
+        	 <** @description: true = success, false = error **>
+        	Boolean result
+        }
+    }
+    
+        <** 
+    @description: Clear all exceptions in the BasicApp
+    @details: id = 19
+    **>
+    method GetBulkTelemetry
+    {
+        out
+        {
+        	<** @description: current opperating mode of the PDM **>
+        	UInt8 conOpsMode
+        	<** @description: Current output values **>
+            UInt8 GPIOStates
+            <** @description: 
+        	 	bit 0 =>  RAWOutput \\
+				bit 1 =>  12V_Master \\
+				bit 2 =>  12V_SP1_3 \\
+				bit 3 =>  12V_SP1_4 \\
+				bit 4 =>  12V_SP1_5 \\
+				bit 5 =>  5V_Ch1_Master \\
+				bit 6 =>  5V_Ch1_SP2_3 \\
+				bit 7 =>  5V_Ch1_SP2_4 \\
+				bit 8 =>  5V_Ch2_Master \\
+				bit 9 =>  5V_Ch2_SP1_6 \\
+				bit 10 =>  5V_Ch2_SP1_7 \\
+				bit 11 =>  3V3_Ch1_Master \\
+				bit 12 =>  3V3_Ch1_SP2_5 \\
+				bit 13 =>  3V3_Ch1_SP2_6 \\
+				bit 14 =>  3V3_Ch1_SP2_7 \\
+				bit 15 =>  3V3_Ch2_Master \\
+ 			**>
+            UInt32 powerOutputsStates
+            <** @description: Information about the power used on all channels **>
+        	SPowerDistributionInfo	 PowerDistributionInfo
+            <** @description: Information about the communication with all chips **>
+        	SGetDeviceHealthInfo	 GetDeviceHealthInfo
+            <** @description: Error counters of the bootloader **>        	
+        	SResetBootLdrErrCounters ResetBootLdrErrCounters
+        }
+    }
+    
+
+/////=====================================////
+
+
+    <** 
+        @description: Reset device in same mode (main/BasicApp) as it is at the time command is received.
+	  @details: id = 0x20 
+	**>
+    method ResetDevice   
+    {
+		out
+		{
+        	 <** @description: true = success, false = error **>
+			Boolean result
+		}
+    }
+
+    <** 
+        @description: Restart and install main application. This command may be initiated to switch from BasicApp operation to main.
+	  @details: id = 0x21
+	**>
+    method ForceInstallMainApp   
+    {
+		out
+		{
+        	 <** @description: true = success, false = error **>
+			Boolean result
+		}
+    }
+
+    <** 
+        @description: Restart and install BasicApp.
+	  @details: id = 0x22
+	**>
+    method ForceInstallBasicApp     
+    {
+		out
+		{
+        	 <** @description: true = success, false = error **>
+			Boolean result
+		}
+    }
+
+    <** 
+        @description: Get the values of the error counters of the bootloader about the App fails to run
+	  @details: id = 0x23
+	**>
+    method GetBootLoaderErrCounters     
+    {
+		out
+		{
+			<** @description: Error counters of the bootloader **>        	
+        	SResetBootLdrErrCounters ResetBootLdrErrCounters
+		}
+    }
+
+    <** 
+        @description: Clear the values of the error counters of the bootloader about the App fails to run
+	  @details: id = 0x24
+	**>
+    method ResetBootLdrErrCounters     
+    {
+		out
+		{
+			<** @description: Error counters of the bootloader **>        	
+        	SResetBootLdrErrCounters ResetBootLdrErrCounters
+		}
+    }    
+    
+
+// ============================================================================================
+// END
+// ============================================================================================
+   
+}

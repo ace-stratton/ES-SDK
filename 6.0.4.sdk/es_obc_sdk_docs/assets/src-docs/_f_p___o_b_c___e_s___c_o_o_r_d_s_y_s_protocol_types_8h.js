@@ -1,0 +1,26 @@
+var _f_p___o_b_c___e_s___c_o_o_r_d_s_y_s_protocol_types_8h =
+[
+    [ "OBC_ES_COORDSYS_GYROSCOPE_FRAME_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___g_y_r_o_s_c_o_p_e___f_r_a_m_e__t.html", null ],
+    [ "OBC_ES_COORDSYS_MAGNETOMETER_FRAME_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___m_a_g_n_e_t_o_m_e_t_e_r___f_r_a_m_e__t.html", null ],
+    [ "OBC_ES_COORDSYS_MAGNETORQUER_FRAME_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___m_a_g_n_e_t_o_r_q_u_e_r___f_r_a_m_e__t.html", null ],
+    [ "OBC_ES_COORDSYS_COARSE_SUN_SENSOR_FRAME_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___c_o_a_r_s_e___s_u_n___s_e_n_s_o_r___f_r_a_m_e__t.html", null ],
+    [ "OBC_ES_COORDSYS_ACCELEROMETER_FRAME_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___a_c_c_e_l_e_r_o_m_e_t_e_r___f_r_a_m_e__t.html", null ],
+    [ "OBC_ES_COORDSYS_FRAMES_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s___f_r_a_m_e_s__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_GYROSCOPE_FRAMERequestData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___g_y_r_o_s_c_o_p_e___f_r_a_m_e_request_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_MAGNETOMETER_FRAMERequestData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___m_a_g_n_e_t_o_m_e_t_e_r___f_r_a_m_e_request_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_MAGNETORQUER_FRAMERequestData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___m_a_g_n_e_t_o_r_q_u_e_r___f_r_a_m_e_request_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_COARSE_SUN_SENSOR_FRAMERequestData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___c_o_a_r_s_e___s_u_n___s_e_n_s_o_r___f_r_a_m_e_request_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_ACCELEROMETER_FRAMERequestData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___a_c_c_e_l_e_r_o_m_e_t_e_r___f_r_a_m_e_request_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_GYROSCOPE_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___g_y_r_o_s_c_o_p_e___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSGET_GYROSCOPE_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_g_e_t___g_y_r_o_s_c_o_p_e___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_MAGNETOMETER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___m_a_g_n_e_t_o_m_e_t_e_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSGET_MAGNETOMETER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_g_e_t___m_a_g_n_e_t_o_m_e_t_e_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_MAGNETORQUER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___m_a_g_n_e_t_o_r_q_u_e_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSGET_MAGNETORQUER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_g_e_t___m_a_g_n_e_t_o_r_q_u_e_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_COARSE_SUN_SENSOR_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___c_o_a_r_s_e___s_u_n___s_e_n_s_o_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSGET_COARSE_SUN_SENSOR_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_g_e_t___c_o_a_r_s_e___s_u_n___s_e_n_s_o_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSAVE_COORDSYS_CONFIGResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_a_v_e___c_o_o_r_d_s_y_s___c_o_n_f_i_g_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSLOAD_COORDSYS_CONFIGResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_l_o_a_d___c_o_o_r_d_s_y_s___c_o_n_f_i_g_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSSET_ACCELEROMETER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_s_e_t___a_c_c_e_l_e_r_o_m_e_t_e_r___f_r_a_m_e_response_data__t.html", null ],
+    [ "OBC_ES_COORDSYSGET_ACCELEROMETER_FRAMEResponseData_t", "struct_o_b_c___e_s___c_o_o_r_d_s_y_s_g_e_t___a_c_c_e_l_e_r_o_m_e_t_e_r___f_r_a_m_e_response_data__t.html", null ]
+];

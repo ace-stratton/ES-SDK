@@ -1,0 +1,72 @@
+#ifndef ESPS_DRV_EXEH_CONFIG_H
+#define ESPS_DRV_EXEH_CONFIG_H
+
+/**
+ * @addtogroup espsi_drv
+ * @{
+ *
+ * @file     esps_drv_exeh_config.h
+ * @brief    Exception storage and handling. Used for storing and reporting
+ *
+ * @}
+ */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <esps_drv_cdef.h>
+#include <esps_drv_exeh_ct.h>
+
+ 
+/**
+ * @brief enumeration with all ESPS driver modules that could store exceptions
+ */
+typedef enum {
+    eEXEHModuleID_MAC,
+    eEXEHModuleID_MAC_POOL,
+    eEXEHModuleID_MAC_RECEIVE_IRQ,
+    eEXEHModuleID_MAC_TRANSMIT_IRQ,
+    eEXEHModuleID_MAC_QUEUE,
+    eEXEHModuleID_MAC_DISPATCHER,
+    eEXEHModuleID_MAC_TIM,
+    eEXEHModuleID_MAC_RNG,
+    eEXEHModuleID_COUNT
+} eEXEHModuleID_t;
+
+/**
+ * @brief Exception severity level enumeration.
+ */
+typedef enum {
+    // Warning - just logged
+    eEXEHSeverity_Warning,
+    // Error - just logged
+    eEXEHSeverity_Error,
+    // Fatal - logged and reset
+    eEXEHSeverity_Fatal,
+    // Count of severities defined
+    eEXEHSeverity_Count,
+} eEXEHSeverityLevel_t;
+
+/**
+ * @brief Handler for the exceptions of the ESPS driver with level and ID.
+ * @param fp_eLevel         - level
+ * @param fp_eModuleID      - the ID of the module reporting the exception.
+ * @param fp_s32ExceptionID - the user defined exception ID.
+ * @param fp_u32FileLineNo  - line in the file where the exception occurred.
+ */
+void MacCfg_EXEH_vException(eEXEHSeverityLevel_t fp_eLevel,
+                            eEXEHModuleID_t fp_eModuleID, eMACException_t fp_s32ExceptionID, uint32_t fp_u32FileLineNo);
+
+/// This macro allows specifying the logical module (M parameter) to which the exception relates
+#define EXEH_HANDLE_EX(LEVEL, MOD, EXC)     MacCfg_EXEH_vException(LEVEL, MOD, EXC, __LINE__);
+
+// This is a simpler-to-use version of the EXEH_HANDLE_EX(...) macro where the module ID is not explicitly
+// specified and is assumed to be defined in the same module under the name of EXEH_CURRENT_MODULE_ID
+#define EXEH_HANDLE(LEVEL, EXC)             EXEH_HANDLE_EX(LEVEL, EXEH_CURRENT_MODULE_ID, EXC);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // ESPS_DRV_EXEH_CONFIG_H

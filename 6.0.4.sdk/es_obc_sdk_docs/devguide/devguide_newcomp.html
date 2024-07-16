@@ -1,0 +1,1597 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://endurosat.com/devguide/devguide_newcomp.html">
+      
+      
+        <link rel="prev" href="devguide_sysconfig.html">
+      
+      
+        <link rel="next" href="devguide_esps_cmd_extend.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Extending the SDK with new components - EnduroSat On-Board Computer SDK Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#component-folder-structure" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-header__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EnduroSat On-Board Computer SDK Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Extending the SDK with new components
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart.html" class="md-tabs__link">
+        
+  
+    
+  
+  Quick-start Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="hldesign.html" class="md-tabs__link">
+          
+  
+  Developer's Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../assets/src-docs/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Code Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference_docs.html" class="md-tabs__link">
+        
+  
+    
+  
+  Reference documents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_history.html" class="md-tabs__link">
+        
+  
+    
+  
+  Change history
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contacts.html" class="md-tabs__link">
+        
+  
+    
+  
+  Contacts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-nav__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    EnduroSat On-Board Computer SDK Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick-start Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Developer's Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer's Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hldesign.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_dirstructure.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directory structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cmake.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OBC configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            OBC configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_buildcfg.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_sysconfig.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development recipes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development recipes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="devguide_newcomp.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#component-folder-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Component folder structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-anatomy-of-a-typical-obc-sdk-cmakeliststxt-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      The anatomy of a typical OBC SDK CMakeLists.txt file
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_esps_cmd_extend.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the set of OBC supported commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_fwupd.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootloader and firmware updates handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_debugtrace.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_assertions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_datacache.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_telemetry.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Telemetry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_micropython.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroPython
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_es_adcs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EnduroSat ADCS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5_10" id="__nav_3_5_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_conops.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_user_payloads.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_aocs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Attitude and Orbit Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_payload_scheduler.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Payload Scheduler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cubeadcs_gen2_service.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CubeADCS Gen2 Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_operations_guide.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_pm.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Performance monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Connectivity
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Connectivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_eth.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/src-docs/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference_docs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference documents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_history.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change history
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contacts.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contacts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Extending the SDK with new components</h1>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>In the context of the <abbr title="On-board Computer">OBC</abbr> SDK, a <code>software component</code> is a collection of source files (<em>.c</em> and <em>.h</em>) which encapsulate a set of logically related functions or implement a specific algorithm. Communication to software components takes place only via their declared public interface (in the C language, that would be one or more <em>header</em> file(s)). Software components are packaged as a <em>static library</em> and have clearly defined dependencies in the CMake build through the <code>target_link_libraries</code> CMake command.</p>
+</div>
+<p>This chapter is intended for users who wish to extend the <abbr title="On-board Computer">OBC</abbr> SDK with their own components and integrate their code in the build process but don't have much experience with <em>CMake</em>. We will describe the pattern that EnduroSat follows
+when extending the <abbr title="On-board Computer">OBC</abbr> SDK and which also integrates the build process with <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> source code generation from <abbr title="Franca Interface Definition Language">FIDL</abbr> files (if you are using them in your implementation).</p>
+<h2 id="component-folder-structure">Component folder structure</h2>
+<p>The proposed folder structure of a component is the following:</p>
+<table>
+<thead>
+<tr>
+<th>Folder</th>
+<th>Sub-folder</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>component name</code><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></td>
+<td></td>
+<td>Place here the <em>CMakeLists.txt</em> file describing how to build your component.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>inc</code></td>
+<td>Place here the public headers of your component (<em>.h</em> files).</td>
+</tr>
+<tr>
+<td></td>
+<td><code>src</code></td>
+<td>Place here the source code of your component (<em>.c</em> files).</td>
+</tr>
+<tr>
+<td></td>
+<td><code>config</code></td>
+<td>Place here configuration files used by your component build such as <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> deployment schema files for code generation.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>fp</code></td>
+<td>Place here <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em>-generated code for the <em>Function Protocol</em> <abbr title="EnduroSat Protocol Stack">ESPS</abbr> I layer (based on <em><abbr title="Franca Interface Definition Language">FIDL</abbr></em> descriptions).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="the-anatomy-of-a-typical-obc-sdk-cmakeliststxt-file">The anatomy of a typical <abbr title="On-board Computer">OBC</abbr> SDK CMakeLists.txt file</h2>
+<p>Each software component needs a build recipe. In the context of the <abbr title="On-board Computer">OBC</abbr> SDK, that would be the <code>CMakeLists.txt</code> file which contains instructions on building your component. There are many ways with <em>CMake</em> to describe your build ingredients and this instruction aims to provide a basic template which you can directly use and which is well integrated with the rest of the <abbr title="On-board Computer">OBC</abbr> SDK build infrastructure. You can always deviate from this, if additional flexibility is needed or your component does not exactly fit into the shape promoted here.</p>
+<p>Our assumption would be that we are writing a build file for a telemetry service and we have already implemented our source code in the proposed folder structure above. The component is also using some <abbr title="Function Protocol (a custom command and query protocol for ESPS I)">FP</abbr> commands described with a <abbr title="Franca Interface Definition Language">FIDL</abbr> file and we want to enable automatic code generation with <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> for this component. Let's start...</p>
+<ul>
+<li>Define a project for your component</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">project</span><span class="p">(</span><span class="s">telemetry</span><span class="w"> </span><span class="s">C</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">make_target</span><span class="w"> </span><span class="s2">&quot;telemetry&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>We define the <code>make_target</code> variable here to use in all commands expecting a <em>CMake</em> target to make it easier to change the name of the produced <em>.a</em> file later, e.g. in this case that would be <code>libtelemetry.a</code>.
+You can skip this customization step if you want.</p>
+</div>
+<ul>
+<li>Include <abbr title="On-board Computer">OBC</abbr> SDK-specific <em>CMake</em> helper functions</li>
+</ul>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">include</span><span class="p">(</span><span class="o">${</span><span class="nv">ROOT_BUILD_PATH</span><span class="o">}</span><span class="s">/espf.cmake</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<code>${ROOT_BUILD_PATH}</code> is a variable is defined by the root <code>CMakeLists.txt</code> file.</p>
+<ul>
+<li>Create absolute path variables for your deployment schema (<abbr title="Franca Deployment">FDEPL</abbr>) and <abbr title="Franca Interface Definition Language">FIDL</abbr> file used for the <abbr title="Function Protocol (a custom command and query protocol for ESPS I)">FP</abbr> code generation of your component</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">cmake_path</span><span class="p">(</span><span class="s">SET</span><span class="w"> </span><span class="s">fdepl_path</span><span class="w"> </span><span class="s2">&quot;${PROJECT_SOURCE_DIR}/config/telemetry.fdepl&quot;</span><span class="p">)</span>
+<span class="nb">cmake_path</span><span class="p">(</span><span class="s">SET</span><span class="w"> </span><span class="s">fidl_path</span><span class="w"> </span><span class="s2">&quot;${FIDL_ROOT_OBC}/Telemetry.fidl&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition warn">
+<p class="admonition-title">Warn</p>
+<p><code>cmake_path</code> command is used here to ensure <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> code generator is provided correctly formatted build host paths.</p>
+</div>
+<ul>
+<li>Let's create a list of <abbr title="Franca Interface Definition Language">FIDL</abbr> files which code generation with <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> will depend on. It will be used later to enable automatic code generation upon modification of any of the <abbr title="Franca Interface Definition Language">FIDL</abbr> files listed.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">fidl_dependencies_list</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">fidl_path</span><span class="o">}</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>Now we will list all C source files which are generated by <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em>. If you don't know these in advance, you can run <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> first to get the list of files and then put them in your <code>CMakeLists.txt</code> file. The number of files and naming pattern doesn't change with each generation so once you do this the first time, you will just know how to name your files based on the name of your <abbr title="Franca Interface Definition Language">FIDL</abbr> interface.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">fp_list</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryProtocolServer.c</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryServerApp.c</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryProtocolTypes.h</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryProtocolServer.h</span>
+<span class="w">        </span><span class="o">${</span><span class="nv">PROJECT_SOURCE_DIR</span><span class="o">}</span><span class="s">/fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryServerApp.h</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>Once we are ready with the description of our <abbr title="Franca Interface Definition Language">FIDL</abbr> dependencies, we can add a custom <em>CMake</em> command to <em>arm</em> the triggering of <em><abbr title="EnduroSat code generation framework based on FIDL file interface descriptions">macchiato</abbr></em> when the build starts and the files we specified in <code>fp_list</code> do not exist. This is easily done with a predefined function from the <code>espf.cmake</code> file which we included earlier:</li>
+</ul>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">FP_GEN_AT_PATH</span><span class="p">(</span><span class="s">fp_list</span><span class="w"> </span><span class="o">${</span><span class="nv">fdepl_path</span><span class="o">}</span><span class="w"> </span><span class="s">fidl_dependencies_list</span><span class="w"> </span><span class="s2">&quot;${PROJECT_SOURCE_DIR}/fp&quot;</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+This line will:</p>
+<ul>
+<li>Configure your project to generate automatically your specified deployment schema (<code>fdepl_path</code>) in the <code>fp</code> subfolder of your component root folder.</li>
+<li>Trigger generation of the files specified by <code>fp_list</code> above in case any of the original <code>fdepl_path</code> or <code>fidl_path</code> files get modified.</li>
+<li>
+<p>Automatically merge any changes you made to the <code>FP_TelemetryServerApp.c</code> file after performing a new generation in any of the previous steps<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+</li>
+<li>
+<p>So far, so good but we need to include the generated source files to the list of files our component needs to build.</p>
+</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">telemetry_sources</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_sm_config_user.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_sm_config.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_file_sink_sm_config_user.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_file_sink_sm_config.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_queue.c&quot;</span>
+<span class="w">    </span><span class="s2">&quot;src/telemetry_file_sink.c&quot;</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">fp_list</span><span class="o">}</span>
+<span class="p">)</span>
+
+<span class="nb">add_library</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">STATIC</span>
+<span class="w">    </span><span class="o">${</span><span class="nv">telemetry_sources</span><span class="o">}</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you inspect closer the <code>telemetry_sources</code> <em>CMake</em> list, you will notice that lines <code>1-7</code> enumerate all manually written C source files and at line <code>8</code> we append the <code>fp_list</code> with all generated C files. This is how all component-specific source files will eventually be added to the static library build target and <em>CMake</em> will take care to compile them for you.</p>
+</div>
+<ul>
+<li>We integrated all <abbr title="Franca Interface Definition Language">FIDL</abbr>-generated sources for the component into the component build process but we still need to <em>incorporate</em> the generated commands into the <abbr title="EnduroSat Protocol Stack">ESPS</abbr> I stack used by the project. There is some fair automation going behind the scenes but fortunately you don't need to know details about how this is exactly done. What you have to do from the perspective of your own component is to set a couple of global properties and leave the rest to <em>CMake</em> <img alt="😄" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/1f604.svg" title=":smile:" />. Here is how those property settings look like:</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">set_property</span><span class="p">(</span><span class="s">GLOBAL</span><span class="w"> </span><span class="s">APPEND</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">FUNCTION_PROTOCOL_INCLUDE_LIST</span>
+<span class="w">    </span><span class="s2">&quot;#include \&quot;</span><span class="s">fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryProtocolServer.h\</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">set_property</span><span class="p">(</span><span class="s">GLOBAL</span><span class="w"> </span><span class="s">APPEND</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">FUNCTION_PROTOCOL_HANDLERS_LIST</span>
+<span class="w">    </span><span class="s2">&quot;&amp;FP_TelemetryProtocolServerInfo&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">set_property</span><span class="p">(</span><span class="s">GLOBAL</span><span class="w"> </span><span class="s">APPEND</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">FUNCTION_PROTOCOL_APP_INCLUDE_LIST</span>
+<span class="w">    </span><span class="s2">&quot;#include \&quot;</span><span class="s">fp/Telemetry/v0.1/Telemetry_server/FP_TelemetryServerApp.h\</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">set_property</span><span class="p">(</span><span class="s">GLOBAL</span><span class="w"> </span><span class="s">APPEND</span><span class="w"> </span><span class="s">PROPERTY</span><span class="w"> </span><span class="s">FUNCTION_PROTOCOL_APP_INIT_LIST</span>
+<span class="w">    </span><span class="s2">&quot;TelemetryServerAppInit()\;&quot;</span>
+<span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above properties actually specify lines of C code which get accumulated to a list and later placed in files automatically generated by <em>CMake</em> which provide the <abbr title="EnduroSat Protocol Stack">ESPS</abbr> configuration used by the <abbr title="On-board Computer">OBC</abbr> SDK project. In fact, this serves as a plug-in mechanism for <abbr title="Franca Interface Definition Language">FIDL</abbr> commands because if your component <code>CMakeLists.txt</code> file is not added to the root project, its corresponding <abbr title="Franca Interface Definition Language">FIDL</abbr>-generated commands will not be available for the end-users to execute.</p>
+</div>
+<ul>
+<li>Finally we will add our component public include paths and specify the compilation and linker options for our component as well as its external dependencies:</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">list</span><span class="p">(</span>
+<span class="w">    </span><span class="s">APPEND</span><span class="w"> </span><span class="s">module_includes</span>
+<span class="w">    </span><span class="s2">&quot;${PROJECT_SOURCE_DIR}&quot;</span>
+<span class="w">    </span><span class="s2">&quot;${PROJECT_SOURCE_DIR}/inc&quot;</span>
+<span class="w">    </span><span class="s2">&quot;${PROJECT_SOURCE_DIR}/src&quot;</span>
+<span class="p">)</span>
+
+<span class="nb">target_include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">module_includes</span><span class="o">}</span><span class="w"> </span><span class="s">PRIVATE</span><span class="w"> </span><span class="o">${</span><span class="nv">ROOT_INCLUDES</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_compile_definitions</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ROOT_COMPILE_DEFS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_compile_options</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ROOT_COMPILE_OPTIONS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_options</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">PUBLIC</span><span class="w"> </span><span class="o">${</span><span class="nv">ROOT_LINK_OPTIONS</span><span class="o">}</span><span class="p">)</span>
+<span class="nb">target_link_libraries</span><span class="p">(</span><span class="o">${</span><span class="nv">make_target</span><span class="o">}</span><span class="w"> </span><span class="s">timer</span><span class="w"> </span><span class="s">hsm</span><span class="w"> </span><span class="s">datetime</span><span class="w"> </span><span class="s">COBS</span><span class="w"> </span><span class="s">datacache</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All <em>CMake</em> variables containing the word <code>ROOT</code> are actually defined by the root <code>CMakeLists.txt</code> file. In this case, most of the compiler and linker options are inherited from the top-level project.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The <code>target_link_libraries</code> call on line <code>12</code> provides the names of all other <em>CMake</em> components your implementation depends on. <br><br>
+Why is this important? <br>
+This is how <em>CMake</em> knows to rebuild your library if any of the dependent libraries get rebuilt. This line also ensures that the public include paths for all dependent components is added to the list of include folders passed to the compiler when building your component sources.</p>
+</div>
+<ul>
+<li>Your component build recipe is now ready. What remains is adding this to the top-level project of the <abbr title="On-board Computer">OBC</abbr> SDK so that it will be automatically built by <em>CMake</em> when you trigger one of the <abbr title="On-board Computer">OBC</abbr> SDK build targets. To do that, open <code>espft/CMakeLists.txt</code> file and add the following lines somewhere before the <code>target_link_libraries</code> call:</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nb">add_subdirectory</span><span class="p">(</span><span class="s">core/services/telemetry</span><span class="w"> </span><span class="s">telemetry</span><span class="p">)</span>
+<span class="nb">list</span><span class="p">(</span><span class="s">APPEND</span><span class="w"> </span><span class="s">libs</span><span class="w"> </span><span class="s">telemetry</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Line <code>1</code> enlists your component to the build chain of <em>CMake</em> while line <code>2</code> puts a global dependency to the <code>telemetry</code> static library to the list of libraries built in the <abbr title="On-board Computer">OBC</abbr> SDK.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>It is highly recommended to use lowercase for naming your components especially if you are working with your SDK project under different platforms (Windows, Linux, MacOS).&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Make sure that you follow the special comment blocks in <code>FP_TelemetryServerApp.c</code> which indicate where user changes can be performed in order to preserve your changes later after generating the code again.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="footer.title">
+      
+        
+        <a href="devguide_sysconfig.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Run-time configuration" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Run-time configuration
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="devguide_esps_cmd_extend.html" class="md-footer__link md-footer__link--next" aria-label="Next: Extending the set of OBC supported commands" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Extending the set of OBC supported commands
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            <i>Privileged and confidential</i>
+          </div>
+        
+      </div>
+      <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/endurosat/" target="_blank" rel="noopener" title="EnduroSat on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share", "navigation.tabs", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+
+
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

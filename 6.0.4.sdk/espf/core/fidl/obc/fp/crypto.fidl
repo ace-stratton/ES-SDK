@@ -1,0 +1,150 @@
+package endurosat.pf
+
+<** @description: OBC Cryptographic-related services API
+    @details: id = 260 
+**>
+
+interface crypto
+{
+    version { major 0 minor 1 }
+    
+    enumeration key_update_status
+    {
+        <** @description: The provided key length is not supported by the configured algorithm **>
+        BAD_SIZE,
+        <** @description: Underlying key store error occurred **>
+        STORE_ERROR,
+        <** @description: The key is updated successfully in the internal key store **>
+        OK
+    }
+    
+    enumeration cipher_op_type
+    {
+        ENCRYPT,
+        DECRYPT
+    }
+    
+    enumeration cipher_op_status
+    {
+        <** @description: end-of-stream **>
+        EOS,
+        <** @description: Invalid encrypted file header detected **> 
+        INVALID_HEADER,
+        <** @description: Invalid encrypted file footer detected **> 
+        INVALID_FOOTER,
+        <** @description: Invalid cipher offset specifeid in encrypted file header **>
+        INVALID_CIPHER_OFS,
+        <** @description: File system error during cipher operation **>
+        FILE_ERROR,
+        <** @description: Crypto library error occurred during initialization or operation **>
+        CRYPTOLIB_ERROR,
+        <** @description: could not set cryptolib key **>
+        CRYPTOLIB_KEY_ERROR,
+        <** @description: Could not set cryptolib IV **>
+        CRYPTOLIB_IV_ERROR,
+        <** @description: Could not set cryptolib AAD **>
+        CRYPTOLIB_AAD_ERROR,
+        <** @description: Source file seems incomplete **> 
+        PARTIAL_FILE,
+        <** @description: Stream authentication error **>
+        AUTH_ERROR,
+        <** @description: Invalid/NULL parameters passed to function **>
+        BAD_PARAMS,
+        <** @description: No key programmed in the device **>
+        NO_KEY,
+        <** @description: The operation was aborted by the user **>
+        ABORTED,
+        <** @description: The operation failed due to error (if any other error code doesn't fit) **>
+        ERROR,
+        <** @description: The specified source file does not exist **>
+        NO_FILE,
+        <** @description: Crypto service is now busy and cannot take another operation **>
+        BUSY,
+        <** @description: Operation queued for execution **>
+        OK
+    }
+    
+    enumeration abort_type
+    {
+        <** @description: Aborts the currently active operation. This will trigger the next operation in the queue. **>
+        CURRENT_ONLY,
+        <** @description: Aborts any running operations on the queue and clears the queue. **>
+        ALL
+    }
+    
+    <** @description: Updates the encryption key of the OBC 
+        @details: id = 0
+    **>
+    method update_key_store
+    {
+        in
+        {
+            <** @description: Encryption key bytes (currently only AES CGM algorithm is available for use and it requires a 32-byte key)
+                @details: size = 32 
+            **>
+            ByteBuffer key
+        }
+        out
+        {
+            <** @description: Result from the key update operation **>
+            key_update_status op_result
+        }
+    }
+    
+    <** @description: Queue a file operation for encryption or decryption.
+        @details: id = 1 
+    **>
+    method perform_cipher_op
+    {
+        in
+        {
+            <** @description: Cipher operation to perform **>
+            cipher_op_type cipher_op
+            <** @description: Source file name
+                @details: size = 47
+            **>
+            String src_file_name
+            
+            <** @description: Target file name
+                @details: size = 47
+            **>
+            String target_file_name
+        }
+        out
+        {
+            <** @description: Initial status of the cipher operation request **>
+            cipher_op_status cipher_req_status
+        }
+    }
+    
+    <** @description: Returns the status of the last cipher operation requested via perform_cipher_op()  
+        @details: id = 2
+    **>
+    method get_cipher_op_status
+    {
+        out
+        {
+            <** @description: Status of the last cipher operation **>
+            cipher_op_status cipher_op_status
+            <** @description: Number of milliseconds the operation took to execute (only valid if cipher_op_status is reported to be OK)**>
+            UInt32 op_time
+        }
+    }
+    
+    <** @description: Aborts the current or all enqueued cipher operations  
+        @details: id = 3
+    **>
+    method abort
+    {
+        in
+        {
+            <** @description: Type of abort operation requested **>
+            abort_type op_type
+        }
+        out
+        {
+            <** @description: true - operation accepted; false - operation rejected **>
+            Boolean status
+        }
+    }
+}

@@ -1,0 +1,12 @@
+#ifndef GLOBALCONFIG_H_
+#define GLOBALCONFIG_H_
+
+#define ESSASP_SUPPORT_DISCOVERY_CLIENT
+
+#cmakedefine EXTMODULES_CUBEADCS_ENABLED
+
+#if defined(EXTMODULES_CUBEADCS_ENABLED) && defined(GENERAL_OBC_ADCS_ENABLED)
+    #error Only 1 ADCS shall be used (CUBEADCS or OBCADCS).
+#endif
+
+#endif  // #ifndef GLOBALCONFIG_H_

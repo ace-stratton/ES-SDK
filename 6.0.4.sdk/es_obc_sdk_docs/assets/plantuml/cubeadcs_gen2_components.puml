@@ -1,0 +1,43 @@
+@startuml
+title CubeADCS Gen2 Integration Overview of Components
+
+package "OBC" {
+
+package "Gen2 Integration" {
+    [cubeadcs_gen2_int] as gen2_int
+    [cubeadcs_gen2_state_machine] as gen2_sm
+    [libcubeobc] as gen2_lib
+    [driver] as drv
+    [cubeadcs_gw] as gen2_gw
+    [cubeadcs_cp] as gen2_cp
+    [es_custom] as es_custom
+    }
+}
+
+package "CubeADCS Gen2" {
+package "Computer" {
+[CubeCore] as core
+}
+package "Sensors" {
+    [magnetometers,\nfine sun sensors,\nhorizon sensors,\n...] as sensors
+}
+package "Actuators" {
+    [torque rods,\nreaction wheels,\n...] as actuators
+}
+}
+}
+
+gen2_int <-down-> gen2_sm
+gen2_sm <-> gen2_gw
+gen2_int <-> gen2_gw
+gen2_cp <-down-> gen2_gw
+gen2_gw <-down-> gen2_lib
+gen2_lib <-right-> es_custom
+gen2_lib <-down-> drv
+
+drv <-right-> core
+
+core <-down-> sensors
+core <-down-> actuators
+
+@enduml

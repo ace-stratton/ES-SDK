@@ -1,0 +1,442 @@
+package endurosat.macif
+
+<** @description: FileManager interface which is provided by devices supporting file storage capability.
+    @details: id = 15
+**>
+interface FileManager
+{
+    version { major 1 minor 2 }
+
+    <** @description: The error codes here are mapped to the FATFS implementation (http://elm-chan.org/fsw/ff/doc/rc.html) **>
+    enumeration FManOpResult
+    {
+        <** @description: Succeeded **>
+        OK = 0,
+        <** @description: A hard error occurred in the low level disk I/O layer **>
+        DISK_ERR = 1,
+        <** @description: Assertion failed **>
+        INT_ERR = 2,
+        <** @description: The physical drive cannot work **>
+        NOT_READY = 3,
+        <** @description: Could not find the file **>
+        NO_FILE = 4,
+        <** @description: Could not find the path **>
+        NO_PATH = 5,
+        <** @description: The path name format is invalid **>
+        INVALID_NAME = 6,
+        <** @description: Access denied due to prohibited access or directory full **>
+        DENIED = 7,
+        <** @description: Access denied due to prohibited access **>
+        EXIST = 8,
+        <** @description: The file/directory object is invalid **>
+        INVALID_OBJECT = 9,
+        <** @description: The physical drive is write protected **>
+        WRITE_PROTECTED = 10,
+        <** @description: The logical drive number is invalid **>
+        INVALID_DRIVE = 11,
+        <** @description: The volume has no work area **>
+        NOT_ENABLED = 12,
+        <** @description: There is no valid FAT volume **>
+        NO_FILESYSTEM = 13,
+        <** @description: The f_mkfs() aborted due to any problem **>
+        MKFS_ABORTED = 14,
+        <** @description: Could not get a grant to access the volume within defined period **>
+        TIMEOUT = 15,
+        <** @description: The operation is rejected according to the file sharing policy **>
+        LOCKED = 16,
+        <** @description: LFN working buffer could not be allocated **>
+        NOT_ENOUGH_CORE = 17,
+        <** @description: Number of open files > _FS_LOCK **>
+        TOO_MANY_OPEN_FILES = 18,
+        <** @description: Given parameter is invalid **>
+        INVALID_PARAMETER = 19
+    }
+
+    <** @description: The enumeration provides all possible partitions supported in the OBC **>
+    enumeration FManPartitions
+    {
+        <** @description: SD Card Partition **>
+        SD_PARTITION = 0
+    }
+
+    <** @description: The enumeration provides the different flags which can be used with the fileOpen method. Please note that
+                      those are bit-mask values which implies that they can be combined by a logical OR operation, e.g.
+                      READ | WRITE => "r+" (POSIX)
+    **>
+    enumeration FManFileModeId
+    {
+        <** @description: Opens a file and the fileOpen will fail if the file doesn't already exist **>
+        OPEN_EXISTING = 0x00
+        <** @description: Opens a file for reading only **>
+        READ = 0x01
+        <** @description: Opens a file for writing only **>
+        WRITE = 0x02
+        <** @description: The fileOpen function will create a new file with the given name but will fail with FManOpResult::EXIST if such a file already exists. **>
+        CREATE_NEW = 0x04
+        <** @description: The fileOpen function will create a new file with the given name if it doesn't exist or will overwrite (truncate to 0 bytes) the file if it exists. **>
+        CREATE_ALWAYS = 0x08
+        <** @description: The fileOpen function will open the specified file if it exists, otherwise will create it. **>
+        OPEN_ALWAYS = 0x10
+        <** @description: Same behavior as OPEN_ALWAYS except that if the file exists, the read/write pointer will be set to the end of the file instead of truncating it to 0. **>
+        OPEN_APPEND = 0x30
+    }
+
+    <** @description: This type represents a unique identifier of an opened file returned by the fileOpen operation. Later this identifier is used with
+                      the rest of the file APIs and it gets invalidated when the fileClose operation is executed with this handle.
+    **>
+    typedef FManFileHandle is UInt32
+
+    <** @description: This type describes all internally tracked error counters related to file operations. **>
+    struct ErrorCounters
+    {
+        UInt16 DISK_ERR
+        UInt16 INT_ERR
+        UInt16 NOT_READY
+        UInt16 NO_FILE
+        UInt16 NO_PATH
+        UInt16 INVALID_NAME
+        UInt16 DENIED
+        UInt16 EXIST
+        UInt16 INVALID_OBJECT
+        UInt16 WRITE_PROTECTED
+        UInt16 INVALID_DRIVE
+        UInt16 NOT_ENABLED
+        UInt16 NO_FILESYSTEM
+        UInt16 MKFS_ABORTED
+        UInt16 TIMEOUT
+        UInt16 LOCKED
+        UInt16 NOT_ENOUGH_CORE
+        UInt16 TOO_MANY_OPEN_FILES
+        UInt16 INVALID_PARAMETER
+    }
+
+    <** @description: This structure contains statistical information about the operation of the file subsystem of the device. Its main
+                      purpose is to ease debugging and finding faults with file operations.
+    **>
+    struct Statistics
+    {
+        <** @description: Provides information about the different file system error code occurrences during runtime **>
+        ErrorCounters errCounters
+        <** @description: Indicates the number of nesting levels occurred for File APIs **>
+        Int16 nestCount
+        <** @description: Indicates the maximum number of nesting levels occurred for File APIs since last module reset **>
+        Int16 maxNestCount
+    }
+
+    <** @description: Opens a file in a specified mode and provides a handle for use with other FileManager methods, e.g. fileRead, fileWrite, etc.
+        @details: id = 0x00000000
+    **>
+    method fileOpen
+    {
+        in
+        {
+            <** @description: This is the full path of the file including the mount point. If only the filename is given the default mount point will be applied. The full path to the file must exist.
+                @details: size = 47
+            **>
+            String filePath
+            <** @description: A combination of logically OR'd bit-flags which determine the mode of operation for the opened file. Refer to the documentation of FManFileModeId for details **>
+            UInt8 mode
+        }
+        out
+        {
+            <** @description: A unique file handle which must be used to address the file with the other API functions in this interface. Valid only if res = OK **>
+            FManFileHandle handle
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Closes an opened file and invalidates its handle.
+        @details: id = 0x00000001
+    **>
+    method fileClose
+    {
+        in
+        {
+            <** @description: A valid file handle returned by the fileOpen function **>
+            FManFileHandle handle
+        }
+        out
+        {
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Reads a block of bytes from an opened file. The file handle for this method shall be obtained via
+                      fileOpen() method and the file mode shall support reading.
+        @details: id = 0x00000002
+    **>
+    method fileRead
+    {
+        in
+        {
+            <** @description: A valid file handle returned by the fileOpen function **>
+            FManFileHandle handle
+            <** @description: Byte offset used for the read operation **>
+            UInt32 pos
+            <** @description: Number of bytes to read starting from the offset specified by 'pos'; Max 230 bytes **>
+            UInt32 bytesToRead
+        }
+        out
+        {
+            <** @description: Read data buffer (with some implementations, e.g. in C, this buffer always has a fixed maximum size and if bytesToRead is bigger than the specified size here, the operation will only return whatever can fit in the buffer.
+                @details: size = 230
+            **>
+            ByteBuffer data
+            <** @description: Actual number of bytes read **>
+            UInt32 bytesRead
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Writes a block of bytes to an opened file. The file handle for this method shall be obtained via fileOpen() method and the file mode shall support writing.
+        @details: id = 0x00000003
+    **>
+    method fileWrite
+    {
+        in
+        {
+            <** @description: A valid file handle returned by the fileOpen function **>
+            FManFileHandle handle
+            <** @description: Byte offset used for the write operation **>
+            UInt32 pos
+            <** @description: Write data buffer (with some implementations, e.g. in C, this buffer always has a fixed maximum size and if bytesToWrite is bigger than the specified size here, the operation will truncate the data).
+                @details: size = 230
+            **>
+            ByteBuffer data
+        }
+        out
+        {
+            <** @description: Actual number of bytes written **>
+            UInt32 bytesWritten
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Renames a specified directory or file
+        @details: id = 0x0000000F
+    **>
+    method Rename
+    {
+        in
+        {
+            <** @description: Name of the directory or file to be renamed. This is the full path of the object including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String oldPath
+            <** @description: New name of the directory or file. This is the full path of the object including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String newPath
+        }
+        out
+        {
+            <** @description: Status of the operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Deletes a specified file or directory
+        @details: id = 0x00000004
+    **>
+    method Delete
+    {
+        in
+        {
+            <** @description: Name of the directory or file to be deleted. This is the full path of the object including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String Path
+        }
+        out
+        {
+            <** @description: Status of the operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Returns the size of a specified file in bytes
+        @details: id = 0x00000005
+    **>
+    method fileGetSize
+    {
+        in
+        {
+            <** @description: This is the full path of the file including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String filePath
+        }
+        out
+        {
+            <** @description: Size of the specified file in bytes. The field is valid only if res = OK **>
+            UInt32 fSize
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Returns a simple mod 2^32 check sum of a specified file
+        @details: id = 0x00000006
+    **>
+    method fileGetCheckSum
+    {
+        in
+        {
+            <** @description: This is the full path of the file including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String filePath
+        }
+        out
+        {
+            <** @description: The field contains the calculated checksum of the file. Valid only if res = OK **>
+            UInt32 cs
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Returns the number of currently opened file handles.
+        @details: id = 0x00000007
+    **>
+    method fileGetOpenedHandlesCount
+    {
+        out
+        {
+            <** @description: Number of simultaneously opened file handles via the FileManager interface **>
+            UInt32 handlesCount
+        }
+    }
+
+    <** @description: The operation is used to format a storage volume given its unique identifier in the system.
+                      For a list of identifiers valid for a particular device, refer to the device specification.
+        @details: id = 0x00000008
+    **>
+    method formatPartition
+    {
+        in
+        {
+            <** @description: Partition id selected for currently available partitions.**>
+            FManPartitions PartitionId
+        }
+        out
+        {
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Dumps a file listing using a specified wildcard pattern to an ASCII file with a user-defined name.
+        @details: id = 0x00000009
+    **>
+    method fileDumpDirListToFile
+    {
+        in
+        {
+            <** @description: Target file name to create. This is the full path of the file including the mount point. If only the filename is given the default mount point will be applied.(default mount point is "/sd/" Ex: "/sd/filename.xxx" is the same as "filename.xxx"
+                @details: size = 47
+            **>
+            String filePath
+            <** @description: wild-card pattern to use as a filter, e.g. "\*.jpg"
+                @details: size = 47
+            **>
+            String pattern
+        }
+        out
+        {
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: The function provides a set of statistic counters providing more insight on the type of errors occurred during file operation.
+        @details: id = 0x0000000A
+    **>
+    method getStatistics
+    {
+        out
+        {
+            <** @description: Statistics file operation error counters and other data useful for debugging **>
+            Statistics stats
+        }
+    }
+
+    <** @description: The function clears all accummulated statistics related to file operations. The statistics is only kept in RAM until the next CPU reset, so
+                      this function clears the RAM content of the statistic counters.
+        @details: id = 0x0000000B
+    **>
+    method clearStatistics
+    {
+    }
+
+    <** @description: The function executes a manual reinit of the SD card.
+        @details: id = 0x0000000C
+    **>
+    method sdReinit
+    {
+        in
+        {
+            <** @description: If set to True, the sdReinit operation blocks until the operation completes, otherwise it returns a response immediately. **>
+            Boolean synchronousCall
+        }
+        out
+        {
+            <** @description: True - the operation completed successfully, otherwise - False **>
+            Boolean status
+        }
+    }
+
+    <** @description: Creates a new directory. Absolute path is required.
+        @details: id = 0x0000000D
+    **>
+    method dirMake
+    {
+        in
+        {
+            <**
+                @description:   This is the full path of the directory including the mount point.
+                                If only the directory name is given the default mount point will be applied.
+                                (default mount point is "/sd/" Ex: "/sd/dirname" is the same as "dirname"
+                @details: size = 47
+            **>
+            String dirName
+        }
+        out
+        {
+            <** @description: Status of the file operation request **>
+            FManOpResult res
+        }
+    }
+
+    <** @description: Return the status of the SD card in the OBC.
+        @details: size = 1 **>
+    enumeration SDCardStatus
+    {
+        <** @description: SD Card ready to be used **>
+        READY = 0,
+        <** @description: SD Card present but not initialized **>
+        NOT_INIT = 1,
+        <** @description: SD Card not present **>
+        EJECTED = 2,
+        <** @description: Error with the SD Card **>
+        ERROR = 3
+    }
+
+    <** @description: Return true if the SD card is ready, false if the sd card is not.
+        @details: id = 0x0000000E
+    **>
+    method get_sd_card_status
+    {
+        out
+        {
+            <** @description: True if the SD card is ready **>
+            SDCardStatus status
+        }
+    }
+}
+
+

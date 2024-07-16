@@ -1,0 +1,16 @@
+@startuml
+title <b>telemetry_sm
+[*] --> Not_Init
+state Not_Init
+state Init
+state Started
+state Stopped
+
+Not_Init --> Init: <b>init</b> \n
+Init --> Started: <b>start</b> [can_start_operation]\n/ prepare_tlm_collection
+Init -[dotted,#blue]-> Init: <b>__periodic</b> \n/ reload_config
+Started --> Stopped: <b>stop</b> [can_stop_operation]\n
+Started -[dotted,#blue]-> Started: <b>__periodic</b> [periodic_timer_elapsed]\n/ collect_telemetry
+Stopped --> Started: <b>start</b> [can_start_operation]\n/ prepare_tlm_collection
+Stopped -[dotted,#blue]-> Stopped: <b>__periodic</b> \n/ reload_config
+@enduml

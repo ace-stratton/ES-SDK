@@ -1,0 +1,50 @@
+#ifndef ESPS_DRV_TIM_CONFIG_H
+#define ESPS_DRV_TIM_CONFIG_H
+
+/**
+ * @addtogroup espsi_drv
+ * @{
+ *
+ * @file     esps_drv_tim_config.h
+ * @brief    Timer for MAC Driver configuration
+ *
+ * @}
+ */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "esps_drv_stm32.h"
+#include "esps_drv_def.h"
+
+#include "esps_drv_tim_ct.h"
+
+/// MAC UART Interface configuration definitions
+#define TIMER_ISR_PRIO  MAC_UART_ISR_PRIO
+
+/// Timers used are 16-bit, hence max range is ~65 ms @ 1us/tick
+#define MAX_TIMER_RANGE_US      ((uint32_t) 65535)
+
+/// Enumeration with all available TIMs
+typedef enum {
+    eTIM_TIM10_ID,
+    eTIM_TIM11_ID,
+    eTIM_TIM_ID_Count
+} eTIMTimerID_t;
+
+/// Configuration entry for all the defined timers
+extern struct sTIMTimerEntry_t TIM_CFG_asTimerEntries[eTIM_TIM_ID_Count];
+
+/**
+ * @brief Calculate the prescaler for a given timer to get 1ms per tick
+ * @param fp_psTIM ESPS Driver Timer entry
+ * @return Prescaler
+ */
+uint16_t MacCfg_TIM_u16CalculatePrescaler(sTIMTimerEntry_t * fp_psTIM);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#endif /* ESPS_DRV_TIM_CONFIG_H */

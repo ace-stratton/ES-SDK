@@ -1,0 +1,1420 @@
+package endurosat.macif
+
+<** @description: CubeADCS Gen 2 protocol as part of the Onboard Computer. Refer to the SDK documentation for further information on the GEN2.
+    @details: id = 33 
+**>
+interface OBC_CUBEADCS_GEN2
+{
+    version { major 1 minor 0 }
+
+    enumeration TctlmCubeComputerCommon3_TlmLogReturnIntervalValues 
+    {
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL_200MS = 0    
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL1S = 1        
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL2S = 2        
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL3S = 3        
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL4S = 4        
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL5S = 5        
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL_10S = 6      
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL_20S = 7      
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL_50S = 8      
+        TCTLM_CUBE_COMPUTER_COMMON_3__INTERVAL_100S = 9     
+    }
+
+    enumeration TctlmCubeComputerCommon3_LogReadFilterType 
+    {
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_NONE = 0
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_TIME_SPAN = 1
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_TIME_NEXT_X = 2
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_FIRST_X = 3
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_LAST_X = 4
+        TCTLM_CUBE_COMPUTER_COMMON_3__FILTER_COUNTER_NEXT_X = 5
+    } 
+
+    enumeration TctlmCubeComputerCommon3_EventReadQueueState 
+    {
+        TCTLM_CUBE_COMPUTER_COMMON_3__EVT_READ_QIDLE
+        TCTLM_CUBE_COMPUTER_COMMON_3__EVT_READ_QDOWNLOAD 
+        TCTLM_CUBE_COMPUTER_COMMON_3__EVT_READ_QERASE
+    }
+    
+    enumeration TctlmCubeComputerCommon3_TlmLogReadQueueState 
+    {
+        TCTLM_CUBE_COMPUTER_COMMON_3__TLM_READ_QIDLE
+        TCTLM_CUBE_COMPUTER_COMMON_3__TLM_READ_QDOWNLOAD
+        TCTLM_CUBE_COMPUTER_COMMON_3__TLM_READ_QERASE
+    }
+
+    enumeration TctlmCubeComputerCommon3_ImageTransferState 
+    {
+        TCTLM_CUBE_COMPUTER_COMMON_3__STATE_IDLE
+        TCTLM_CUBE_COMPUTER_COMMON_3__STATE_BUSY_STORE
+        TCTLM_CUBE_COMPUTER_COMMON_3__STATE_BUSY_DOWNLOAD
+    }
+
+    enumeration CommissioningStatus
+    {
+        CMS_STATUS_NOT_DONE
+        CMS_STATUS_COMPLETE
+    }
+
+    enumeration TctlmCubeComputerControlProgram8_FtpUpgradeState 
+    {
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_IDLE = 0      
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_INIT = 1       
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_TRANS = 2       
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_INIT_BIN = 3    
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_INIT_CFG = 4    
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_BUSY_BIN = 5    
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__UPGRADE_BUSY_CFG = 6    
+    }
+
+    enumeration TctlmCubeComputerControlProgram8_FtpState 
+    {
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__IDLE = 0 
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__INIT = 1 
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__BUSY = 2
+        TCTLM_CUBE_COMPUTER_CONTROL_PROGRAM_8__LOCKED = 3
+    }
+
+    enumeration TctlmCommonFrameworkEnums_NodeType 
+    {
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_INVALID = 0             
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_COMPUTER = 1       
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_SENSE = 2          
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_WHEEL = 3          
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_IR = 4             
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_MAG_DEPLOY = 5     
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_MAG_COMPACT = 6    
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_STAR = 7           
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_AURIGA = 8              
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_NODE = 9           
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_NODE_SLT = 10      
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_NODE_PST3S = 11    
+        TCTLM_COMMON_FRAMEWORK_ENUMS__NODE_TYPE_CUBE_NODE_NSSRWL = 12   
+    }
+
+    struct FName
+    {
+        <** @details: size = 47 **>
+        UInt8[] name
+    }
+
+    struct TctlmCubeComputerCommon3_EventLogFilterTransferSetup 
+    {
+        TctlmCubeComputerCommon3_LogReadFilterType filterType
+        UInt32 startTimeUnix                                         
+        UInt32 endTimeUnix                                          
+        UInt32 numEntries                                            
+        UInt32 writeCounter                                          
+        Boolean includeClassCritical                             
+        Boolean includeClassMajorWarning                          
+        Boolean includeClassMinorWarning                          
+        Boolean includeClassInfo                                 
+        Boolean includeSourceCubeComputer                         
+        Boolean includeSourceRwl0                                
+        Boolean includeSourceRwl1                                
+        Boolean includeSourceRwl2                                
+        Boolean includeSourceRwl3                                
+        Boolean includeSourceFss0                                
+        Boolean includeSourceFss1                                
+        Boolean includeSourceFss2                                
+        Boolean includeSourceFss3                                
+        Boolean includeSourceHss0                                
+        Boolean includeSourceHss1                                
+        Boolean includeSourceStr0                                
+        Boolean includeSourceStr1                                
+        Boolean includeSourceMag0                                
+        Boolean includeSourceMag1                                
+        Boolean includeSourceExt0                                
+        Boolean includeSourceExt1                                
+    }
+
+    struct TctlmCubeComputerCommon3_EventLogStatus 
+    {
+        UInt16 numberOfEntriesQueued
+        UInt16 numberOfEntriesBuffered                                  
+        UInt32 numberOfEntries                                          
+        UInt32 numberOfEmptyEntries                                     
+        UInt32 oldestEntryUnix                                          
+        UInt32 latestEntryUnix                                          
+        UInt32 numberOfCriticalEvents                                   
+        UInt32 numberOfMajorWarningEvents                               
+        UInt32 numberOfMinorWarningEvents                               
+        UInt32 numberOfInfoEvents                                       
+        UInt32 writeCounter                                             
+        TctlmCubeComputerCommon3_EventReadQueueState readQueueState    
+    }
+
+    struct TctlmCubeComputerCommon3_TelemetryLogTransferSetup 
+    {
+        TctlmCubeComputerCommon3_LogReadFilterType filterType                       
+        UInt32 startTimeUnix                                                           
+        UInt32 endTimeUnix                                                             
+        UInt32 numEntries                                                              
+        UInt32 writeCounter                                                            
+        TctlmCubeComputerCommon3_TlmLogReturnIntervalValues tlmLogReturnInterval   
+
+        <** @details: size = 5 **>
+        UInt8[] logIdBitmask                                               
+    }
+
+    struct TctlmCubeComputerCommon3_TelemtryLogStatus 
+    {
+        UInt8 numberOfEntriesQueued                                
+        UInt8 numberOfTlmIterations                                
+        UInt32 numberOfEntries                                     
+        UInt32 oldestEntryUnix                                     
+        UInt32 latestEntryUnix                                     
+        UInt32 writeCounter                                        
+        TctlmCubeComputerCommon3_TlmLogReadQueueState readQueueState
+    }
+
+    struct TctlmCubeComputerCommon3_ImageTransferStatus 
+    {
+        TctlmCubeComputerCommon3_ImageTransferState transfer_state
+        UInt32 errorCode                                     
+        UInt32 transferSize                                  
+        UInt32 dataRemain                                    
+        Boolean invalidNodeError                             
+        Boolean timeoutError                                 
+        Boolean captureError                                 
+        Boolean setupError                                   
+        Boolean fileOpenReadError                            
+        Boolean fileOpenWriteError                           
+        Boolean fileReadError                                
+        Boolean fileWriteError                               
+        Boolean busyError                                    
+    }
+
+    <** @description: Errors message structure. Error information of the application **>
+    struct TctlmCubeCommonBaseBootloader5_Errors 
+    {
+        <** @description: Error code for the last operation - gets reset to 0 at start of new operation **>
+        UInt32 result                 
+
+        <** @description: Error code for HAL initialization (0 = OK) **>
+        UInt32 halInit                
+
+        <** @description: Error code for Flash initialization (0 = OK) **>
+        UInt32 flashInit   
+
+        <** @description: Error code for UART1 initialization (0 = OK) **>           
+        UInt32 uart1Init     
+
+        <** @description: Error code for UART2 initialization (0 = OK) **>         
+        UInt32 uart2Init       
+
+        <** @description: Error code for CAN1 initialization (0 = OK) **>       
+        UInt32 can1Init        
+
+        <** @description: Error code for CAN2 initialization (0 = OK) **>       
+        UInt32 can2Init          
+
+        <** @description: Error code for I2C initialization (0 = OK) **>     
+        UInt32 i2cInit                
+
+        <** @description: Config error flag set if configuration CRC failed and default config is being used **>
+        Boolean configInit            
+
+        <** @description: Timeout error flag on last operation **>
+        Boolean timeout               
+
+        <** @description: Data overrun error flag on last operation **>
+        Boolean overrun               
+
+        <** @description: Page erase error flag on last operation **>
+        Boolean erasePage             
+
+        <** @description: Write error flag on last operation **>
+        Boolean write                 
+
+        <** @description: File CRC error flag on upload complete **>
+        Boolean fileCrc               
+
+        <** @description: Set if failure to write file table to flash **>
+        Boolean commitFileTable       
+
+        <** @description: Set if failure to write config table to flash **>
+        Boolean commitConfigTable     
+
+        <** @description: Set if the jump target is invalid **>
+        Boolean jumpTarget            
+    } 
+
+    <** @description: File Transfer Status message structure. File Transfer Status **>
+    struct TctlmCubeComputerControlProgram8_FileTransferStatus 
+    {
+        <** @description: FTP Global State **>
+        TctlmCubeComputerControlProgram8_FtpState ftp_state                  
+
+        <** @description: FTP Internal Upgrade State **>
+        TctlmCubeComputerControlProgram8_FtpUpgradeState upgradeState    
+
+        <** @description: Amount of remaining data to transfer  (measurment unit is [Bytes]) **>
+        UInt32 dataRemain                               
+
+        <** @description: Operation Error Code. Non-Zero = ERROR **>                    
+        UInt32 errorCode                       
+
+        <** @description: Bootloader is busy **>                             
+        Boolean busyError                   
+
+        <** @description: File Metadata received is invalid **>                             
+        Boolean fileMetaError                   
+
+        <** @description: File version is incompatible **>                        
+        Boolean versionError                    
+
+        <** @description: Target node does not exist **>                       
+        Boolean nodeExistError               
+
+        <** @description: Target node is not expected **>                        
+        Boolean nodeExpectError              
+
+        <** @description: File CRC Error Flag **>                           
+        Boolean fileCrcError                  
+
+        <** @description: File is too large **>                           
+        Boolean fileSizeError                          
+
+        <** @description: File Error Flag (open/close) **>                 
+        Boolean fileError             
+
+        <** @description: File Invalid Error Flag **>                                 
+        Boolean fileInvalidError                      
+
+        <** @description: File Full Error Flag **>                   
+        Boolean fileFullError                        
+
+        <** @description: File Empty Error Flag **>                   
+        Boolean fileEmptyError                          
+
+        <** @description: Read Error Flag **>               
+        Boolean readError                         
+
+        <** @description: Write Error Flag **>                    
+        Boolean writeError                    
+
+        <** @description: Erase Error Flag **>                          
+        Boolean eraseError                               
+
+        <** @description: Frame Size Error Flag **>               
+        Boolean frameSizeError                      
+
+        <** @description: Timeout Error Flag **>                   
+        Boolean timeoutError                        
+
+        <** @description: Node comms fails during upgrade **>                    
+        Boolean nodeCommsError           
+
+        <** @description: Node is required for control **>                               
+        Boolean nodeUsedError                                           
+    }
+
+    <** @description: event download status **>     
+    struct download_event_status
+    {
+        UInt32 err
+        TctlmCubeComputerCommon3_EventLogFilterTransferSetup setup
+        TctlmCubeComputerCommon3_EventLogStatus status
+        FName file_name
+    } 
+
+    <** @description: telemetry download status **>    
+    struct download_telemetry_status
+    {
+        UInt32 err
+        TctlmCubeComputerCommon3_TelemetryLogTransferSetup setup
+        TctlmCubeComputerCommon3_TelemtryLogStatus status
+        FName file_name
+    } 
+
+    <** @description: image download status **>    
+    struct download_image_stored_status
+    {
+        UInt32 err
+        UInt32 setup
+        TctlmCubeComputerCommon3_ImageTransferStatus status
+        FName file_name
+    } 
+
+    <** @description: cube computer control program update status **>    
+    struct cube_computer_fw_update_status
+    {
+        UInt32 err_code                                  
+        Boolean force
+        TctlmCubeCommonBaseBootloader5_Errors status
+        FName control_program_file_name
+        FName configuration_file_name
+    }
+
+    <** @description: cube node control program update status **>    
+    struct cube_node_fw_update_status
+    {
+        UInt32 err_code                                  
+        Boolean force
+        TctlmCommonFrameworkEnums_NodeType node_type
+	    UInt32 serial_int
+        TctlmCubeComputerControlProgram8_FileTransferStatus status
+        FName control_program_file_name
+        FName configuration_file_name
+    }
+    
+    enumeration StandardResult
+    {
+        SUCCESS,
+        ERROR,
+        INVALID_ARGS,
+        NOT_SUPPORTED
+    }
+    
+    enumeration SafeBool
+    {
+        FALSE = 0,
+        TRUE = 255 
+    }
+    
+    <** @description: State machine events. **>
+    enumeration StateMachineEvents
+    {
+        <** @description: Reset the state machine to its initial state. This event is always executed. **>
+        RESET = 0,
+        <** @description: Send a "periodic" event. This event is always executed, it forces the state machine to check if it needs to make a transitions to a different state based on the defined guard conditions. **>
+        PERIODIC = 1,
+        <** @description: This event will complete the EVENT MARKER ACQUISITION state and transition the SM to IDLE.  **>
+        EVENT_MARKER_ACQUIRED = 3,
+        <** @description: Request the state change state. The state change will use the Data Cache AOCS_CNTRL_SYS_STATE value for the system state. **>
+        REQUEST_STATE_CHANGE = 4,
+        <** @description: Request the FDIR state. If an FDIR error is reported and there is relevant logic, it will be executed.**>
+        REQUEST_FDIR = 5,
+        <** @description: This event will put the SM back to IDLE state in case we are in the CHECK state.**>
+        CHECK_COMPLETED = 6,
+        <** @description: This event will put the SM back to IDLE state in case we are in the EVENT DOWNLOAD state.**>
+        EVENT_DOWNLOAD_COMPLETED = 7,
+        <** @description: This event will put the SM back to IDLE state in case we are in the STATE CHANGE state.**>
+        STATE_CHANGE_COMPLETED = 8,
+        <** @description: This event will put the SM back to CHECK state in case we are in the FDIR state.**>
+        FDIR_COMPLETED = 9
+    }
+    
+    <** @description: State machine states. **>
+    enumeration StateMachineStates
+    {
+        ROOT,
+        BACKOFF,
+        EVENT_MARKER_ACQUISITION,
+        IDLE,
+        CHECK,
+        EVENT_DOWNLOAD,
+        STATE_CHANGE,
+        FDIR
+    }
+    
+    <** @description: Available control modes **>
+    enumeration ControlModes 
+    {
+        CNTRL_NO_CONTROL = 0,
+        CNTRL_1_AXIS_BDOT = 1,
+        CNTRL_Y_THOMSON = 2,
+        CNTRL_3_AXIS_BDOT = 3,
+        CNTRL_3_AXIS_LOW_POWER = 4,
+        CNTRL_SUN_Y_AXIS_SPIN_DETUMB = 5,
+        CNTRL_Z_THOMSON = 6,
+        CNTRL_SUN_Z_AXIS_SPIN_DETUMB = 7,
+        CNTRL_MAG_CNTRL_GG_BOOM_AND_YAW = 8,
+        CNTRL_MAG_CNTRL_GG_BOOM_AND_Z = 9,
+        CNTRL_INITIAL_Y_WHEEL_RAMP_UP = 10,
+        CNTRL_INITIAL_Y_WHEEL_PITCH_CNTRL = 11,
+        CNTRL_RW_3_AXIS = 12,
+        CNTRL_RW_SUN_TRACKING = 13,
+        CNTRL_RW_EO_TARGET_TRACKING = 14,
+        CNTRL_RW_EARTH_TARGET_STEERING = 15,
+        CNTRL_RW_GS_TARGET_TRACKING = 16,
+        CNTRL_RW_INERTIAL_TARGET_TRACKING = 17,
+        CNTRL_RW_MOON_TRACKING = 18,
+        CNTRL_RW_SAT_TARGET_TRACKING = 19,
+        CNTRL_NADIR_AND_YAW_TO_SUN = 20,
+        CNTRL_NADIR_AND_YAW_TO_GROUND_TARGET = 21,
+        CNTRL_VELOCITY_AND_ROLL_TO_SUN = 22,
+        CNTRL_VELOCITY_AND_ROLL_TO_GROUND_TARGET = 23,
+        CNTRL_NADIR_AND_YAW_BEST_TO_GS = 24,
+        CNTRL_STOP_RW_CONTROLLED = 50,
+        CNTRL_OPEN_LOOP_RW = 51,
+        CNTRL_USER = 100
+    }
+    
+    <** @description: Available estimation modes **>
+    enumeration EstimationModes
+    {
+        EST_NO_ESIMATOR = 0,
+        EST_GYRO_MEASURED_RATES = 1,
+        EST_MAG_EST_RATES = 2,
+        EST_MAG_EST_RATES_WITH_PITCH_EST = 3,
+        EST_TRIAD = 4,
+        EST_FULL_STATE_EKF = 5,
+        EST_GYRO_EKF = 6,
+        EST_USER = 100
+    }
+    
+    <** @description: Node power states **>
+    enumeration NodePowerState
+    {
+        OFF = 0,
+        ON = 1,
+        NO_CHANGE = 2,
+        AUTO = 3,
+        POWER_ON_PASS = 4
+    }
+    
+    <** @description: ADCS Boot State **>
+    enumeration BootState
+    {
+        
+        <** @description: Bootloader is running in main() **>
+        BootloaderRunning = 0
+        
+        <** @description: Bootloader is running and is in the timer backoff state **>
+        BootloaderBackoff = 1
+        
+        <** @description: Bootloader is running and performing port validation of connected nodes. Only applicable to CubeComputer **>
+        BootloaderPortValidation = 2
+        
+        <** @description: Bootloader is running and performing node auto discovery of connected nodes. Only applicable to CubeComputer **>
+        BootloaderAutoDiscover = 3
+        
+        <** @description: Bootloader is running and is halted, awaiting instructions **>
+        BootloaderHalt = 4
+        
+        <** @description: Bootloader is jumping to application **>
+        BootloaderJump = 5
+        
+        <** @description: Bootloader is running and experienced an error attempting to run the control-program, see error flags **>
+        BootloaderExitError = 6
+        
+        <** @description: Application is running after successful bootloader execution **>
+        ApplicationRunning = 7
+        
+        <** @description: Bootloader is removing write-protection from its config region **>
+        BootloaderCfgUnlock = 8
+        
+        <** @description: Bootloader is enabling boot pin **>
+        BootloaderBootPinEn = 9
+        
+        <** @description: Bootloader is disabling boot pin **>
+        BootloaderBootPinDis = 10
+        
+        <** @description: Bootloader is clearing all write-protction **>
+        BootloaderWrpClear = 11
+        
+        <** @description: Bootloader failed to load option bytes after unlocking config **>
+        BootloaderCfgUnlockError = 12
+        
+        <** @description: Bootloader failed to load option bytes after enabling boot pin **>
+        BootloaderBootPinEnError = 13
+        
+        <** @description: Bootloader failed to load option bytes after disabling boot pin **>
+        BootloaderBootPinDisError = 14
+        
+        <** @description: Bootloader failed to load option bytes after clearing all write-protction **>
+        BootloaderWrpClearError = 15
+        
+        <** @description: Auto-discovery failed **>
+        BootloaderAutoDiscoverError = 16
+        
+        <** @description: Boot bank could not be synchronized with flash option bytes **>
+        BootloaderBankSyncError = 17
+        
+        <** @description: Application has been commanded to reset to the bootloader and halt immediately **>
+        BootloaderHaltReset = 18
+        
+        <** @description: Application has triggered an ASSERT and will immediately. This is transitory and is not expected to be read as the state. It will be reflected in the reset reason.  **>
+        AssertError = 19
+        
+    }
+    
+    <** @description: ADCS Reset Reason **>
+    enumeration BootResetReason
+    {
+        
+        <** @description: Reset reason is unknown **>
+        ResetUnknown = 0
+        
+        <** @description: Firewall (Unused) **>
+        ResetFirewall = 1
+        
+        <** @description: Option-byte reset. This will have a dedicated reset reason if commanded, otherwise, is signals that the bootloader reloaded option bytes automatically before exitting. **>
+        ResetObl = 2
+        
+        <** @description: External Pin reset (Unused) **>
+        ResetExtPin = 3
+        
+        <** @description: Brown Out reset **>
+        ResetBrownOut = 4
+        
+        <** @description: Software reset **>
+        ResetSoft = 5
+        
+        <** @description: WatchDog Reset **>
+        ResetWatchdog = 6
+        
+        <** @description: Low Power Reset **>
+        ResetLowPower = 7
+        
+        <** @description: Soft reset commanded to halth bootloader immediately **>
+        ResetEnterBootloader = 8
+        
+        <** @description: Bootloader was commanded to unlock config - reset caused by removing write-protection **>
+        ResetCfgUnlock = 9
+        
+        <** @description: Bootloader was commanded to enable boot pin - reset caused by option bytes reload **>
+        ResetBootPinEn = 10
+        
+        <** @description: Bootloader was commanded to disable boot pin - reset caused by option bytes reload **>
+        ResetBootPinDis = 11
+        
+        <** @description: Bootloader was commanded to clear all write-protection - reset caused by option bytes reload **>
+        ResetWrpClearAll = 12
+        
+        <** @description: Attempt to unlock config failed - reset called internally **>
+        ResetCfgUnlockErr = 13
+        
+        <** @description: Attempt to enable boot pin failed - reset called internally **>
+        ResetBootPinEnErr = 14
+        
+        <** @description: Attempt to disable boot pin failed - reset called internally **>
+        ResetBootPinDisErr = 15
+        
+        <** @description: Attempt to clear all write-protection failed - reset called internally **>
+        ResetWrpClearAllErr = 16
+        
+        <** @description: Attempt to exit bootloader failed - reset called internally **>
+        ResetBootloaderExitErr = 17
+        
+        <** @description: Attempt to jump to new bootloader failed and bank synchronization also failed - reset called internally **>
+        ResetBootloaderBankSyncErr = 18
+        
+        <** @description: The running application triggered an ASSERT and reset - check error log for error code **>
+        ResetAssertErr = 19
+        
+    }
+    
+    <** @description: ADCS Run Mode
+    **>
+    enumeration AdcsRunMode
+    {
+        
+        <** @description: ADCS loop is inactive **>
+        AdcsOff = 0
+        
+        <** @description: ADCS loop is active **>
+        AdcsEnabled = 1
+        
+        <** @description: ADCS loop executed on trigger **>
+        AdcsTriggered = 2
+        
+        <** @description: ADCS is in simulation mode **>
+        AdcsSimulation = 3
+        
+    }
+    
+    <** @description: ADCS Operational State
+    **>
+    enumeration AdcsOpState
+    {
+        
+        <** @description: Manual operational state **>
+        OpStateManual = 0
+        
+        <** @description: Autonomous operational state **>
+        OpStateAuto = 1
+        
+        <** @description: Safe operational state **>
+        OpStateSafe = 2
+        
+        <** @description: Fault operational state **>
+        OpStateFault = 3
+        
+    }
+    
+    <** @description: ADCS Control Program Type
+    **>
+    enumeration AdcsProgType
+    {
+        <** @description: Bootloader **>
+        BOOTLOADER
+        <** @description: Application **>
+        APPLICATION
+    }
+
+    <** @description: Power state of all nodes **>
+    struct PowerState
+    {
+        <** @description: RWheel 0 **>
+        NodePowerState rwl0
+        <** @description: RWheel 1 **>
+        NodePowerState rwl1
+        <** @description: RWheel 2 **>
+        NodePowerState rwl2
+        <** @description: RWheel 3 **>
+        NodePowerState rwl3
+        <** @description: Magnetometer 0 **>
+        NodePowerState mag0
+        <** @description: Magnetometer 1 **>
+        NodePowerState mag1
+        <** @description: Gyro 0 **>
+        NodePowerState gyro0
+        <** @description: Gyro 1 **>
+        NodePowerState gyro1
+        <** @description: Fine Sun Sensor 0 **>
+        NodePowerState fss0
+        <** @description: Fine Sun Sensor 1 **>
+        NodePowerState fss1
+        <** @description: Fine Sun Sensor 2 **>
+        NodePowerState fss2
+        <** @description: Fine Sun Sensor 3 **>
+        NodePowerState fss3
+        <** @description: Horizon Sensor 0 **>
+        NodePowerState hss0
+        <** @description: Horizon Sensor 1 **>
+        NodePowerState hss1
+        <** @description: Star Tracker 0 **>
+        NodePowerState str0
+        <** @description: Star Tracker 1 **>
+        NodePowerState str1
+        <** @description: External Sensor 0 **>
+        NodePowerState extSensor0
+        <** @description: External Sensor 1 **>
+        NodePowerState extSensor1
+    }
+    
+    <** @description: Reference parameters for some control modes **>
+    struct RefParams
+    {
+        <** @description: Roll, Latitude or X component of an ECI pointing vector **>
+        Float ref_param1
+        <** @description: Pitch, Longitude or Y component of an ECI pointing vector **>
+        Float ref_param2
+        <** @description: Yaw, Altitude or Z component of an ECI pointing vector **>
+        Float ref_param3
+    }
+    
+    <** @description: State change core arguments **>
+    struct state_change_core_args
+    {
+        <** @description: Requested control mode **>
+        ControlModes control_mode
+        <** @description: Requested estimation mode for the main estimator **>
+        EstimationModes estimation_mode_main
+        <** @description: Requested estimation mode for the backup estimator **>
+        EstimationModes estimation_mode_backup
+        <** @description: Requested power state for the peripheral nodes **>
+        PowerState    nodes_pwr_states
+    }
+    
+    <** @description: State change arguments associated to the state change event type **>
+    struct state_change_args
+    {
+        <** @description: State change core arguments **>
+        state_change_core_args core_args
+        <** @description: Reference parameters (angles, coordinates, etc.) for some control modes **>
+        RefParams ref_params
+        <** @description: ID of the requested AOCS state **>
+        UInt8 req_state_id
+    }
+    
+    <** @description: Boot status **>
+    struct BootStatus
+    {
+        <** @description: Boot State **>
+        BootState State
+        
+        <** @description: Cause of the last reset **>
+        BootResetReason ResetReason
+        
+        <** @description: CRC check of shared parameters from bootloader failed - app will use its own config values **>
+        Boolean SharedParamsError
+        
+        <** @description: Port validation failed. Only applicable to CubeComputer. **>
+        Boolean PortValidationError
+        
+        <** @description: Auto-Discovery failed. Only applicable to CubeComputer. **>
+        Boolean PortDiscoveryError
+        
+        <** @description: OTP serial number is invalid **>
+        Boolean OtpSerialError
+        
+        <** @description: Config serial number is invalid **>
+        Boolean CfgSerialError
+        
+        <** @description: OTP/Config serial numbers do not match **>
+        Boolean SerialMismatchError
+        
+        <** @description: Set if the applications config is invalid and the default configuration is being used (if available). **>
+        Boolean ConfigInvalidError        
+    }
+    
+    <** @description: Component Error Codes **>
+    struct CompErrCodes
+    {
+        <** @description: Tctlm comms master service error code (node comms) **>
+        UInt32 MasterSvc
+        
+        <** @description: FRAM file system error code. **>
+        UInt32 FramFsSvc
+        
+        <** @description: Event log service error code. **>
+        UInt32 EventLogSvc
+        
+        <** @description: Image log service error code. **>
+        UInt32 ImgLogSvc
+        
+        <** @description: Telemetry log service error code. **>
+        UInt32 TlmLogSvc
+        
+        <** @description: IMU/Gyro service error code. **>
+        UInt32 ImuSvc
+    }
+    
+    <** @description: Control mode configuration **>
+    struct ControlModeConfig
+    {
+        <** @description: Used control mode type **>
+        ControlModes control_mode
+        <** @description: Magnetic controller timeout **>
+        UInt16 timeout
+    }
+    
+    <** @description: Estimation mode configuration **>
+    struct EstModeConfig
+    {
+        <** @description: Main estimation mode **>
+        EstimationModes main
+        <** @description: Backup estimation mode **>
+        EstimationModes backup
+    }
+
+    <** @description: Common operational status telemetry for the ADCS **>
+    struct OpStatusCommon
+    {
+        <** @description: TLM_137 Boot Status **>
+        BootStatus boot_status
+        <** @description: TLM_183 Power State **>
+        PowerState power_state
+        <** @description: TLM_230 Component Error Codes **>
+        CompErrCodes comp_err_codes
+        <** @description: Is data valid **>
+        Boolean is_valid
+    }
+
+    <** @description: Application operational status telemetry for the ADCS **>
+    struct OpStatusApp
+    {
+        <** @description: TLM_184 Run Mode **>
+        AdcsRunMode run_mode
+        <** @description: TLM_185 Control Mode **>
+        ControlModeConfig control_mode
+        <** @description: TLM_199 Estimation Mode **>
+        EstModeConfig estimation_mode
+        <** @description: TLM_200 Operational State **>
+        AdcsOpState op_state
+        <** @description: Is data valid **>
+        Boolean is_valid
+    }
+
+    <** @description: Events counters for major and critical events. **>
+    struct events
+    {
+        UInt16 adcs_config_validation_error
+        UInt16 node_setup_error
+        UInt16 node_jump_error
+        UInt16 mag_deploy_error
+        UInt16 control_loop_failure
+        UInt16 node_failure
+        UInt16 config_persist_error
+        UInt16 virtual_watchdog_warning
+        UInt16 port_validation_error
+        UInt16 auto_discovery_error
+        UInt16 control_loop_critical
+        UInt16 gyro_voltage_error
+        UInt16 gyro_critical
+        UInt16 virtual_watchdog_error
+    }
+    
+    <** @description: Critical and Major events enumeration. Check documentation for further information. **>
+    enumeration events_enum
+    {
+        ADCS_CONFIG_VALIDATION_ERROR
+        NODE_SETUP_ERROR
+        NODE_JUMP_ERROR
+        MAG_DEPLOY_ERROR
+        CONTROL_LOOP_FAILURE
+        NODE_FAILURE
+        CONFIG_PERSIST_ERROR
+        VIRTUAL_WATCHDOG_WARNING
+        PORT_VALIDATION_ERROR
+        AUTO_DISCOVERY_ERROR
+        CONTROL_LOOP_CRITICAL
+        GYRO_VOLTAGE_ERROR
+        GYRO_CRITICAL
+        VIRTUAL_WATCHDOG_ERROR
+    }
+    
+    <** @description: FDIR stats  **>
+    struct fdir_stat
+    {
+        <** @description: Event type that triggers the FDIR logic **>
+        events_enum event_type
+        <** @description: Number of executions of the specific FDIR logic. **>
+        UInt8 event_fdir_execution_num
+        <** @description: An array indicating the Success/Failure to recover from the error.
+            Each entry corresponds to one of the exectuins.
+            For example, if event_fdir_execution_num == 2, the array will have two entries indicating the result of the first and second executions respectively. 
+            @details: size = 1 **>
+        Boolean[] event_fdir_execution_res
+    }
+    
+    <** @description: Unrecovarable errors  **>
+    enumeration unrecovarable_errors
+    {
+        <** @description: No errors mask **>
+        NO_ERRORS = 0
+        <** @description: Control compromised and control authority cannot be achieved **>
+        CONTROL_COMPROMISED = 1
+    }
+    
+    <** @description: Telemetry mask 0 of loggable frames - Check CubeSpace documentation for further information **>
+    struct telemetry_mask_0
+    {
+        Boolean en_get_health_tlm_for_cubenode_pst3s
+        Boolean en_get_health_tlm_for_cubemag_magnetometer
+        Boolean en_get_health_tlm_for_cubesense_sun
+        Boolean en_get_torquer_current_measurements
+        Boolean en_get_raw_cubesense_sun_telemetry
+        Boolean en_get_raw_external_sensor_telemetry
+        Boolean en_get_controller_telemetry
+        Boolean en_get_backup_estimator_telemetry
+    }
+    
+    <** @description: Telemetry mask 1 of loggable frames - Check CubeSpace documentation for further information **>
+    struct telemetry_mask_1
+    {
+        Boolean en_get_models_telemetry
+        Boolean en_get_calibrated_gnss_sensor_telemetry
+        Boolean en_get_calibrated_hss_sensor_telemetry 
+        Boolean en_get_calibrated_mag_sensor_telemetry
+        Boolean en_get_calibrated_fss_sensor_telemetry
+        Boolean en_get_raw_cubesense_earth_telemetry  
+        Boolean en_get_raw_mag_sensor_telemetry      
+        Boolean en_get_raw_css_sensor_telemetry     
+    }
+    
+    <** @description: Telemetry mask 2 of loggable frames - Check CubeSpace documentation for further information **>
+    struct telemetry_mask_2
+    {
+        Boolean en_get_raw_gyr_sensor_telemetry
+        Boolean en_get_raw_rwl_sensor_telemetry
+        Boolean en_get_calibrated_css_sensor_telemetry
+        Boolean en_get_calibrated_gyr_sensor_telemetry
+        Boolean en_get_calibrated_str_sensor_telemetry
+        Boolean en_get_calibrated_rwl_sensor_telemetry
+        Boolean en_get_main_estimator_telemetry 
+        Boolean en_get_main_estimator_high_resolution_telemetry
+    }
+    
+    <** @description: Telemetry mask 3 of loggable frames - Check CubeSpace documentation for further information **>
+    struct telemetry_mask_3
+    {
+        Boolean en_get_raw_gnss_sensor_telemetry
+        Boolean en_get_raw_pst3s_star_tracker_telemetry
+        Boolean en_get_acp_execution_telemetry
+        Boolean en_get_cubecomputer_health
+        Boolean en_get_health_telemetry_for_cubesense_earth
+        Boolean en_get_health_telemetry_for_reaction_wheels
+        Boolean en_get_health_telemetry_for_cubenode_nssrwl
+        Boolean en_get_raw_nssrwl_sensor_telemetry
+    }
+    
+    <** @description: Telemetry mask 4 of loggable frames - Check CubeSpace documentation for further information **>
+    struct telemetry_mask_4
+    {
+        Boolean en_get_health_telemetry_for_cubestar
+        Boolean reserved_0
+        Boolean reserved_1
+        Boolean reserved_2
+        Boolean reserved_3
+        Boolean reserved_4
+        Boolean reserved_5
+        Boolean reserved_6
+    }
+    
+    <** @description: Predefined system states of Gen2 **>
+    enumeration sys_states
+    {
+        NO_CONTROL,
+        NORMAL_DETUMBLING,
+        Y_THOMSON,
+        Y_THOMSON_MEMS_RATE,
+        FAST_DETUMBLING,
+        VERY_FAST_DETUMBLING,
+        Y_MOMENTUM,
+        Y_MOMENTUM_FULL_STATE_EKF,
+        THREE_AXIS,
+        SUN_TRACKING,
+        TARGET_TRACKING,
+        USER1,
+        USER2,
+        USER3
+    }
+    
+    <** @description: Request a change of the state machine state which hanles the ADCS health and behaviour.
+        @details: id = 0x0000000A
+    **>
+    method reqStateMachineStateChange
+    {
+        in
+        {
+            <** @description: Gen2 state machine which will be triggered **>
+            StateMachineEvents sm_event
+            <** @description: State change event args **>
+            state_change_args state_change_event_args
+        }
+        
+        out
+        {
+            <** @description: Operation result code. Note that this code indicates only the result of the request - whether the request was successfully accepted or not. **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Get state machine current state. Refer to the SDK documentation for further information on the state machine and ADCS services.
+        @details: id = 0x0000000B
+    **>
+    method getStateMachineState
+    {
+        out
+        {
+            <** @description: Current state of the Gen2 state machine **>
+            StateMachineStates sm_state
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Get the last operational status of the ADCS. The status is updated every 10 seconds.
+        @details: id = 0x0000000C
+    **>
+    method getOpStatus
+    {
+        out
+        {
+            <** @description: Common operational status **>
+            OpStatusCommon op_status_common
+            <** @description: Application control program operational status **>
+            OpStatusApp op_status_app
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Request a soft reset of the ADCS and if the ADCS should remain in bootloader or application. The reset executes immeditely changing the state machine to the backoff state.
+        @details: id = 0x0000000D
+    **>
+    method reqSoftResetAndMode
+    {
+        in 
+        {
+            <** @description: Mode in which to put the ADCS into **>
+            AdcsProgType prog_type
+        }
+        out 
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+
+    <** @description: Gets the major and critical events detected since last power-up
+        @details: id = 0x0000000E
+    **>
+    method get_events_since_last_power_up
+    {
+        out 
+        {
+            <** @description: All critical and major events since last power-up **>
+            events all_events
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+
+    <** @description: Clear the events statistics cached in the OBC
+        @details: id = 0x0000000F
+    **>
+    method clear_events_since_last_power_up
+    {
+        out 
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+
+    <** @description: Download CubeObc events
+        @details: id = 0x00000010
+    **>
+    method download_evt
+    {
+        in 
+        {
+            <** @description: file to be created on Endurosat OBC **>
+            FName file_name
+
+            <** @description: event download specific parameters **>
+            TctlmCubeComputerCommon3_EventLogFilterTransferSetup setup
+        }
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+        }
+    }
+    
+    <** @description: 
+        @details: id = 0x00000011
+    **>
+    method download_evt_status
+    {
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+
+            <** @description:  **>
+            download_event_status status
+        }
+    }
+
+    <** @description: 
+        @details: id = 0x00000012
+    **>
+    method download_tlm
+    {
+        in 
+        {
+            <** @description: file to be created on Endurosat OBC **>
+            FName file_name
+
+            <** @description:  **>
+            TctlmCubeComputerCommon3_TelemetryLogTransferSetup setup
+        }
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+        }
+    }
+
+    <** @description: 
+        @details: id = 0x00000013
+    **>
+    method download_tlm_status
+    {
+        out 
+        {
+            <** @description:  **>
+            UInt32 err
+
+            <** @description:  **>
+            download_telemetry_status status
+        }
+    }
+
+    <** @description: 
+        @details: id = 0x00000014
+    **>
+    method download_img_stored
+    {
+        in 
+        {
+            <** @description: file to be created on Endurosat OBC **>
+            FName file_name
+
+            <** @description:  **>
+            UInt32 file_handle
+        }
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+        }
+    }
+
+    <** @description: 
+        @details: id = 0x00000015
+    **>
+    method download_img_stored_status
+    {
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+
+            <** @description:  **>
+            download_image_stored_status status
+        }
+    }
+    
+    <** @description: Read out the errors which the FDIR logic was unable to recover from. These error are stored in RAM.
+        @details: id = 0x00000018
+    **>
+    method get_fdir_unrecovarable_errors
+    {
+        out 
+        {
+            <** @description: A 32 bit mask indicating the unrecovarable errors - check the unrecovarable_errors enumeration **>
+            UInt32 errors
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Clears the unrecovarable errors 
+        @details: id = 0x00000019
+    **>
+    method clear_fdir_unrecovarable_errors
+    {
+        out 
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Get FDIR statistics 
+        @details: id = 0x0000001A
+    **>
+    method get_fdir_stats
+    {
+        out 
+        {
+            <** @description: FDIR logics array - size corrsponds to number of critical and major events
+                @details: size = 14 **>
+            fdir_stat[] fdir_logic
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Clear FDIR statistics 
+        @details: id = 0x0000001B
+    **>
+    method clear_fdir_stats
+    {
+        out 
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Obtains the Gen2 CubeADCS commissioning status
+        @details: id = 0x0000001C
+    **>
+    method get_commissioning_status
+    {
+        out
+        {
+            CommissioningStatus status
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Sets the Gen2 CubeADCS commissioning status to a new value  
+        @details: id = 0x0000001D
+    **>
+    method set_commissioning_status
+    {
+        in
+        {
+            CommissioningStatus status
+        }
+        out
+        {
+            StandardResult opResult 
+        }
+    }    
+    <** @description: Get telemetry configuration - returns the persistent configuration of the loggable telemetry updated in the Data Cache.
+        Loggable telemetry follows CubeSpace's description in API. The following configuration concerns only the valid masks as per the documentation.
+        @details: id = 0x0000001E
+    **>
+    method get_tlm_cfg
+    {
+        out 
+        {
+            <** @description: Loggable telemetry mask - column 0 **>
+            telemetry_mask_0 mask_0
+            <** @description: Loggable telemetry mask - column 1 **>
+            telemetry_mask_1 mask_1
+            <** @description: Loggable telemetry mask - column 2 **>
+            telemetry_mask_2 mask_2
+            <** @description: Loggable telemetry mask - column 3 **>
+            telemetry_mask_3 mask_3
+            <** @description: Loggable telemetry mask - column 4 **>
+            telemetry_mask_4 mask_4
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Set telemetry configuration - set the persistent configuration of the loggable telemetry updated in the Data Cache.
+        Loggable telemetry follows CubeSpace's description in API. The following configuration concerns only the valid masks as per the documentation.
+        @details: id = 0x0000001F
+    **>
+    method set_tlm_cfg
+    {
+        in
+        {
+            <** @description: Loggable telemetry mask - column 0 **>
+            telemetry_mask_0 mask_0
+            <** @description: Loggable telemetry mask - column 1 **>
+            telemetry_mask_1 mask_1
+            <** @description: Loggable telemetry mask - column 2 **>
+            telemetry_mask_2 mask_2
+            <** @description: Loggable telemetry mask - column 3 **>
+            telemetry_mask_3 mask_3
+            <** @description: Loggable telemetry mask - column 4 **>
+            telemetry_mask_4 mask_4
+        }
+        
+        out 
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result
+        }
+    }
+    
+    <** @description: Gets a single Gen2 CubeADCS system states configuration.
+        @details: id = 0x00000020
+    **>
+    method get_nvm_system_states_cfg
+    {
+        in
+        {
+            <** @description: The system to get **>
+            sys_states sys_state_to_get
+        }
+        out
+        {
+            <** @description: NVM system state configuration **>
+            state_change_core_args sys_states_cfg
+            <** @description: Operation result code **>
+            StandardResult op_result 
+        }
+    }
+        
+    <** @description: Sets a single Gen2 CubeADCS system state configuration
+        @details: id = 0x00000021
+    **>
+    method set_nvm_system_states_cfg
+    {
+        in
+        {
+            <** @description: NVM system state configuration **>
+            state_change_core_args sys_states_cfg
+            <** @description: The system to be set **>
+            sys_states sys_state_to_set
+        }
+        out
+        {
+            <** @description: Operation result code **>
+            StandardResult op_result 
+        }
+    }
+
+    <** @description: performs cube computer control program update
+        @details: id = 0x00000022
+    **>
+    method fw_update_cube_computer
+    {
+        in 
+        {
+            <** @description: control program file name (must exist in Endurosat's OBC file storage) **>
+            FName control_program_file_name
+
+            <** @description: configuration file name (must exist in Endurosat's OBC file storage) **>
+            FName configuration_file_name
+
+            <** @description: If parameter is set to true - force cube computer to booloader (if in control program)
+                              otherwise the upload fails if device is not already in booloader 
+            **>
+            Boolean force
+        }
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+        }
+    }
+
+    <** @description: gets the status of the last executed cube computer control program update
+        @details: id = 0x00000023
+    **>
+    method fw_update_cube_computer_status
+    {
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+
+            <** @description: status and parameters of the last executed cube computer control program update **>
+            cube_computer_fw_update_status status
+        }
+    }
+
+    <** @description: performs cube node control program update
+        @details: id = 0x00000024
+    **>
+    method fw_update_cube_node
+    {
+        in 
+        {
+            <** @description: control program file name (must exist in Endurosat's OBC file storage) **>
+            FName control_program_file_name
+
+            <** @description: configuration file name (must exist in Endurosat's OBC file storage) **>
+            FName configuration_file_name
+
+            <** @description: If parameter is set to true - force cube computer to control program (if in boot)
+                              otherwise the upload fails if device is not already in app 
+            **>
+            Boolean force
+
+            <** @description: node type to be updated **>
+            TctlmCommonFrameworkEnums_NodeType node_type
+
+            <** @description: node serial number **>         
+            UInt32 serial_int
+        }
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+        }
+    }
+
+    <** @description: gets the status of the last executed cube node control program update
+        @details: id = 0x00000025
+    **>
+    method fw_update_cube_node_status
+    {
+        out 
+        {
+            <** @description: error code as defined by libcubeobc **>
+            UInt32 err
+
+            <** @description: status and parameters of the last executed cube node control program update **>
+            cube_node_fw_update_status status
+        }
+    }
+}

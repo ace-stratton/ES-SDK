@@ -1,0 +1,626 @@
+package endurosat.pf.DataCache
+
+import endurosat.pf.DataCacheTypes.* from "DataCacheTypes.fidl"
+
+interface data_cache
+{
+    version { major 0 minor 1 }
+
+    <** @description: Onboard Computer TLM Message 0
+        @details: id = 0x00000010
+    **>
+    attribute OBC_0 OBC_0_Data
+
+    <** @description: CubeADCS TLM Message 0
+        - CubeADCS TLM191
+        @details: id = 0x00000011
+    **>
+    attribute ADCS_0 ADCS_0_Data
+
+    <** @description: CubeADCS TLM Message 1
+        - CubeADCS TLM218
+        - CubeADCS TLM147
+        @details: id = 0x00000012
+    **>
+    attribute ADCS_1 ADCS_1_Data
+
+    <** @description: CubeADCS TLM Message 2
+        - CubeADCS TLM140
+        @details: id = 0x00000013
+    **>
+    attribute ADCS_2 ADCS_2_Data
+
+    <** @description: EPS II TLM Message 0
+        @details: id = 0x00000014
+    **>
+    attribute EPS_0 EPS_0_Data
+
+    <** @description: Smart Solar Panels TLM Message 0 (First 6U dove panel Y+)
+        - Panel 1 Data (axis is satellite dependent)
+        @details: id = 0x00000015
+    **>
+    attribute SSP_0 SSP_0_Data
+
+    <** @description: Smart Solar Panels TLM Message 1 (Second 6U dove panel Y-)
+        - Panel 2 Data (axis is satellite dependent)
+        @details: id = 0x00000016
+    **>
+    attribute SSP_1 SSP_1_Data
+
+    <** @description: Smart Solar Panels TLM Message 2 (3U MCU Solar Panel X-)
+        - Panel 3 Data (axis is satellite dependent)
+        @details: id = 0x00000017
+    **>
+    attribute SSP_2 SSP_2_Data
+
+    <** @description: AOCS Control TLM Message
+        @details: id = 0x00000019
+    **>
+    attribute AOCS_CNTRL_TLM AOCS_CNTRL_TLM_Data
+
+    <** @description: RTOS Tasks statistics
+        @details: id = 0x00000020
+    **>
+    attribute TaskStats OS_Task_Data
+
+    <** @description: Smart Solar Panels TLM Message 4 (2U MCU Solar Panel Z-)
+        - Panel 4 Data (axis is satellite dependent)
+        @details: id = 0x00000021
+    **>
+    attribute SSP_3 SSP_3_Data
+
+    <** @description: Primary Magnetometer Measurements in Sensor Frame
+        @details: id = 0x00000022
+    **>
+    attribute SENSOR_MAG_PRIMARY SENSOR_MAG_PRIMARY_Data
+
+    <** @description: Secondary Magnetometer Measurements in Sensor Frame
+        @details: id = 0x00000023
+    **>
+    attribute SENSOR_MAG_SECONDARY SENSOR_MAG_SECONDARY_Data
+
+    <** @description: Gyroscope Measurements in Sensor Frame
+        @details: id = 0x00000024
+    **>
+    attribute SENSOR_GYRO SENSOR_GYRO_Data
+
+    <** @description: Coarse Sun Sensor Measurements in Sensor Frame
+        @details: id = 0x00000025
+    **>
+    attribute SENSOR_COARSE_SUN SENSOR_COARSE_SUN_Data
+
+    <** @description: ESADCS Primary Magnetometer Measurements in Satellite Frame
+        @details: id = 0x00000026
+    **>
+    attribute ES_ADCS_SENSOR_MAG_PRIMARY ES_ADCS_SENSOR_MAG_PRIMARY_Data
+
+    <** @description: ESADCS Secondary Magnetometer Measurements in Satellite Frame
+        @details: id = 0x00000027
+    **>
+    attribute ES_ADCS_SENSOR_MAG_SECONDARY ES_ADCS_SENSOR_MAG_SECONDARY_Data
+
+    <** @description: ESADCS Gyroscope Measurements in Satellite Frame
+        @details: id = 0x00000028
+    **>
+    attribute ES_ADCS_SENSOR_GYRO ES_ADCS_SENSOR_GYRO_Data
+
+    <** @description: ESADCS Photosensor Measurements in Satellite Frame
+        @details: id = 0x00000029
+    **>
+    attribute ES_ADCS_SENSOR_CSS ES_ADCS_SENSOR_CSS_Data
+
+    <** @description: ESADCS Estimator Detumbling Bdot output in Satellite Frame
+        @details: id = 0x00000030
+    **>
+    attribute ES_ADCS_ESTIMATES_BDOT ES_ADCS_ESTIMATES_BDOT_Data
+
+    <** @description: ESADCS Controller MTQ output in Satellite Frame
+        @details: id = 0x00000031
+    **>
+    attribute ES_ADCS_CONTROL_VALUES_MTQ ES_ADCS_CONTROL_VALUES_MTQ_Data
+
+    <** @description: Concept of Operations flags
+        @details: id = 0x00000032
+    **>
+    attribute ConOpsFlags ConOpsFlags_Data
+
+    <** @description: AOCS System State TLM and CNTRL
+        @details: id = 0x00000033
+    **>
+    attribute AOCS_CNTRL_SYS_STATE AOCS_CNTRL_SYS_STATE_Data
+
+    <** @description: CubeADCS TLM Message 3
+        @details: id = 0x00000034
+    **>
+    attribute ADCS_3 ADCS_3_Data
+
+    <** @description: CubeADCS TLM Message 4
+        @details: id = 0x00000035
+    **>
+    attribute ADCS_4 ADCS_4_Data
+	
+    <** @description: GetPowerDistributionInfo from EPSII_PDM_1 interface
+        @details: id = 0x00000038
+    **>
+    attribute EPS_9 EPS_9_Data
+
+    <** @description: GetDeviceHealthInfo from EPSII_PDM_1 interface
+        @details: id = 0x00000039
+    **>
+    attribute EPS_10 EPS_10_Data
+
+    <** @description: GetRAWSensors from EPSII_PDM_1 interface (Indexes 1-54)
+        @details: id = 0x00000043
+    **>
+    attribute EPS_14 EPS_14_Data
+
+	<** @description: Primary Accelerometer Measurements in Sensor Frame
+        @details: id = 0x00000044
+    **>
+    attribute SENSOR_ACC_PRIMARY SENSOR_ACC_PRIMARY_Data
+	
+	<** @description: Secondary Accelerometer Measurements in Sensor Frame
+        @details: id = 0x00000045
+    **>
+    attribute SENSOR_ACC_SECONDARY SENSOR_ACC_SECONDARY_Data
+	
+	<** @description: Primary Accelerometer Measurements in Satellite Frame
+        @details: id = 0x00000046
+    **>
+    attribute SENSOR_ACC_PRIMARY_SAT_FRAME SENSOR_ACC_PRIMARY_SAT_FRAME_Data
+	
+	<** @description: Secondary Accelerometer Measurements in Satellite Frame
+        @details: id = 0x00000047
+    **>
+    attribute SENSOR_ACC_SECONDARY_SAT_FRAME SENSOR_ACC_SECONDARY_SAT_FRAME_Data
+	
+	<** @description: Panels Temperature Measurements in Sensor Frame
+        @details: id = 0x00000048
+    **>
+    attribute SENSOR_PANEL_TEMP SENSOR_PANEL_TEMP_Data
+	
+	<** @description: Panels Temperature Measurements in Satellite Frame
+        @details: id = 0x00000049
+    **>
+    attribute SENSOR_PANEL_TEMP_SAT_FRAME SENSOR_PANEL_TEMP_SAT_FRAME_Data
+	
+	<** @description: Gyroscopes Temperature Measurements in Sensor Frame
+        @details: id = 0x0000004A
+    **>
+    attribute SENSOR_GYRO_TEMP SENSOR_GYRO_TEMP_Data
+	
+	<** @description: Gyroscopes Temperature Measurements in Satellite Frame
+        @details: id = 0x0000004B
+    **>
+    attribute SENSOR_GYRO_TEMP_SAT_FRAME SENSOR_GYRO_TEMP_SAT_FRAME_Data
+	
+	<** @description: CubeADCS Gen2 Operational Status Common
+        @details: id = 0x0000004C
+    **>
+    attribute CUBEADCS_GEN2_OP_STATUS_COMMON CUBEADCS_GEN2_OP_STATUS_COMMON_Data
+	
+	<** @description: CubeADCS Gen2 Operational Status Application Control Program
+        @details: id = 0x0000004D
+    **>
+    attribute CUBEADCS_GEN2_OP_STATUS_APP CUBEADCS_GEN2_OP_STATUS_APP_Data
+    
+    <** @description: Reference params for AOCS control modes
+        @details: id = 0x0000004E
+    **>
+    attribute AOCS_CNTRL_REF_PARAMS AOCS_CNTRL_REF_PARAMS_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 166
+        @details: id = 0x0000004F
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_166 CUBEADCS_GEN2_TLM_FRAME_166_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 167
+        @details: id = 0x00000050
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_167 CUBEADCS_GEN2_TLM_FRAME_167_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 168
+        @details: id = 0x00000051
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_168 CUBEADCS_GEN2_TLM_FRAME_168_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 169
+        @details: id = 0x00000052
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_169 CUBEADCS_GEN2_TLM_FRAME_169_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 170
+        @details: id = 0x00000053
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_170 CUBEADCS_GEN2_TLM_FRAME_170_Data    
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 171
+        @details: id = 0x00000054
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_171 CUBEADCS_GEN2_TLM_FRAME_171_Data  
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 172
+        @details: id = 0x00000055
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_172 CUBEADCS_GEN2_TLM_FRAME_172_Data  
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 173
+        @details: id = 0x00000056
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_173 CUBEADCS_GEN2_TLM_FRAME_173_Data  
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 174
+        @details: id = 0x00000057
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_174 CUBEADCS_GEN2_TLM_FRAME_174_Data  
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 175
+        @details: id = 0x00000058
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_175 CUBEADCS_GEN2_TLM_FRAME_175_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 176
+        @details: id = 0x00000059
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_176 CUBEADCS_GEN2_TLM_FRAME_176_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 177
+        @details: id = 0x0000005A
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_177 CUBEADCS_GEN2_TLM_FRAME_177_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 178
+        @details: id = 0x0000005B
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_178 CUBEADCS_GEN2_TLM_FRAME_178_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 179
+        @details: id = 0x0000005C
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_179 CUBEADCS_GEN2_TLM_FRAME_179_Data    
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 180
+        @details: id = 0x0000005D
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_180 CUBEADCS_GEN2_TLM_FRAME_180_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 203
+        @details: id = 0x0000005E
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_203 CUBEADCS_GEN2_TLM_FRAME_203_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 204
+        @details: id = 0x0000005F
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_204 CUBEADCS_GEN2_TLM_FRAME_204_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 205
+        @details: id = 0x00000060
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_205 CUBEADCS_GEN2_TLM_FRAME_205_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 206
+        @details: id = 0x00000061
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_206 CUBEADCS_GEN2_TLM_FRAME_206_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 207
+        @details: id = 0x00000062
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_207 CUBEADCS_GEN2_TLM_FRAME_207_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 208 - Part 1
+        @details: id = 0x00000063
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_208_1 CUBEADCS_GEN2_TLM_FRAME_208_1_Data
+    
+    <** @description: CubeADCS Gen2 Telemetry Frame 208 - Part 2
+        @details: id = 0x00000064
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_208_2 CUBEADCS_GEN2_TLM_FRAME_208_2_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 209
+        @details: id = 0x00000065
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_209 CUBEADCS_GEN2_TLM_FRAME_209_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 210
+        @details: id = 0x00000066
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_210 CUBEADCS_GEN2_TLM_FRAME_210_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 211
+        @details: id = 0x00000067
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_211 CUBEADCS_GEN2_TLM_FRAME_211_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 212
+        @details: id = 0x00000068
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_212 CUBEADCS_GEN2_TLM_FRAME_212_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 213
+        @details: id = 0x00000069
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_213 CUBEADCS_GEN2_TLM_FRAME_213_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 214
+        @details: id = 0x0000006A
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_214 CUBEADCS_GEN2_TLM_FRAME_214_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 216
+        @details: id = 0x0000006B
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_216 CUBEADCS_GEN2_TLM_FRAME_216_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 217
+        @details: id = 0x0000006C
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_217 CUBEADCS_GEN2_TLM_FRAME_217_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 218
+        @details: id = 0x0000006D
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_218 CUBEADCS_GEN2_TLM_FRAME_218_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 225
+        @details: id = 0x0000006E
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_225 CUBEADCS_GEN2_TLM_FRAME_225_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 226
+        @details: id = 0x0000006F
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_226 CUBEADCS_GEN2_TLM_FRAME_226_Data
+
+    <** @description: CubeADCS Gen2 Telemetry Frame 165
+        @details: id = 0x00000070
+    **>
+    attribute CUBEADCS_GEN2_TLM_FRAME_165 CUBEADCS_GEN2_TLM_FRAME_165_Data
+    
+    <** @description: GNSS TIME log
+        @details: id = 0x00000071
+    **>
+    attribute GNSS_TIME GNSS_TIME_Data
+    
+    <** @description: GNSS BESTXYZ log
+        @details: id = 0x00000072
+    **>
+    attribute GNSS_BESTXYZ GNSS_BESTXYZ_Data
+    
+    <** @description: Overall Information for the Batteries in the system
+        @details: id = 0x00000073
+    **>
+    attribute EpsOverallBatteryInfoType EpsOverallBatteryInfo_Data
+    
+// begin EPS BP generated code
+
+
+//
+// Global declarations for EPS BP INSTANCE0
+//
+    <** @description: Battery Info
+        @details: id = 0x101
+    **>
+    attribute Eps2Inst0BatteryInfoType EPS2_BP_INST0_BP_INFO_Data
+    
+    <** @description: Battery pack device health info
+        @details: id = 0x102
+    **>
+    attribute Eps2Inst0DeviceHealthInfoType EPS2_BP_INST0_DEVICE_HEALTH_INFO_Data
+    
+    <** @description: INA Sensor 1 data
+        @details: id = 0x103
+    **>
+    attribute Eps2Inst0InaSensors1Type EPS2_BP_INST0_INA_SENSOR1_Data
+    
+    <** @description: INA Sensor 2 data
+        @details: id = 0x104
+    **>
+    attribute Eps2Inst0InaSensors2Type EPS2_BP_INST0_INA_SENSOR2_Data
+    
+    <** @description: Balancer info
+        @details: id = 0x105
+    **>
+    attribute Eps2Inst0BalancerInfoType EPS2_BP_INST0_BALANCER_INFO_Data
+    
+    <** @description: Balancer status
+        @details: id = 0x106
+    **>
+    attribute Eps2Inst0BalancerStatusType EPS2_BP_INST0_BALANCER_STATUS_Data
+    
+    <** @description: Balancer Cells info
+        @details: id = 0x107
+    **>
+    attribute Eps2Inst0BalancerCellsInfoType EPS2_BP_INST0_BALANCER_CELLS_INFO_Data
+    
+    
+
+    <** @description: Input Charger XP info
+        @details: id = 0x108
+    **>
+    attribute Eps2Inst0ChargerXpType  EPS2_BP_INST0_CHARGER_XP_Data
+    
+
+    <** @description: Input Charger XR info
+        @details: id = 0x109
+    **>
+    attribute Eps2Inst0ChargerXrType  EPS2_BP_INST0_CHARGER_XR_Data
+    
+
+    <** @description: Input Charger YP info
+        @details: id = 0x10a
+    **>
+    attribute Eps2Inst0ChargerYpType  EPS2_BP_INST0_CHARGER_YP_Data
+    
+
+    <** @description: Input Charger YR info
+        @details: id = 0x10b
+    **>
+    attribute Eps2Inst0ChargerYrType  EPS2_BP_INST0_CHARGER_YR_Data
+    
+
+    <** @description: Input Charger ZP info
+        @details: id = 0x10c
+    **>
+    attribute Eps2Inst0ChargerZpType  EPS2_BP_INST0_CHARGER_ZP_Data
+    
+
+    <** @description: Input Charger ZR info
+        @details: id = 0x10d
+    **>
+    attribute Eps2Inst0ChargerZrType  EPS2_BP_INST0_CHARGER_ZR_Data
+    
+//
+// Global declarations for EPS BP INSTANCE1
+//
+    <** @description: Battery Info
+        @details: id = 0x10e
+    **>
+    attribute Eps2Inst1BatteryInfoType EPS2_BP_INST1_BP_INFO_Data
+    
+    <** @description: Battery pack device health info
+        @details: id = 0x10f
+    **>
+    attribute Eps2Inst1DeviceHealthInfoType EPS2_BP_INST1_DEVICE_HEALTH_INFO_Data
+    
+    <** @description: INA Sensor 1 data
+        @details: id = 0x110
+    **>
+    attribute Eps2Inst1InaSensors1Type EPS2_BP_INST1_INA_SENSOR1_Data
+    
+    <** @description: INA Sensor 2 data
+        @details: id = 0x111
+    **>
+    attribute Eps2Inst1InaSensors2Type EPS2_BP_INST1_INA_SENSOR2_Data
+    
+    <** @description: Balancer info
+        @details: id = 0x112
+    **>
+    attribute Eps2Inst1BalancerInfoType EPS2_BP_INST1_BALANCER_INFO_Data
+    
+    <** @description: Balancer status
+        @details: id = 0x113
+    **>
+    attribute Eps2Inst1BalancerStatusType EPS2_BP_INST1_BALANCER_STATUS_Data
+    
+    <** @description: Balancer Cells info
+        @details: id = 0x114
+    **>
+    attribute Eps2Inst1BalancerCellsInfoType EPS2_BP_INST1_BALANCER_CELLS_INFO_Data
+    
+    
+
+    <** @description: Input Charger XP info
+        @details: id = 0x115
+    **>
+    attribute Eps2Inst1ChargerXpType  EPS2_BP_INST1_CHARGER_XP_Data
+    
+
+    <** @description: Input Charger XR info
+        @details: id = 0x116
+    **>
+    attribute Eps2Inst1ChargerXrType  EPS2_BP_INST1_CHARGER_XR_Data
+    
+
+    <** @description: Input Charger YP info
+        @details: id = 0x117
+    **>
+    attribute Eps2Inst1ChargerYpType  EPS2_BP_INST1_CHARGER_YP_Data
+    
+
+    <** @description: Input Charger YR info
+        @details: id = 0x118
+    **>
+    attribute Eps2Inst1ChargerYrType  EPS2_BP_INST1_CHARGER_YR_Data
+    
+
+    <** @description: Input Charger ZP info
+        @details: id = 0x119
+    **>
+    attribute Eps2Inst1ChargerZpType  EPS2_BP_INST1_CHARGER_ZP_Data
+    
+
+    <** @description: Input Charger ZR info
+        @details: id = 0x11a
+    **>
+    attribute Eps2Inst1ChargerZrType  EPS2_BP_INST1_CHARGER_ZR_Data
+    
+//
+// Global declarations for EPS BP INSTANCE2
+//
+    <** @description: Battery Info
+        @details: id = 0x11b
+    **>
+    attribute Eps2Inst2BatteryInfoType EPS2_BP_INST2_BP_INFO_Data
+    
+    <** @description: Battery pack device health info
+        @details: id = 0x11c
+    **>
+    attribute Eps2Inst2DeviceHealthInfoType EPS2_BP_INST2_DEVICE_HEALTH_INFO_Data
+    
+    <** @description: INA Sensor 1 data
+        @details: id = 0x11d
+    **>
+    attribute Eps2Inst2InaSensors1Type EPS2_BP_INST2_INA_SENSOR1_Data
+    
+    <** @description: INA Sensor 2 data
+        @details: id = 0x11e
+    **>
+    attribute Eps2Inst2InaSensors2Type EPS2_BP_INST2_INA_SENSOR2_Data
+    
+    <** @description: Balancer info
+        @details: id = 0x11f
+    **>
+    attribute Eps2Inst2BalancerInfoType EPS2_BP_INST2_BALANCER_INFO_Data
+    
+    <** @description: Balancer status
+        @details: id = 0x120
+    **>
+    attribute Eps2Inst2BalancerStatusType EPS2_BP_INST2_BALANCER_STATUS_Data
+    
+    <** @description: Balancer Cells info
+        @details: id = 0x121
+    **>
+    attribute Eps2Inst2BalancerCellsInfoType EPS2_BP_INST2_BALANCER_CELLS_INFO_Data
+    
+    
+
+    <** @description: Input Charger XP info
+        @details: id = 0x122
+    **>
+    attribute Eps2Inst2ChargerXpType  EPS2_BP_INST2_CHARGER_XP_Data
+    
+
+    <** @description: Input Charger XR info
+        @details: id = 0x123
+    **>
+    attribute Eps2Inst2ChargerXrType  EPS2_BP_INST2_CHARGER_XR_Data
+    
+
+    <** @description: Input Charger YP info
+        @details: id = 0x124
+    **>
+    attribute Eps2Inst2ChargerYpType  EPS2_BP_INST2_CHARGER_YP_Data
+    
+
+    <** @description: Input Charger YR info
+        @details: id = 0x125
+    **>
+    attribute Eps2Inst2ChargerYrType  EPS2_BP_INST2_CHARGER_YR_Data
+    
+
+    <** @description: Input Charger ZP info
+        @details: id = 0x126
+    **>
+    attribute Eps2Inst2ChargerZpType  EPS2_BP_INST2_CHARGER_ZP_Data
+    
+
+    <** @description: Input Charger ZR info
+        @details: id = 0x127
+    **>
+    attribute Eps2Inst2ChargerZrType  EPS2_BP_INST2_CHARGER_ZR_Data
+        
+// end EPS BP generated code
+}

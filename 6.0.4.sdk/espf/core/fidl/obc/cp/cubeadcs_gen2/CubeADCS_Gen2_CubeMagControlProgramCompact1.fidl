@@ -1,0 +1,435 @@
+// WARNING!!! THIS IS A GENERATED FILE! DO NOT MODIFY CONTENTS MANUALLY!!!
+
+package endurosat.macif
+
+
+<** @description: Interface for Cube ADCS Gen2 - CubeMagControlProgramCompact1
+    @details: id = 307
+**>
+
+interface CubeADCS_Gen2_CubeMagControlProgramCompact1
+{
+    version {major 1 minor 0}
+    
+    <** @description: This enumeration holds the IDs of CubeADCS Gen2 nodes for which this interface is applicable **>
+    enumeration CmdTargetNode
+    {
+        NodeInvalid = 0
+        NodeMag0 = 10
+        NodeMag1 = 11
+        
+    }
+    
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_TcTlmError
+    {
+        
+        <** @description: No Error **>
+        Ok = 0
+        
+        <** @description: Invalid TcTlm ID **>
+        InvalidId = 1
+        
+        <** @description: Invalid Length **>
+        InvalidLength = 2
+        
+        <** @description: Invalid Parameter **>
+        InvalidParam = 3
+        
+        <** @description: CRC Check Failed **>
+        Crc = 4
+        
+        <** @description: TCTLM not implemented **>
+        NotImplemented = 5
+        
+        <** @description: Busy **>
+        TcTlmBusy = 6
+        
+        <** @description: Error in sequence of commands **>
+        Sequence = 7
+        
+        <** @description: Internal error **>
+        Internal = 8
+        
+        <** @description: Passthrough node timeout error **>
+        PassTimeout = 9
+        
+        <** @description: Passthrough target is invalid (passthrough is disabled) **>
+        PassTarget = 10
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_NodeType
+    {
+        
+        <** @description: Invalid Node Type **>
+        NodeTypeInvalid = 0
+        
+        <** @description: CubeComputer Type - version independant **>
+        NodeTypeCubeComputer = 1
+        
+        <** @description: CubeSense Type - version independant **>
+        NodeTypeCubeSense = 2
+        
+        <** @description: CubeWheel Type - version independant **>
+        NodeTypeCubeWheel = 3
+        
+        <** @description: CubeIR Type - version independant **>
+        NodeTypeCubeIr = 4
+        
+        <** @description: CubeMag Deploy Type - version independant **>
+        NodeTypeCubeMagDeploy = 5
+        
+        <** @description: CubeMag Compact Type - version independant **>
+        NodeTypeCubeMagCompact = 6
+        
+        <** @description: CubeStar Type - version independant **>
+        NodeTypeCubeStar = 7
+        
+        <** @description: CubeAuriga Type - version independant **>
+        NodeTypeAuriga = 8
+        
+        <** @description: CubeNode General Type - version independant **>
+        NodeTypeCubeNode = 9
+        
+        <** @description: CubeNode SLT Type - version independant **>
+        NodeTypeCubeNodeSlt = 10
+        
+        <** @description: CubeNode PST3S Type - version independant **>
+        NodeTypeCubeNodePst3s = 11
+        
+        <** @description: CubeNode NSSRWL Type - version independant **>
+        NodeTypeCubeNodeNssrwl = 12
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_ProgramType
+    {
+        
+        <** @description: Invalid Program Type **>
+        ProgramTypeInvalid = 0
+        
+        <** @description: control-program primary product application **>
+        ProgramTypeControl = 1
+        
+        <** @description: cube-computer flash-bootloader Bootloader application **>
+        ProgramTypeBootloader = 4
+        
+        <** @description: health-check Health Check application **>
+        ProgramTypeHealthCheck = 5
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_AbstractNode
+    {
+        
+        <** @description: Invalid Abstract Node **>
+        NodeInvalid = 0
+        
+        <** @description: CubeComputer **>
+        NodeComputer = 1
+        
+        <** @description: Star tracker 0 **>
+        NodeStr0 = 2
+        
+        <** @description: Star tracker 1 **>
+        NodeStr1 = 3
+        
+        <** @description: Fine sun sensor 0 **>
+        NodeFss0 = 4
+        
+        <** @description: Fine sun sensor 1 **>
+        NodeFss1 = 5
+        
+        <** @description: Fine sun sensor 2 **>
+        NodeFss2 = 6
+        
+        <** @description: Fine sun sensor 3 **>
+        NodeFss3 = 7
+        
+        <** @description: Horizon sun sensor 0 **>
+        NodeHss0 = 8
+        
+        <** @description: Horizon sun sensor 1 **>
+        NodeHss1 = 9
+        
+        <** @description: Magnetometer sensor 0 **>
+        NodeMag0 = 10
+        
+        <** @description: Magnetometer sensor 1 **>
+        NodeMag1 = 11
+        
+        <** @description: External sensor 0 **>
+        NodeExt0 = 12
+        
+        <** @description: External sensor 1 **>
+        NodeExt1 = 13
+        
+        <** @description: Reaction wheel 0 **>
+        NodeRwl0 = 14
+        
+        <** @description: Reaction wheel 1 **>
+        NodeRwl1 = 15
+        
+        <** @description: Reaction wheel 2 **>
+        NodeRwl2 = 16
+        
+        <** @description: Reaction wheel 3 **>
+        NodeRwl3 = 17
+        
+        <** @description: Reaction wheel 4 **>
+        NodeRwl4 = 18
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CommonFrameworkEnums_SerialSource
+    {
+        
+        <** @description: Serial number sourced from OTP **>
+        SourceOtp = 0
+        
+        <** @description: Serial number sourced from Config **>
+        SourceConfig = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MagType
+    {
+        
+        <** @description: PNI RM3100 Magnetometer **>
+        PNI = 0
+        
+        <** @description: MMC5883 Magnetometer **>
+        MMC = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_FilterType
+    {
+        
+        <** @description: Simple Averaging Filter **>
+        Average = 0
+        
+        <** @description: Butterworth Filter **>
+        Butter = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_FilterOrder
+    {
+        
+        <** @description: Butterworth 2nd order low-pass **>
+        bw_order_2 = 0
+        
+        <** @description: Butterworth 4th order low-pass **>
+        bw_order_4 = 1
+        
+        <** @description: Butterworth 6th order low-pass **>
+        bw_order_6 = 2
+        
+        <** @description: Butterworth 8th order low-pass **>
+        bw_order_8 = 3
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SampleBusy
+    {
+        
+        <** @description: Wait for the current sample to complete **>
+        sample_wait = 0
+        
+        <** @description: Use the last cached sample and return **>
+        sample_cached = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SamplePeriod
+    {
+        
+        <** @description: 10ms **>
+        t_10ms = 0
+        
+        <** @description: 20ms **>
+        t_20ms = 1
+        
+        <** @description: 30ms **>
+        t_30ms = 2
+        
+        <** @description: 40ms **>
+        t_40ms = 3
+        
+        <** @description: 50ms **>
+        t_50ms = 4
+        
+        <** @description: 60ms **>
+        t_60ms = 5
+        
+        <** @description: 70ms **>
+        t_70ms = 6
+        
+        <** @description: 80ms **>
+        t_80ms = 7
+        
+        <** @description: 90ms **>
+        t_90ms = 8
+        
+        <** @description: 100ms **>
+        t_100ms = 9
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SampleDuration
+    {
+        
+        <** @description: Single Measurement **>
+        SingleMeasurement = 0
+        
+        <** @description: 20ms **>
+        d_20ms = 4
+        
+        <** @description: 30ms **>
+        d_30ms = 5
+        
+        <** @description: 40ms **>
+        d_40ms = 6
+        
+        <** @description: 50ms **>
+        d_50ms = 7
+        
+        <** @description: 60ms **>
+        d_60ms = 8
+        
+        <** @description: 100ms **>
+        d_100ms = 9
+        
+        <** @description: 150ms **>
+        d_150ms = 10
+        
+        <** @description: 200ms **>
+        d_200ms = 11
+        
+        <** @description: 400ms **>
+        d_400ms = 12
+        
+        <** @description: 800ms **>
+        d_800ms = 13
+        
+        <** @description: 3000ms **>
+        d_3000ms = 14
+        
+        <** @description: 5000ms **>
+        d_5000ms = 15
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MagState
+    {
+        
+        <** @description: CubeMag Svc is Armed to Deploy **>
+        MagSvcDeployArm = 0
+        
+        <** @description: CubeMag Svc is Deploying **>
+        MagSvcDeploy = 1
+        
+        <** @description: CubeMag Svc is Idle **>
+        MagSvcIdle = 2
+        
+        <** @description: CubeMag Svc is in an error state **>
+        MagSvcError = 3
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MntState
+    {
+        
+        <** @description: Mnt Svc is off **>
+        MntSvcOff = 0
+        
+        <** @description: Mnt Svc is Initializing **>
+        MntSvcInit = 1
+        
+        <** @description: Mnt Svc is Idle **>
+        MntSvcIdle = 2
+        
+        <** @description: Mnt Svc is Auto Sampling **>
+        MntSvcAuto = 3
+        
+        <** @description: Mnt Svc is Sampling **>
+        MntSvcSample = 4
+        
+        <** @description: Mnt Svc is in an error state **>
+        MntSvcError = 5
+        
+    }
+    
+    
+    
+    
+    <**
+        @description: Health Telemetry for CubeMagCompact
+        @details: id = 0
+    **>
+    method getHealthTlm
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: MCU current **>
+            UInt16 McuCurrent
+            
+            <** @description: MCU temperature in deg C **>
+            Int16 McuTemp
+            
+            <** @description: MCU supply voltage **>
+            UInt16 McuVoltage
+            
+            <** @description: Magnetometer Temperature **>
+            Float MagTemp
+            
+            <** @description: Bitmask representing virtual watchdog region warning counters.  
+            @details: size = 5 **>
+            UInt8[] WatchdogCount
+            
+            
+        }
+    }
+    
+}

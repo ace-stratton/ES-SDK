@@ -1,0 +1,67 @@
+package endurosat.pf
+
+
+<** @description: Interface for onboard GNSS module
+    @details: id = 23
+**>
+interface gnss
+{
+    version { major 1 minor 0 }
+
+
+    <** @description: Operation status **>
+    enumeration operation
+    {
+        <** @description: could not execute **>
+        ERROR = 0,
+        
+        <** @description: executed **>
+        OK
+    }
+
+
+    <** @description: GNSS power status **>
+    enumeration power
+    {
+        <** @description: gnss power off **>
+        OFF = 0,
+        
+        <** @description: gnss power on **>
+        ON
+    }
+
+    <** 
+        @description: Turn on/off GNSS module
+        @details: id = 0x00000001
+    **>
+    method set_power
+    {
+        in
+        {
+            <** @description: power state (on or off) **>
+            power pwr_status 
+        }
+        out
+        {
+            <** @description: operation result **>
+            operation op_status
+        }
+    }
+    
+    
+    <** 
+        @description: Check if GNSS is on/off
+        @details: id = 0x00000003
+    **>
+    method get_power
+    {
+        out
+        {
+            <** @description: operation result **>
+            operation op_status
+
+            <** @description: current power state (on or off) **>
+            power pwr_status 
+        }
+    }
+}

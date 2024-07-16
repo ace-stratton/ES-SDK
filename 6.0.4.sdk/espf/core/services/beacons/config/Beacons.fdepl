@@ -1,0 +1,7 @@
+package org.endurosat.deploy
+
+import "../../../../core/fidl/spec/PlatformSpec.fdepl"
+import "../../../../core/fidl/obc/fp/Beacons.fidl"
+
+define org.endurosat.spec.PlatformSpec for interface endurosat.pf.Beacons               		   { IsClient = false }
+

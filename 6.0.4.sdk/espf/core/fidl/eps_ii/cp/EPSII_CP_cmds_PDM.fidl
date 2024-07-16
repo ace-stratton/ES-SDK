@@ -1,0 +1,1051 @@
+package endurosat.macif
+
+<** 
+    @description: EnduroSat EPSII PDM
+    @details: id = 0x14
+**>
+
+interface EPSII_CP_cmds_PDM
+{
+	// This protocol version
+    version { major 1 minor 0 }
+
+// ============================================================================================
+// Global types - TODO: Export in separate fidl, included here and there
+// ============================================================================================
+
+	<** @description: Telemetry sensors IDs **>
+    struct SESEPSII_PDM_SensorIDs
+    {
+		<** @description: Current for primary channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_I_ID    
+		<** @description: Voltage for primary channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_U_ID    
+		<** @description: Power for primary channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_P_ID    
+		<** @description: Temperature for primary channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1P_T_ID    
+		<** @description: Current for redundance channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_I_ID    
+		<** @description: Voltage for redundance channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_U_ID    
+		<** @description: Power for redundance channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_P_ID    
+		<** @description: Temperature for redundance channel_1 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_1R_T_ID    
+		<** @description: Current for primary channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_I_ID    
+		<** @description: Voltage for primary channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_U_ID    
+		<** @description: Power for primary channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_P_ID    
+		<** @description: Temperature for primary channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2P_T_ID    
+		<** @description: Current for redundance channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_I_ID    
+		<** @description: Voltage for redundance channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_U_ID    
+		<** @description: Power for redundance channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_P_ID    
+		<** @description: Temperature for redundance channel_2 for 3.3V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_3V3_2R_T_ID    
+		<** @description: Current for primary channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1P_I_ID     
+		<** @description: Voltage for primary channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1P_U_ID     
+		<** @description: Power for primary channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1P_P_ID     
+		<** @description: Temperature for primary channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1P_T_ID     
+		<** @description: Current for redundance channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1R_I_ID     
+		<** @description: Voltage for redundance channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1R_U_ID     
+		<** @description: Power for redundance channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1R_P_ID     
+		<** @description: Temperature for redundance channel_1 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_1R_T_ID     
+		<** @description: Current for primary channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2P_I_ID     
+		<** @description: Voltage for primary channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2P_U_ID     
+		<** @description: Power for primary channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2P_P_ID     
+		<** @description: Temperature for primary channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2P_T_ID     
+		<** @description: Current for redundance channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2R_I_ID     
+		<** @description: Voltage for redundance channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2R_U_ID     
+		<** @description: Power for redundance channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2R_P_ID     
+		<** @description: Temperature for redundance channel_2 for 5V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_5V_2R_T_ID     
+		<** @description: Current for primary channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_P_I_ID     
+		<** @description: Voltage for primary channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_P_U_ID     
+		<** @description: Power for primary channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_P_P_ID     
+		<** @description: Temperature for primary channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_P_T_ID     
+		<** @description: Current for redundance channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_R_I_ID     
+		<** @description: Voltage for redundance channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_R_U_ID     
+		<** @description: Power for redundance channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_R_P_ID     
+		<** @description: Temperature for redundance channel_1 for 12V **>
+		UInt32 ESEPSIISSVPDM_INA_LUP_IN_12V_R_T_ID     
+		<** @description: Temperature sensor 1 on PCB **>
+		UInt32 ESEPSIISSVPDM_TEMPERATURE_PCB_1_ID      
+		<** @description: Temperature sensor 2 on PCB **>
+		UInt32 ESEPSIISSVPDM_TEMPERATURE_PCB_2_ID      
+		<** @description: CPU temperature sensor 2 on PCB **>
+		UInt32 ESEPSIISSVPDM_ADC_CPU_T_ID      
+		<** @description: CProcessor AVCC voltage **>
+		UInt32 ESEPSIISSVPDM_ADC_CPU_AVCC_U_ID 
+		<** @description: Battery System bus input voltage **>
+		UInt32 ESEPSIISSVPDM_ADC_SYS_BUS_V_IN_MON      
+		<** @description: Battery raw bus output voltage **>
+		UInt32 ESEPSIISSVPDM_ADC_BAT_RAW_V_OUT_MON     
+		<** @description: Battery raw bus output current HSS 1 **>
+		UInt32 ESEPSIISSVPDM_ADC_BAT_RAW_I_1_OUT_MON   
+		<** @description: Battery raw bus output current HSS 2 **>
+		UInt32 ESEPSIISSVPDM_ADC_BAT_RAW_I_2_OUT_MON   
+		<** @description: 12V bus output voltage **>
+		UInt32 ESEPSIISSVPDM_ADC_12V_OUT_MON   
+		<** @description: 5V bus output voltage ch. 1 **>
+		UInt32 ESEPSIISSVPDM_ADC_5V_OUT_MON_1  
+		<** @description: 5V bus output voltage ch. 2 **>
+		UInt32 ESEPSIISSVPDM_ADC_5V_OUT_MON_2  
+		<** @description: 5V bus output voltage ch. 1 **>
+		UInt32 ESEPSIISSVPDM_ADC_3V3_OUT_MON_1 
+		<** @description: 5V bus output voltage ch. 2 **>
+		UInt32 ESEPSIISSVPDM_ADC_3V3_OUT_MON_2 
+    }
+
+
+    <** @description: Units are signed mA, mV, mC, mT etc
+    @details: size = 4 **>
+    enumeration ESEPSII_PDM_ReservedValues
+    {
+        <** @description: Use if (VAL > ESEPSIISSV) then error or unknown value **>
+        ESEPSIISSVPDM_MAX_VAL                       = 0x7FFFFFF0
+        ESEPSIISSVPDM_UNKNOWN_VAL                   = 0x7FFFFFFF
+        ESEPSIISSVPDM_ERROR_VAL                     = 0x7FFFFFFE
+    }
+
+	    
+    /////=====================================////
+    
+    <** @description: Exception descriptor **>
+	struct SDiagException
+	{
+		<** @description: Exception identificator. All BP/PDM exception identificators are 0 **>
+	    UInt16 m_nID
+	    <** @description: File identificator where exception occurred **>
+	    UInt16 m_nFileID
+	    <** @description: Line number where exception occurred **>
+	    UInt16 m_nLineNum
+	} 
+	
+	<** @description: Structure of all exception data **>
+	struct SDiagExceptions
+	{
+		<** @description: Version of this structure, currently = 0x1000 **>
+	    UInt16 m_nVersion
+	    <** @description: Returned exceptions count in the Exceptions array **>
+	    UInt16 m_nCount
+	    <** @description: Array with exceptions. Up to 16 exceptions can be returned, actual count is in the Count field
+				 	@details: size = 16 **>
+	    SDiagException[] m_exception
+	} 
+
+    <** 
+    @description: Gets the last X critical exceptions that have occurred in the BasicApp since the ResetBasicAppExceptions command
+    @details: id = 1001
+    **>
+    method GetBasicAppExceptions //enum EDiagFileIDs
+    {
+        out 
+        {
+            <** @description: Get last 16 ASSERT fails **>
+            SDiagExceptions exceptions
+        }
+    }
+    
+    <** @description: List with error types **>
+    struct SDiagErrCounter
+    {
+		<** @description: position in array **>
+		UInt16 position_0
+		<** @description: NULL ID, not returned by command **>
+		UInt16 EDC_NONE
+		<** @description: position in array **>
+		UInt16 position_1
+		<** @description: External oscillator single failure event **>
+		UInt16 EDC_OSC_EXT_SINGLE_FAILED_CNTR
+		<** @description: position in array **>
+		UInt16 position_2
+		<** @description: External oscillator permanent failure event (after X single failures) **>
+		UInt16 EDC_OSC_EXT_PERMANENT_FAILED_CNTR
+		<** @description: position in array **>
+		UInt16 position_3
+		<** @description: Low Frequency oscillator failures and run on backup one **>
+		UInt16 EDC_LF_OSC_BACKUP_CNTR
+		<** @description: position in array **>
+		UInt16 position_4
+		<** @description: FRAM Access Time Error **>
+		UInt16 EDC_SYSSNIV__ACCTEIFG
+		<** @description: position in array **>
+		UInt16 position_5
+		<** @description: MPUSEGPIFG encapsulated IP memory segment violation **>
+		UInt16 EDC_SYSSNIV__MPUSEGPIFG
+		<** @description: position in array **>
+		UInt16 position_6
+		<** @description: MPUSEGIIFG information memory segment violation **>
+		UInt16 EDC_SYSSNIV__MPUSEGIIFG
+		<** @description: position in array **>
+		UInt16 position_7
+		<** @description: MPUSEG1IFG segment 1 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG1IFG
+		<** @description: position in array **>
+		UInt16 position_8
+		<** @description: MPUSEG1IFG segment 2 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG2IFG
+		<** @description: position in array **>
+		UInt16 position_9
+		<** @description: MPUSEG1IFG segment 3 memory violation **>
+		UInt16 EDC_SYSSNIV__MPUSEG3IFG
+		<** @description: position in array **>
+		UInt16 position_10
+		<** @description: VMAIFG Vacant memory access **>
+		UInt16 EDC_SYSSNIV__VMAIFG
+		<** @description: position in array **>
+		UInt16 position_11
+		<** @description: JMBOUTIFG JTAG mailbox input **>
+		UInt16 EDC_SYSSNIV__JMBINIFG
+		<** @description: position in array **>
+		UInt16 position_12
+		<** @description: JMBOUTIFG JTAG mailbox output **>
+		UInt16 EDC_SYSSNIV__JMBOUTIFG
+		<** @description: position in array **>
+		UInt16 position_13
+		<** @description: Correctable FRAM bit error detection **>
+		UInt16 EDC_SYSSNIV__CBDIFG
+		<** @description: position in array **>
+		UInt16 position_14
+		<** @description: FRAM write protection detection **>
+		UInt16 EDC_SYSSNIV__WPROT
+		<** @description: position in array **>
+		UInt16 position_15
+		<** @description: LEA time-out fault **>
+		UInt16 EDC_SYSSNIV__LEATO
+		<** @description: position in array **>
+		UInt16 position_16
+		<** @description: LEA command fault **>
+		UInt16 EDC_SYSSNIV__LEACMD
+		<** @description: position in array **>
+		UInt16 position_17
+		<** @description: ADC Reference voltage settle timeout **>
+		UInt16 EDC_ADC_REF_SETTLE_FAIL_CNTR
+		<** @description: position in array **>
+		UInt16 position_18
+		<** @description: ADC Conversion timeout **>
+		UInt16 EDC_ADC_CONV_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_19
+		<** @description: ADC Reference voltage regulator bussy error **>
+		UInt16 EDC_ADC_REF_BUSSY_CNTR
+		<** @description: position in array **>
+		UInt16 position_20
+		<** @description: ADC Bussy with previous conversion **>
+		UInt16 EDC_ADC_STUCK_IN_PREV_CONV
+		<** @description: position in array **>
+		UInt16 position_21
+		<** @description: NVM No free memory **>
+		UInt16 EDC_NVM_NO_FREE_MEMORY
+		<** @description: position in array **>
+		UInt16 position_22
+		<** @description: NVM Sgment not found **>
+		UInt16 EDC_NVM_SEGMENT_NOT_FOUND
+		<** @description: position in array **>
+		UInt16 position_23
+		<** @description: BL Checker partition 1 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_24
+		<** @description: BL Checker partition 2 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_25
+		<** @description: BL Checker partition 3 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART3_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_26
+		<** @description: BL Checker partition 4 corrupted **>
+		UInt16 EDC_BL_CHECKER_PART4_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_27
+		<** @description: BL Implementation partition 1 corrupted **>
+		UInt16 EDC_BL_IMPLEMENTATION_PART1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_28
+		<** @description: BL Implementation partition 2 corrupted **>
+		UInt16 EDC_BL_IMPLEMENTATION_PART2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_29
+		<** @description: NVM partition 1 corrupted **>
+		UInt16 EDC_NVM_PART1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_30
+		<** @description: NVM partition 2 corrupted **>
+		UInt16 EDC_NVM_PART2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_31
+		<** @description: External BasicApp partition 1 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_32
+		<** @description: External BasicApp partition 2 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_33
+		<** @description: External BasicApp partition 3 image corrupted **>
+		UInt16 EDC_EXT_BASICAPP_PART3_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_34
+		<** @description: External Main app partition 1 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_35
+		<** @description: External Main app partition 2 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_36
+		<** @description: External Main app partition 3 image corrupted **>
+		UInt16 EDC_EXT_MAINAPP_PART3_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_37
+		<** @description: CPU FRAM Correctable bit error (duplicated) **>
+		UInt16 EDC_CBDIFG_FRAM_CORRECTABLE_BIT
+		<** @description: position in array **>
+		UInt16 position_38
+		<** @description: CPU RESET: Total reset counter **>
+		UInt16 EDC_RST_TOTAL
+		<** @description: position in array **>
+		UInt16 position_39
+		<** @description: CPU RESET: Brownout (BOR) **>
+		UInt16 EDC_RST_BROWNOUT
+		<** @description: position in array **>
+		UInt16 position_40
+		<** @description: CPU RESET: RSTIFG RST/NMI (BOR) **>
+		UInt16 EDC_RST_RSTIFG
+		<** @description: position in array **>
+		UInt16 position_41
+		<** @description: CPU RESET: PMMSWBOR software BOR (BOR) **>
+		UInt16 EDC_RST_PMMSWBOR
+		<** @description: position in array **>
+		UInt16 position_42
+		<** @description: CPU RESET: LPMx.5 wake up (BOR) **>
+		UInt16 EDC_RST_LPM_X_5_WAKE
+		<** @description: position in array **>
+		UInt16 position_43
+		<** @description: CPU RESET: Security violation (BOR) **>
+		UInt16 EDC_RST_SECURITY_VIOLATION
+		<** @description: position in array **>
+		UInt16 position_44
+		<** @description: CPU RESET: Reserved (0x0C) **>
+		UInt16 EDC_RST_RES1
+		<** @description: position in array **>
+		UInt16 position_45
+		<** @description: CPU RESET: SVSHIFG SVSH event (BOR) **>
+		UInt16 EDC_RST_SVSHIFG
+		<** @description: position in array **>
+		UInt16 position_46
+		<** @description: CPU RESET: Reserved (0x10) **>
+		UInt16 EDC_RST_RES2
+		<** @description: position in array **>
+		UInt16 position_47
+		<** @description: CPU RESET: Reserved (0x12) **>
+		UInt16 EDC_RST_RES3
+		<** @description: position in array **>
+		UInt16 position_48
+		<** @description: CPU RESET: PMMSWPOR software POR (POR) **>
+		UInt16 EDC_RST_PMMSWPOR
+		<** @description: position in array **>
+		UInt16 position_49
+		<** @description: CPU RESET: WDTIFG watchdog timeout (PUC) **>
+		UInt16 EDC_RST_WDTIFG
+		<** @description: position in array **>
+		UInt16 position_50
+		<** @description: CPU RESET: WDTPW password violation (PUC) **>
+		UInt16 EDC_RST_WDTPW
+		<** @description: position in array **>
+		UInt16 position_51
+		<** @description: CPU RESET: FRCTLPW password violation (PUC) **>
+		UInt16 EDC_RST_FRCTLPW
+		<** @description: position in array **>
+		UInt16 position_52
+		<** @description: CPU RESET: Uncorrectable FRAM bit error detection (PUC) **>
+		UInt16 EDC_RST_FRAM_BIT_ERR
+		<** @description: position in array **>
+		UInt16 position_53
+		<** @description: CPU RESET: Peripheral area fetch (PUC) **>
+		UInt16 EDC_RST_PER_FETCH
+		<** @description: position in array **>
+		UInt16 position_54
+		<** @description: CPU RESET: PMMPW PMM password violation (PUC) **>
+		UInt16 EDC_RST_PMMPW
+		<** @description: position in array **>
+		UInt16 position_55
+		<** @description: CPU RESET: MPUPW MPU password violation (PUC) **>
+		UInt16 EDC_RST_MPUPW
+		<** @description: position in array **>
+		UInt16 position_56
+		<** @description: CPU RESET: CSPW CS password violation (PUC) **>
+		UInt16 EDC_RST_CSPW
+		<** @description: position in array **>
+		UInt16 position_57
+		<** @description: CPU RESET: MPUSEGIPIFG encapsulated IP memory segment violation (PUC) **>
+		UInt16 EDC_RST_MPUSEGIPIFG
+		<** @description: position in array **>
+		UInt16 position_58
+		<** @description: CPU RESET: MPUSEGIIFG information memory segment violation (PUC) **>
+		UInt16 EDC_RST_MPUSEGIIFG
+		<** @description: position in array **>
+		UInt16 position_59
+		<** @description: CPU RESET: MPUSEG1IFG segment 1 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG1IFG
+		<** @description: position in array **>
+		UInt16 position_60
+		<** @description: CPU RESET: MPUSEG2IFG segment 2 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG2IFG
+		<** @description: position in array **>
+		UInt16 position_61
+		<** @description: CPU RESET: MPUSEG3IFG segment 3 memory violation (PUC) **>
+		UInt16 EDC_RST_MPUSEG3IFG
+		<** @description: position in array **>
+		UInt16 position_62
+		<** @description: MAC SYS1: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_SYS1_TX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_63
+		<** @description: MAC SYS1: TX Timeout **>
+		UInt16 EDC_MAC_SYS1_TX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_64
+		<** @description: MAC SYS1: RX Message with zerro size **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: position in array **>
+		UInt16 position_65
+		<** @description: MAC SYS1: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: position in array **>
+		UInt16 position_66
+		<** @description: MAC SYS1: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: position in array **>
+		UInt16 position_67
+		<** @description: MAC SYS1: RX Collision detected **>
+		UInt16 EDC_MAC_SYS1_RX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_68
+		<** @description: MAC SYS1: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_SYS1_RX_MSG_MISS_NO_BUFFER
+		<** @description: position in array **>
+		UInt16 position_69
+		<** @description: MAC SYS1: RX Timeout counter **>
+		UInt16 EDC_MAC_SYS1_RX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_70
+		<** @description: MAC SYS1: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_SYS1_RX_RESTARTED_MSGS
+		<** @description: position in array **>
+		UInt16 position_71
+		<** @description: MAC SYS1: RX byte to byte timeout **>
+		UInt16 EDC_MAC_SYS1_RX_INTER_BYTE_MAX_TIME
+		<** @description: position in array **>
+		UInt16 position_72
+		<** @description: MAC SYS2: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_SYS2_TX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_73
+		<** @description: MAC SYS2: TX Timeout **>
+		UInt16 EDC_MAC_SYS2_TX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_74
+		<** @description: MAC SYS2: RX Message with zerro size **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: position in array **>
+		UInt16 position_75
+		<** @description: MAC SYS2: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: position in array **>
+		UInt16 position_76
+		<** @description: MAC SYS2: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: position in array **>
+		UInt16 position_77
+		<** @description: MAC SYS2: RX Collision detected **>
+		UInt16 EDC_MAC_SYS2_RX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_78
+		<** @description: MAC SYS2: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_SYS2_RX_MSG_MISS_NO_BUFFER
+		<** @description: position in array **>
+		UInt16 position_79
+		<** @description: MAC SYS2: RX Timeout counter **>
+		UInt16 EDC_MAC_SYS2_RX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_80
+		<** @description: MAC SYS2: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_SYS2_RX_RESTARTED_MSGS
+		<** @description: position in array **>
+		UInt16 position_81
+		<** @description: MAC SYS2: RX byte to byte timeout **>
+		UInt16 EDC_MAC_SYS2_RX_INTER_BYTE_MAX_TIME
+		<** @description: position in array **>
+		UInt16 position_82
+		<** @description: MAC PAY1: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_PAY1_TX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_83
+		<** @description: MAC PAY1: TX Timeout **>
+		UInt16 EDC_MAC_PAY1_TX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_84
+		<** @description: MAC PAY1: RX Message with zerro size **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: position in array **>
+		UInt16 position_85
+		<** @description: MAC PAY1: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: position in array **>
+		UInt16 position_86
+		<** @description: MAC PAY1: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: position in array **>
+		UInt16 position_87
+		<** @description: MAC PAY1: RX Collision detected **>
+		UInt16 EDC_MAC_PAY1_RX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_88
+		<** @description: MAC PAY1: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_PAY1_RX_MSG_MISS_NO_BUFFER
+		<** @description: position in array **>
+		UInt16 position_89
+		<** @description: MAC PAY1: RX Timeout counter **>
+		UInt16 EDC_MAC_PAY1_RX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_90
+		<** @description: MAC PAY1: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_PAY1_RX_RESTARTED_MSGS
+		<** @description: position in array **>
+		UInt16 position_91
+		<** @description: MAC PAY1: RX byte to byte timeout **>
+		UInt16 EDC_MAC_PAY1_RX_INTER_BYTE_MAX_TIME
+		<** @description: position in array **>
+		UInt16 position_92
+		<** @description: MAC PAY2: TX Collisions (obsolete, not used) **>
+		UInt16 EDC_MAC_PAY2_TX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_93
+		<** @description: MAC PAY2: TX Timeout **>
+		UInt16 EDC_MAC_PAY2_TX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_94
+		<** @description: MAC PAY2: RX Message with zerro size **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_ZERRO_SIZE
+		<** @description: position in array **>
+		UInt16 position_95
+		<** @description: MAC PAY2: RX Message with wrong header CRC **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_HDR_CRC
+		<** @description: position in array **>
+		UInt16 position_96
+		<** @description: MAC PAY2: RX Message with wrong msg CRC **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_MSG_CRC
+		<** @description: position in array **>
+		UInt16 position_97
+		<** @description: MAC PAY2: RX Collision detected **>
+		UInt16 EDC_MAC_PAY2_RX_COLLISION
+		<** @description: position in array **>
+		UInt16 position_98
+		<** @description: MAC PAY2: RX No available buffer to accept message (message lost) **>
+		UInt16 EDC_MAC_PAY2_RX_MSG_MISS_NO_BUFFER
+		<** @description: position in array **>
+		UInt16 position_99
+		<** @description: MAC PAY2: RX Timeout counter **>
+		UInt16 EDC_MAC_PAY2_RX_TIMEOUT
+		<** @description: position in array **>
+		UInt16 position_100
+		<** @description: MAC PAY2: RX start reception of message while previous not fully received **>
+		UInt16 EDC_MAC_PAY2_RX_RESTARTED_MSGS
+		<** @description: position in array **>
+		UInt16 position_101
+		<** @description: MAC PAY2: RX byte to byte timeout **>
+		UInt16 EDC_MAC_PAY2_RX_INTER_BYTE_MAX_TIME
+		<** @description: position in array **>
+		UInt16 position_102
+		<** @description: CPU time since last reset in seconds (Low 2 bytes) **>
+		UInt16 EDC_CPU_UP_TIME_LO
+		<** @description: position in array **>
+		UInt16 position_103
+		<** @description: CPU time since last reset in seconds (High 2 bytes) **>
+		UInt16 EDC_CPU_UP_TIME_HI
+		<** @description: position in array **>
+		UInt16 position_104
+		<** @description: CPU cooperative loop max time in ms **>
+		UInt16 EDC_CPU_MAIN_LOOP_MAX_TIME
+		<** @description: position in array **>
+		UInt16 position_105
+		<** @description: NVM Initial device configuration partition 1 corrupted counter **>
+		UInt16 EDC_INIT_CONFIG_NVM_1_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_106
+		<** @description: NVM Initial device configuration partition 2 corrupted counter **>
+		UInt16 EDC_INIT_CONFIG_NVM_2_CORRUPTED
+		<** @description: position in array **>
+		UInt16 position_107
+		<** @description: External FRAM chip probe during CPU boot failed **>
+		UInt16 EDC_EXT_FRAM_PROBE_FAILED
+		<** @description: position in array **>
+		UInt16 position_108
+		<** @description: Current NVM allocated size **>
+		UInt16 EDC_NVM_ALLOCATED_SIZE
+		<** @description: position in array **>
+		UInt16 position_109
+		<** @description: Current NVM used size **>
+		UInt16 EDC_NVM_USED_SIZE
+		<** @description: position in array **>
+		UInt16 position_110
+		<** @description: Device basic settings in NVM corrupted **>
+		UInt16 EDC_BASIC_SETTINGS_NVM_CORRUPTED
+    }
+    
+    <** @description: Error Counter all data structure **>
+	struct SDiagErrCounters
+	{
+		<** @description: Version of this structure, currently = 0x1000 **>
+	    UInt16 m_nVersion
+	    <** @description: Returned diagnostics counters count in the Counters array **>
+	    UInt16 m_nCount
+    	<** @description: Array with diagnostics counters. Actual count is in the Count field **>
+	    SDiagErrCounter m_counter
+	}
+    
+        <** 
+    @description: Gets error counters (non-critical errors, handled by application) of BasicApp
+    @details: id = 1002
+    **>
+    method GetBasicAppErrCounters	//enum EDiagCntrs
+    {
+        out
+        {
+			<** @description: Gets error counters (non-critical errors, handled by application) of the BasicApp. **>
+            SDiagErrCounters errorCounters
+        }
+    }
+
+    <** 
+    @description: Gets the last X critical exceptions that have occurred in the main application since the ResetBasicAppExceptions command
+    @details: id = 1003
+    **>
+    method GetMainAppExceptions //enum EDiagFileIDs
+    {
+        out
+        {
+	    <** @description: Get last 16 ASSERT fails **>
+            SDiagExceptions exceptions
+        }
+    }
+    
+    <** 
+    @description: Gets error counters (non-critical errors, handled by application) of main application
+    @details: id = 1004
+    **>
+    method GetMainAppErrCounters	//enum EDiagCntrs
+    {
+        out
+        {
+        	<** @description: Gets error counters (non-critical errors, handled by application) of the Main application. **>
+            SDiagErrCounters errorCounters
+        }
+    }
+            
+    <** 
+    @description: Clears exceptions for the basic application
+    @details: id = 1005
+    **>
+    method ResetBasicAppExceptions
+    {
+    }
+    
+    <** 
+    @description: Clears error counters for the basic application
+    @details: id = 1006
+    **>
+    method ResetBasicAppErrCounters
+    {
+    }
+        
+    <** 
+    @description: Clears exceptions for the main application
+    @details: id = 1007
+    **>
+    method ResetMainAppExceptions
+    {
+    }
+    
+    <** 
+    @description: Clears error counters for the main application
+    @details: id = 1008
+    **>
+    method ResetMainAppErrCounters
+    {
+    }
+
+/////=====================================////
+
+
+    <** 
+        @description: Reset device in same mode (main/basic) as it is at the time command is received.
+	  @details: id = 1011
+	**>
+    method ResetDevice   
+    {
+    }
+
+    <** 
+        @description: Restarts and installs main application. This command may be initiated to switch from BasicApp to main application operation
+	  @details: id = 1012
+	**>
+    method ForceInstallMainApp   
+    {
+    }
+
+    <** 
+        @description: Restarts and installs BasicApp
+	  @details: id = 1013
+	**>
+    method ForceInstallBasicApp     
+    {
+    }
+
+/////=====================================////
+
+
+// ============================================================================================
+// Get RAW Sensor values
+// ============================================================================================
+
+    <** 
+        @description: Gets all sensor values of the PDM by ID. Up to 53 different sensor values may be got.
+		@details: id = 1014
+	**>
+    method GetRawSensorsValues
+    {
+		out
+		{
+              <** @description: Random value to identify Request <-> Response **>
+			UInt32 PktID
+
+			<** @description: Returns all error counters defined in PDM. **>
+			SESEPSII_PDM_SensorIDs SensorValues
+		}
+    }
+
+
+// ============================================================================================
+// Set/Get BasicSettings
+// If device switches to/from low power modes (Phoenix, bat.overheat, etc.) or device is restarted, these defaults will be loaded.
+// ============================================================================================
+    <** @description: Use as bitmask
+    @details: size = 8 **>
+    enumeration SBSED_Bitmask
+    {
+    		<** @description: Disabled channel **>
+        SBSEDBM_DiSABLED                    = 0  
+        //   <** @description: Corresponding value is switched on when entering BAT_OVERHEAT mode **>
+        //SBSEDBM_OVH_MODE                    = 1        
+           <** @description: Corresponding value is switched on when entering PHOENIX mode **>
+        SBSEDBM_PHOENIX_MODE                 = 2      
+           <**@description: Corresponding value is switched on when entering NORMAL mode. Normal for this device means 'SAFE' and up **>
+        SBSEDBM_NORMAL_MODE                 = 4     
+        	<** @description: Corresponding value is switched on when entering PHOENIX mode **>
+        SBSEDBM_PHOENIX_MODE_AND_NORMAL      = 6
+    }
+
+    <** @description: Use as enum
+    @details: size = 8 **>
+    enumeration SBSEDE_ConOpsMode
+    {
+            <** @description: All outputs and PC104 GPIOs are off **>
+        SBSEDE_HELL_MODE                    = 1   
+            <** @description: Overheat mode **>      
+        SBSEDE_OVH_MODE                     = 2
+            <** @description: Phoenix mode **>   
+        SBSEDE_PHOENIX_MODE                  = 3
+            <** @description: Normal for this device means 'SAFE' and up  **>
+        SBSEDE_NORMAL_MODE                  = 4         
+    }
+
+    <** @description: Basic settings fields **>
+    struct SBasicSettings
+    {
+    	<** @description: Get response error ESCP_GETBS_ERR_... **>
+    	UInt8 nErr									
+    	
+            <** @description: In which mode to start on reboot till ConOps mode is received (this should be HELL as default) **>
+        SBSEDE_ConOpsMode nConOpsStartMode                    
+    
+            <** @description: Enable battery bus RAW output (banana) **>
+        SBSED_Bitmask nBBUS_RAWOutputEnable                   
+
+          // <** @description: 12V **>
+            <** @description: in mV. Output setting (all channels). Range: 5 - 13.6 V **>
+        Int32 n12V_Voltage                           
+           <** @description: in mA. LUP setting (all channels combined). Range: 2 - 6.5 A **>
+        Int32 n12V_CurrentLimit                          
+           <** @description: Enable or disable all 12V channels **>
+        SBSED_Bitmask n12V_MasterEnable                 
+           <** @description: Enable 12V on side POWER 1 connector, pin 3 **>
+        SBSED_Bitmask n12V_SP1_3_Enable                 
+        <** @description: Enable 12V on side POWER 1 connector, pin 4 **>
+        SBSED_Bitmask n12V_SP1_4_Enable                  
+        <** @description: Enable 12V on side POWER 1 connector, pin 5 **>
+        SBSED_Bitmask n12V_SP1_5_Enable                 
+
+        <** @description: in mA. LUP setting (all 5V_Channel1 channels combined). Range: 2 - 6.5 A **>
+        Int32 n5V_Ch1_CurrentLimit                  
+        <** @description: Enable or disable all 5V_Channel1 channels **>
+        SBSED_Bitmask n5V_Ch1_MasterEnable               
+        <** @description: Enable 5V_Channel1 on side POWER 2 connector, pin 3 **>
+        SBSED_Bitmask n5V_Ch1_SP2_3_Enable               
+        <** @description: Enable 5V_Channel1 on side POWER 2 connector, pin 4 **>
+        SBSED_Bitmask n5V_Ch1_SP2_4_Enable              
+
+        <** @description: in mA. LUP setting (all 5V_Channel2 channels combined). Range: 2 - 6.5 A **>
+        Int32 n5V_Ch2_CurrentLimit                  
+        <** @description: Enable or disable all 5V_Channel2 channels **>
+        SBSED_Bitmask n5V_Ch2_MasterEnable              
+        <** @description: Enable 5V_Channel2 on side POWER 1 connector, pin 6 **>
+        SBSED_Bitmask n5V_Ch2_SP1_6_Enable              
+        <** @description: Enable 5V_Channel2 on side POWER 1 connector, pin 7 **>
+        SBSED_Bitmask n5V_Ch2_SP1_7_Enable              
+ 
+        <** @description: in mA. LUP setting (all 3V3_Channel1 channels combined). Range: 2 - 6.5 A **>
+        Int32 n3V3_Ch1_CurrentLimit                  
+        <** @description: Enable or disable all 3V3_Channel1 channels **>
+        SBSED_Bitmask n3V3_Ch1_MasterEnable              
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 5 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_5_Enable              
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 6 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_6_Enable             
+        <** @description: Enable 3V3_Channel1 on side POWER 2 connector, pin 7 **>
+        SBSED_Bitmask n3V3_Ch1_SP2_7_Enable              
+
+        <** @description: in mA. LUP setting (all 3V3_Channel2 channels combined). Range: 2 - 6.5 A **>
+        Int32 n3V3_Ch2_CurrentLimit
+        <** @description: Enable or disable all 3V3_Channel2 channels **>                   
+        SBSED_Bitmask n3V3_Ch2_MasterEnable         
+
+            <** @description: If bit is inversed in hardware. Bit 0 = DigOUT1...Bit 7 = DigOUT8 **>
+        UInt16 nPC104_GPIO_InversedBitmask                
+            <** @description: Which value to be set, when we enter "Normal" (all above Phoenix) mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_NormalModeValueBitmask               
+            <** @description: Which value to be set, when we enter "Phoenix" mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_PhoenixModeValueBitmask               
+            <** @description: Which value to be set, when we enter "BAT_OVERHEAT" mode. Bitmask: 0 = off, 1 - on. Uses nPC104_GPIO_InversedBitmask internally to convert values to proper electrical signals. **>
+        UInt16 nPC104_GPIO_OvhModeValueBitmask            
+    }
+
+    <** 
+        @description: Get current device settings
+        @details: id = 1015
+    **>
+    method GetBasicSettings
+    {
+        out
+        {
+        	 <** @description: Currently set basic settings **>
+            SBasicSettings BasicSettings
+        }
+    }
+    
+    <** @description: SetBasicSettings command error codes **>
+    enumeration SBS_SetError
+    {
+    	<** @description: done **>
+        SBSSE_SUCCESS
+        <** @description: Invalid parameters **>
+        SBSSE_BAD_PARAMS
+    }
+
+    <** 
+        @description: Sets device settings. The main and only device operation configuration.
+        @details: id = 1016
+    **>
+    method SetBasicSettings
+    {
+        in
+        {
+        	<** @description: New basic settings to be set **>
+            SBasicSettings BasicSettings
+        }
+
+        out
+        {
+        	<** @description: Result status **>
+            SBS_SetError Err
+        }
+    }
+
+
+// ============================================================================================
+// Set/Get PC104 GPIO
+// ============================================================================================
+	<** @description: Structure to set the Outputs 1 - 8 **>
+	struct ESCP_SetPC104GPIOReq
+	{
+		<** @description: bits aligned to PC104 signals bit 0 = DigOUT1 ... bit 5 = DigOUT6 **>
+		UInt16 nNewVal					
+		<** @description: Put 1 if you want this bit to be set as it is in nNewVal, if mask is 0, default value will be set (i.e. will cancel any currently set temporary value) **>
+		UInt16 nNewValMask			 
+		<** @description: in milliseconds (49 days max), 0 if none, default values will be applied on device reset no matter of timeout value **>
+		UInt32 nTimeout			 
+	}  
+	    
+    
+    <** 
+        @description: This command is used to temporary (with timeout) switch PC104 GPIO channel
+		@details: id = 1017
+	**>
+    method SetPC104GPIO
+    {
+        in
+        {
+            <** @description: Bits set, define which values to be changed from ValuesMask  **>
+            ESCP_SetPC104GPIOReq requestPC104
+        }
+
+        out
+        {
+        	<** @description: result status **>
+           UInt8 nErr
+        }
+    }
+    
+
+    <** 
+        @description: Get RAW sensor values by ID. Up to 50 different sensor values may be got.
+	**>
+ struct ESCP_PDM_GetChipStatusResp
+{
+	<** @description: Digital potentiometer 3.3V Primary 1 **>
+	UInt8 nDPOT_MCP4562_LUP_3V3_1P
+	<** @description: Digital potentiometer 3.3V Redundant 1 **>
+	UInt8 nDPOT_MCP4562_LUP_3V3_1R
+	<** @description: Digital potentiometer 3.3V Primary 2 **>
+	UInt8 nDPOT_MCP4562_LUP_3V3_2P
+	<** @description: Digital potentiometer 3.3V Redundant 2 **>
+	UInt8 nDPOT_MCP4562_LUP_3V3_2R
+	<** @description: Digital potentiometer 5V Primary 1 **>
+	UInt8 nDPOT_MCP4562_LUP_5V_1P
+	<** @description: Digital potentiometer 5V Redundant 1 **>
+	UInt8 nDPOT_MCP4562_LUP_5V_1R
+	<** @description: Digital potentiometer 5V Primary 2 **>
+	UInt8 nDPOT_MCP4562_LUP_5V_2P
+	<** @description: Digital potentiometer 5V Redundant 2 **>
+	UInt8 nDPOT_MCP4562_LUP_5V_2R
+	<** @description: Digital potentiometer 12V Primary 1 **>
+	UInt8 nDPOT_MCP4562_LUP_12V_P
+	<** @description: Digital potentiometer 12V Redundant 1 **>
+	UInt8 nDPOT_MCP4562_LUP_12V_R
+	<** @description: Digital potentiometer 12V Primary 2 **>
+	UInt8 nDPOT_MCP4562_OUTU_12V_P
+	<** @description: Digital potentiometer 12V Redundant 2 **>
+	UInt8 nDPOT_MCP4562_OUTU_12V_R
+	<** @description: I/O expander 1 **>
+	UInt8 nGPIO_PCA9538_U1001
+	<** @description: I/O expander 2 **>
+	UInt8 nGPIO_PCA9538_U1000
+	<** @description: I/O expander 3 **>
+	UInt8 nGPIO_PCA9538_U1004
+	<** @description: I/O expander 4 **>
+	UInt8 nGPIO_PCA9538_U1011
+	<** @description:  Bidirectional Current and Power Monitor 3.3V Primary channel 1 **>
+	UInt8 nINA_LUP_IN_3V3_1P
+	<** @description:  Bidirectional Current and Power Monitor 3.3V Redundant channel 1 **>
+	UInt8 nINA_LUP_IN_3V3_1R
+	<** @description:  Bidirectional Current and Power Monitor 3.3V Primary channel 2 **>
+	UInt8 nINA_LUP_IN_3V3_2P
+	<** @description:  Bidirectional Current and Power Monitor 3.3V Redundant channel 2 **>
+	UInt8 nINA_LUP_IN_3V3_2R
+	<** @description:  Bidirectional Current and Power Monitor 5V Primary channel 1 **>
+	UInt8 nINA_LUP_IN_5V_1P
+	<** @description:  Bidirectional Current and Power Monitor 5V Redundant channel 1 **>
+	UInt8 nINA_LUP_IN_5V_1R
+	<** @description:  Bidirectional Current and Power Monitor 5V Primary channel 2 **>
+	UInt8 nINA_LUP_IN_5V_2P
+	<** @description:  Bidirectional Current and Power Monitor 5V Redundant channel 2 **>
+	UInt8 nINA_LUP_IN_5V_2R
+	<** @description:  Bidirectional Current and Power Monitor 12V Primary channel **>
+	UInt8 nINA_LUP_IN_12V_P
+	<** @description:  Bidirectional Current and Power Monitor 12V Redundant channel **>
+	UInt8 nINA_LUP_IN_12V_R
+	 <** @description: Digital Temperature Sensor 1 **>
+	UInt8 nTMP117_U1014
+	<** @description: Digital Temperature Sensor 2 **>
+	UInt8 nTMP117_U1031
+}  
+
+    <** 
+        @description: Gets information about all chip statuses (driver state)
+		@details: id = 1018
+	**>
+    method GetChipStatus
+    {
+    	out
+    	{
+	    	ESCP_PDM_GetChipStatusResp status
+    	}
+    }
+     
+    /////=====================================////
+    
+    
+    <** 
+        @description: Get the values of the error counters of the bootloader in case the App fails to run
+	  @details: id = 1024
+	**>
+    method GetBootLoaderErrCounters     
+    {
+		out
+		{
+			 <** @description: Application continuous running at start up failures **>
+			UInt16 c_app_restart_errors
+			 <** @description: Application freeze failures **>
+			UInt8  g_pAppCyclesErrors
+			 <** @description: unused **>
+		    UInt8  reserved
+			 <** @description: Memory health checks failures **>
+		    UInt16 g_pIntegrityCheckStates
+		}
+    }
+    
+    <** 
+        @description: Clear the values of the error counters of the bootloader about the App fails to run
+	  @details: id = 1025
+	**>
+    method ResetBootLdrErrCounters     
+    {
+    }      
+    
+
+// ============================================================================================
+// END
+// ============================================================================================
+   
+}

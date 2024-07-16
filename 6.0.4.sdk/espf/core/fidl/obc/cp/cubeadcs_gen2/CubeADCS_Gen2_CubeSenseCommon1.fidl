@@ -1,0 +1,204 @@
+// WARNING!!! THIS IS A GENERATED FILE! DO NOT MODIFY CONTENTS MANUALLY!!!
+
+package endurosat.macif
+
+
+<** @description: Interface for Cube ADCS Gen2 - CubeSenseCommon1
+    @details: id = 313
+**>
+
+interface CubeADCS_Gen2_CubeSenseCommon1
+{
+    version {major 1 minor 0}
+    
+    <** @description: This enumeration holds the IDs of CubeADCS Gen2 nodes for which this interface is applicable **>
+    enumeration CmdTargetNode
+    {
+        NodeInvalid = 0
+        NodeFss0 = 4
+        NodeFss1 = 5
+        NodeFss2 = 6
+        NodeFss3 = 7
+        
+    }
+    
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeSenseCommon1_OvercurrentResult
+    {
+        
+        <** @description: No Overcurrent **>
+        NoOvercurrent = 0
+        
+        <** @description: Overcurrent detected **>
+        Overcurrent = 1
+        
+    }
+    
+    
+    
+    
+    <**
+        @description: Enable or disable auto-adjust for camera exposure
+        @details: id = 0
+    **>
+    method setCamAutoAdjust
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Automatic exposure adjustment **>
+            Boolean Enabled
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Change camera settings
+        @details: id = 1
+    **>
+    method setCamSettings
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Value for exposure register **>
+            UInt16 Exposure
+            
+            <** @description: Value for Gain Control register **>
+            UInt8 AGC
+            
+            <** @description: Value for Blue Gain register **>
+            UInt8 BlueGain
+            
+            <** @description: Value for Red Gain register **>
+            UInt8 RedGain
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Configuration data for the CubeSense
+        @details: id = 2
+    **>
+    method getConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Byte value 0-255 indicating light threshold level **>
+            UInt8 CamThreshold
+            
+            <** @description: 0 = disabled, 1 = enabled **>
+            Boolean CamAutoAdjust
+            
+            <** @description: exposure time register value **>
+            UInt16 CamExposure
+            
+            <** @description: Common Gain **>
+            UInt8 CamAgc
+            
+            <** @description: Blue Gain **>
+            UInt8 CamBlueGain
+            
+            <** @description: Red Gain **>
+            UInt8 CamRedGain
+            
+            
+        }
+    }
+    
+    <**
+        @description: Health Telemetry for CubeSense
+        @details: id = 3
+    **>
+    method getHealthTlm
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: MCU current **>
+            UInt16 McuCurrent
+            
+            <** @description: MCU temperature in deg C **>
+            Int16 McuTemp
+            
+            <** @description: MCU supply voltage **>
+            UInt16 McuVoltage
+            
+            <** @description: Camera current **>
+            UInt16 CurrentCam
+            
+            <** @description: SRAM current **>
+            UInt16 CurrentSram
+            
+            <** @description: Max recorded Camera current **>
+            UInt16 CurrentCamMax
+            
+            <** @description: Max recorded SRAM current **>
+            UInt16 CurrentSramMax
+            
+            <** @description: CAM overcurrent detected **>
+            CubeSenseCommon1_OvercurrentResult OvercurrentCam
+            
+            <** @description: SRAM overcurrent detected **>
+            CubeSenseCommon1_OvercurrentResult OvercurrentSram
+            
+            <** @description: Bitmask representing virtual watchdog region warning counters.  
+            @details: size = 5 **>
+            UInt8[] WatchdogCount
+            
+            
+        }
+    }
+    
+}

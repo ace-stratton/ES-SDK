@@ -1,0 +1,47 @@
+@startuml
+title <b>sxband_sched_sm
+[*] --> not_init
+state not_init
+state init {
+state idle
+state in_progress {
+state file_tx_in_progress {
+state wait_file_tx
+state file_tx_finished
+
+}
+state prepare_cmd
+state wait_cmd_result
+state cmd_finished
+
+}
+
+}
+
+not_init --> init: <b>init</b> \n
+state init {
+[*] --> idle
+idle --> in_progress: <b>start</b> [is_valid_context]\n/ reset_cmd_iterator
+in_progress --> idle: <b>stop</b> \n/ deinit_sm_context_stop
+in_progress --> idle: <b>failure_check</b> [general_failure]\n/ deinit_sm_context_fail
+}
+wait_file_tx --> file_tx_finished: <b>cmd_confirmed</b> \n/ update_cmd_status
+wait_file_tx --> file_tx_finished: <b>__periodic</b> [is_cmd_timeout_elapsed]\n/ update_cmd_status_timeout
+file_tx_finished --> wait_file_tx: <b>__periodic</b> [has_more_files]\n/ send_next_file_cmd
+file_tx_finished --> prepare_cmd: <b>__periodic</b> [more_cmd_to_process]\n/ load_next_cmd
+file_tx_finished --> idle: <b>__periodic</b> [no_more_commands]\n/ deinit_sm_context
+state file_tx_in_progress {
+[*] --> wait_file_tx
+}
+prepare_cmd --> idle: <b>__periodic</b> [no_more_commands]\n/ deinit_sm_context
+prepare_cmd --> wait_cmd_result: <b>__periodic</b> [is_regular_cmd]\n/ send_next_cmd
+prepare_cmd --> file_tx_in_progress: <b>__periodic</b> [can_iterate_files_with_pattern]\n/ send_first_file_cmd
+prepare_cmd -[dotted,#blue]-> prepare_cmd: <b>__periodic</b> [empty_pattern]\n/ load_next_cmd_empty_pattern
+wait_cmd_result --> cmd_finished: <b>cmd_confirmed</b> \n/ update_cmd_status
+wait_cmd_result --> cmd_finished: <b>__periodic</b> [is_cmd_timeout_elapsed]\n/ update_cmd_status_timeout
+cmd_finished --> prepare_cmd: <b>__periodic</b> [has_more_commands]\n/ load_next_cmd
+cmd_finished --> idle: <b>__periodic</b> [no_more_commands]\n/ deinit_sm_context
+state in_progress {
+[*] --> prepare_cmd
+}
+@enduml

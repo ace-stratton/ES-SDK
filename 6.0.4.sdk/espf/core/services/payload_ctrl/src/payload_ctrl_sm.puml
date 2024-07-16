@@ -1,0 +1,14 @@
+@startuml
+title <b>payload_ctrl_sm
+[*] --> Pointing_Idle
+state Pointing_Idle
+state Pointing_InProgress
+state Pointing_Finished
+
+Pointing_Idle --> Pointing_InProgress: <b>__periodic</b> [__auto]\n/ prepare_pointing_mode
+Pointing_InProgress --> Pointing_Finished: <b>__periodic</b> [is_point_mode_ready]\n/ start_payload
+Pointing_InProgress --> Pointing_Idle: <b>requesting_payload_off</b> \n
+Pointing_InProgress --> Pointing_Idle: <b>__periodic</b> [is_point_mode_failed]\n/ notify_adcs_timeout
+Pointing_Finished --> Pointing_Idle: <b>requesting_payload_off</b> \n
+Pointing_Finished --> Pointing_Finished: <b>__periodic</b> \n/ serve_additional_payloads
+@enduml

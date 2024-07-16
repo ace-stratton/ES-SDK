@@ -1,0 +1,28 @@
+var _f_p___telemetry_protocol_types_8h =
+[
+    [ "TELEMETRY_tlm_preset_cfg_t", "struct_t_e_l_e_m_e_t_r_y__tlm__preset__cfg__t.html", null ],
+    [ "TELEMETRY_tlm_file_size_limit_cfg_t", "struct_t_e_l_e_m_e_t_r_y__tlm__file__size__limit__cfg__t.html", null ],
+    [ "TELEMETRY_tlm_file_time_limit_cfg_t", "struct_t_e_l_e_m_e_t_r_y__tlm__file__time__limit__cfg__t.html", null ],
+    [ "TELEMETRY_tlm_general_cfg_t", "struct_t_e_l_e_m_e_t_r_y__tlm__general__cfg__t.html", null ],
+    [ "TELEMETRY_tlm_stats_t", "struct_t_e_l_e_m_e_t_r_y__tlm__stats__t.html", null ],
+    [ "TelemetrysetTelemetryGeneralConfigRequestData_t", "struct_telemetryset_telemetry_general_config_request_data__t.html", null ],
+    [ "TelemetrysetTelemetryPresetConfigRequestData_t", "struct_telemetryset_telemetry_preset_config_request_data__t.html", null ],
+    [ "TelemetrysetActivePresetRequestData_t", "struct_telemetryset_active_preset_request_data__t.html", null ],
+    [ "TelemetrysetTelemetryFileSzLimitConfigRequestData_t", "struct_telemetryset_telemetry_file_sz_limit_config_request_data__t.html", null ],
+    [ "TelemetrysetTelemetryFileTmLimitConfigRequestData_t", "struct_telemetryset_telemetry_file_tm_limit_config_request_data__t.html", null ],
+    [ "TelemetrypauseFileTelemetryRequestData_t", "struct_telemetrypause_file_telemetry_request_data__t.html", null ],
+    [ "TelemetrygetTelemetryGeneralConfigResponseData_t", "struct_telemetryget_telemetry_general_config_response_data__t.html", null ],
+    [ "TelemetrysetTelemetryGeneralConfigResponseData_t", "struct_telemetryset_telemetry_general_config_response_data__t.html", null ],
+    [ "TelemetrygetTelemetryPresetConfigResponseData_t", "struct_telemetryget_telemetry_preset_config_response_data__t.html", null ],
+    [ "TelemetrysetTelemetryPresetConfigResponseData_t", "struct_telemetryset_telemetry_preset_config_response_data__t.html", null ],
+    [ "TelemetrysetActivePresetResponseData_t", "struct_telemetryset_active_preset_response_data__t.html", null ],
+    [ "TelemetrygetActivePresetResponseData_t", "struct_telemetryget_active_preset_response_data__t.html", null ],
+    [ "TelemetryrestoreActivePresetResponseData_t", "struct_telemetryrestore_active_preset_response_data__t.html", null ],
+    [ "TelemetrygetTelemetryFileSinkConfigResponseData_t", "struct_telemetryget_telemetry_file_sink_config_response_data__t.html", null ],
+    [ "TelemetrysetTelemetryFileSzLimitConfigResponseData_t", "struct_telemetryset_telemetry_file_sz_limit_config_response_data__t.html", null ],
+    [ "TelemetrysetTelemetryFileTmLimitConfigResponseData_t", "struct_telemetryset_telemetry_file_tm_limit_config_response_data__t.html", null ],
+    [ "TelemetryresumeFileTelemetryResponseData_t", "struct_telemetryresume_file_telemetry_response_data__t.html", null ],
+    [ "TelemetrypauseFileTelemetryResponseData_t", "struct_telemetrypause_file_telemetry_response_data__t.html", null ],
+    [ "TelemetrycleanTelemetryFilesResponseData_t", "struct_telemetryclean_telemetry_files_response_data__t.html", null ],
+    [ "TelemetrygetTelemetryOperationStatsResponseData_t", "struct_telemetryget_telemetry_operation_stats_response_data__t.html", null ]
+];

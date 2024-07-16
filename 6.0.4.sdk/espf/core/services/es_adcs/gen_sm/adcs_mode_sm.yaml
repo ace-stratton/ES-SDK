@@ -1,0 +1,37 @@
+---
+es_adcs_op_modes_sm:
+   states:
+      - ADCS_RUN:
+         transitions:
+            - ADCS_IDLE:
+               - { event: run_to_idle, action: prepare_idle_mode }
+            - ADCS_TRIGGER:
+               - { event: run_to_trigger, action: prepare_trigger_mode }
+         attributes:
+            on_entry: False
+            on_exit: False
+      - ADCS_TRIGGER:
+         transitions:
+            - ADCS_IDLE:
+               - { event: trigger_to_idle, action: prepare_idle_mode }
+         attributes:
+            on_entry: False
+            on_exit: False
+      - ADCS_IDLE:
+         transitions:
+            - ADCS_RUN:
+               - { event: idle_to_run, action: prepare_run_mode }
+            - ADCS_TRIGGER:
+               - { event: idle_to_trigger, action: prepare_trigger_mode }
+         attributes:
+            on_entry: False
+            on_exit: False
+      - ADCS_NOT_INIT:
+         transitions:
+            - ADCS_IDLE:
+               - { event: start }
+         attributes:
+            on_entry: False
+            on_exit: False
+   attributes:
+      initial: ADCS_NOT_INIT

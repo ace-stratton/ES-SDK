@@ -1,0 +1,1102 @@
+package org.endurosat.deploy
+
+// import the actual Franca interfaces we want to deploy 
+import "nvm_block_types.fidl"
+
+specification BaseParams
+{
+    for struct_fields {
+        DefaultValue: String;
+    }
+}
+
+/**
+ * Define all the interfaces as a default deployment
+ */
+define BaseParams for typeCollection endurosat.pf.nvm_block_types
+{
+    struct NvmBlock_BootData {
+        Reserve1 {
+            DefaultValue = "0x00000000"
+        }
+        Mailbox {
+            DefaultValue = "0x00000000"
+        }
+        RST_WWD {
+            DefaultValue = "0x00000000"
+        }
+        RST_IWD {
+            DefaultValue = "0x00000000"
+        }
+        RST_LPR {
+            DefaultValue = "0x00000000"
+        }
+        RST_POR {
+            DefaultValue = "0x00000000"
+        }
+        RST_RstPin {
+            DefaultValue = "0x00000000"
+        }
+        RST_BOR {
+            DefaultValue = "0x00000000"
+        }
+        RST_HardFault {
+            DefaultValue = "0x00000000"
+        }
+        RST_MemFault {
+            DefaultValue = "0x00000000"
+        }
+        RST_BusFault {
+            DefaultValue = "0x00000000"
+        }
+        RST_UsageFault {
+            DefaultValue = "0x00000000"
+        }
+        RST_ErrHandler {
+            DefaultValue = "0x00000000"
+        }
+        RebootRequest {
+            DefaultValue = "0x00000000"
+        }
+        Reserve3 {
+            DefaultValue = "0x00000000"
+        }
+    }
+
+    struct NvmBlock_ModuleId {
+        nModuleType {
+            DefaultValue = "0x0000"
+        }
+        
+        nModuleHWConfig {
+            DefaultValue = "0x0109"
+        }
+        
+        nModuleHWRevision {
+            DefaultValue = "0x0000"
+        }
+        
+        szModuleSerial {
+            DefaultValue = "UNASSIGNED"
+        }
+    }
+
+    struct NvmBlock_MacConfig {
+        u8MacBusTerminationBitField {
+            DefaultValue = "0x00000000"
+        }
+        
+        u8MacAddress {
+            DefaultValue = "0x33"
+        }
+    }
+
+struct NvmBlock_beacons_cfg {
+        beacons_en {
+            DefaultValue = "SAFE_TRUE"
+        }
+        chunk_based_transfer_en {
+            DefaultValue = "SAFE_TRUE"
+        }
+        bcn_tx_period {
+            DefaultValue = "30000U"
+        }
+        bcn_inter_frame_period {
+            DefaultValue = "500U"
+        }
+    }
+
+struct NvmBlock_beacons_presets_cfg {
+        beacon_preset_cfg {
+            DefaultValue = 
+"        // preset #0 defaults (SAFE mode)
+            DC_ATTR_ID_EPS_1_DATA,
+            DC_ATTR_ID_EPS_5_DATA,
+            DC_ATTR_ID_OBC_0_DATA,
+            DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+            DC_ATTR_ID_EPS_2_DATA,
+            DC_ATTR_ID_EPS_6_DATA,
+            DC_ATTR_ID_ADCS_2_DATA,
+            DC_ATTR_ID_ADCS_1_DATA,
+            DC_ATTR_ID_ADCS_0_DATA,
+            DC_ATTR_ID_SSP_0_DATA,
+            DC_ATTR_ID_SSP_1_DATA,
+            DC_ATTR_ID_SSP_2_DATA,
+            DC_ATTR_ID_OS_TASK_DATA,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+        // preset #1 defaults (IDLE mode)
+            DC_ATTR_ID_OBC_0_DATA,
+            DC_ATTR_ID_ADCS_1_DATA,
+            DC_ATTR_ID_ADCS_2_DATA,
+            DC_ATTR_ID_EPS_1_DATA,
+            DC_ATTR_ID_ADCS_0_DATA,
+            DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+            DC_ATTR_ID_EPS_5_DATA,
+            DC_ATTR_ID_EPS_2_DATA,
+            DC_ATTR_ID_EPS_6_DATA,
+            DC_ATTR_ID_SSP_0_DATA,
+            DC_ATTR_ID_SSP_1_DATA,
+            DC_ATTR_ID_SSP_2_DATA,
+            DC_ATTR_ID_OS_TASK_DATA,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+        // preset #2 defaults (DETUMBLING mode)
+            DC_ATTR_ID_EPS_1_DATA,
+            DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+            DC_ATTR_ID_ADCS_2_DATA,
+            DC_ATTR_ID_OBC_0_DATA,
+            DC_ATTR_ID_ADCS_1_DATA,
+            DC_ATTR_ID_EPS_5_DATA,
+            DC_ATTR_ID_EPS_2_DATA,
+            DC_ATTR_ID_EPS_6_DATA,
+            DC_ATTR_ID_ADCS_0_DATA,
+            DC_ATTR_ID_SSP_0_DATA,
+            DC_ATTR_ID_SSP_1_DATA,
+            DC_ATTR_ID_SSP_2_DATA,
+            DC_ATTR_ID_OS_TASK_DATA,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+        // preset #3 defaults (PAYLOAD mode)
+            DC_ATTR_ID_OBC_0_DATA,
+            DC_ATTR_ID_EPS_1_DATA,
+            DC_ATTR_ID_ADCS_0_DATA,
+            DC_ATTR_ID_ADCS_2_DATA,
+            DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+            DC_ATTR_ID_ADCS_1_DATA,
+            DC_ATTR_ID_EPS_5_DATA,
+            DC_ATTR_ID_EPS_2_DATA,
+            DC_ATTR_ID_EPS_6_DATA,
+            DC_ATTR_ID_SSP_0_DATA,
+            DC_ATTR_ID_SSP_1_DATA,
+            DC_ATTR_ID_SSP_2_DATA,
+            DC_ATTR_ID_OS_TASK_DATA,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT,
+            INVALID_BEACON_SLOT_ASSIGNMENT
+"
+        }
+    }
+
+struct NvmBlock_OpModesConfig {
+        CBattSafe {
+            DefaultValue = "0x0000AFC8"
+        }
+        SSafe {
+            DefaultValue = "0x000005DC"
+        }
+        SDet {
+            DefaultValue = "0x000005DC"
+        }
+        SPay {
+            DefaultValue = 
+"
+                    0x00000672, // sConOpsConfig.cfg.i32SPay[ 0 ]
+                    0x00000672, // sConOpsConfig.cfg.i32SPay[ 1 ]
+                    0x00000672, // sConOpsConfig.cfg.i32SPay[ 2 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 3 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 4 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 5 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 6 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 7 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 8 ]
+                    0x00000000, // sConOpsConfig.cfg.i32SPay[ 9 ]
+"
+        }
+        AngVelMax {
+            DefaultValue = "0x000001F4"
+        }
+        AngVelLow {
+            DefaultValue = "0x0000002B"
+        }
+        AngVelRange {
+            DefaultValue = 
+"
+                    0xFFFFFFDB, // sConOpsConfig.cfg.i32AngVelRange[ 0 ]
+                    0xFFFFFFE0, // sConOpsConfig.cfg.i32AngVelRange[ 1 ]
+"
+        }
+    }
+
+struct NvmBlock_conops_idle_pointreq_cfg {
+        en_sun_tracking {
+            DefaultValue = "SAFE_TRUE"
+        }
+    }
+
+struct NvmBlock_telemetry_cfg {
+        telemetry_en {
+            DefaultValue = "SAFE_TRUE"
+        }
+        file_telemetry_en {
+            DefaultValue = "SAFE_TRUE"
+        }
+    }
+
+struct NvmBlock_telemetry_preset_cfg {
+        Telemetry_preset_cfg {
+            DefaultValue = 
+"
+          // [0]
+          {
+              DC_ATTR_ID_EPS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [1]
+          {
+              DC_ATTR_ID_EPS_5_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [2]
+          {
+              DC_ATTR_ID_OBC_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [3]
+          {
+              DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [4]
+          {
+              DC_ATTR_ID_OS_TASK_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [5]
+          {
+              DC_ATTR_ID_EPS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [6]
+          {
+              DC_ATTR_ID_EPS_4_DATA,
+              // active
+              false,
+              // acq_period in s
+              30U
+          },
+          // [7]
+          {
+              DC_ATTR_ID_EPS_6_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [8]
+          {
+              DC_ATTR_ID_ADCS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [9]
+          {
+              DC_ATTR_ID_ADCS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+      // preset #1 defaults: IDLE mode
+          // [0]
+          {
+              DC_ATTR_ID_OBC_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [1]
+          {
+              DC_ATTR_ID_ADCS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [2]
+          {
+              DC_ATTR_ID_ADCS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [3]
+          {
+              DC_ATTR_ID_EPS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [4]
+          {
+              DC_ATTR_ID_ADCS_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [5]
+          {
+              DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [6]
+          {
+              DC_ATTR_ID_EPS_3_DATA,
+              // active
+              false,
+              // acq_period in s
+              30U
+          },
+          // [7]
+          {
+              DC_ATTR_ID_EPS_5_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [8]
+          {
+              DC_ATTR_ID_EPS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [9]
+          {
+              DC_ATTR_ID_OS_TASK_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+      // preset #2 defaults: DETUMBLING mode
+          // [0]
+          {
+              DC_ATTR_ID_EPS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [1]
+          {
+              DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [2]
+          {
+              DC_ATTR_ID_ADCS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [3]
+          {
+              DC_ATTR_ID_OBC_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [4]
+          {
+              DC_ATTR_ID_ADCS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [5]
+          {
+              DC_ATTR_ID_EPS_3_DATA,
+              // active
+              false,
+              // acq_period in s
+              30U
+          },
+          // [6]
+          {
+              DC_ATTR_ID_EPS_5_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [7]
+          {
+              DC_ATTR_ID_EPS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [8]
+          {
+              DC_ATTR_ID_OS_TASK_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [9]
+          {
+              DC_ATTR_ID_EPS_6_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+      // preset #3 defaults: PAYLOAD mode
+          // [0]
+          {
+              DC_ATTR_ID_OBC_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [1]
+          {
+              DC_ATTR_ID_EPS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [2]
+          {
+              DC_ATTR_ID_ADCS_0_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [3]
+          {
+              DC_ATTR_ID_ADCS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [4]
+          {
+              DC_ATTR_ID_AOCS_CNTRL_TLM_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [5]
+          {
+              DC_ATTR_ID_ADCS_1_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [6]
+          {
+              DC_ATTR_ID_EPS_3_DATA,
+              // active
+              false,
+              // acq_period in s
+              30U
+          },
+          // [7]
+          {
+              DC_ATTR_ID_EPS_5_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [8]
+          {
+              DC_ATTR_ID_EPS_2_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          },
+          // [9]
+          {
+              DC_ATTR_ID_OS_TASK_DATA,
+              // active
+              true,
+              // acq_period in s
+              30U
+          }
+"
+        }
+    }
+
+struct NvmBlock_telemetry_file_cfg {
+        cfg_type {
+            DefaultValue = "TLM_FILE_CFG_TYPE_SIZE_LIMIT"
+        }
+        size_limit_kb {
+            DefaultValue = "1000"
+        }
+        max_log_files_cnt {
+            DefaultValue = "20"
+        }
+        time_limit_sec {
+            DefaultValue = "10800"
+        }
+        file_size_limit_kb {
+            DefaultValue = "50"
+        }
+    }
+
+struct NvmBlock_EPSM_Config {
+        enableRtcAutoAdjust {
+            DefaultValue = "SAFE_TRUE"
+        }
+        onlyIfRtcIsLost {
+            DefaultValue = "SAFE_TRUE"
+        }
+        reserved1 {
+            DefaultValue = "SAFE_FALSE"
+        }
+        enableCapacityCalculation {
+            DefaultValue = "SAFE_FALSE"
+        }
+        enableUsingPduBoardTemperature {
+            DefaultValue = "SAFE_FALSE"
+        }
+        usedExactTemperatureEnable {
+            DefaultValue = "SAFE_FALSE"
+        }
+        exactTemperature {
+            DefaultValue = "2000"
+        }
+        reserved2 {
+            DefaultValue = "SAFE_FALSE"
+        }
+        allowAutoEnableEpsOnPowerUP {
+            DefaultValue = "SAFE_FALSE"
+        }
+    }
+
+struct NvmBlock_cubeadcs_err_handl_cfg {
+        en_cubeadcs_err_handl {
+            DefaultValue = "SAFE_TRUE"
+        }
+    }
+
+struct NvmBlock_cubeadcs_status {
+        commissioning {
+            DefaultValue = "0x00"
+        }
+        node_status {
+            DefaultValue = "0x00"
+        }
+        runtime_latched_errors {
+            DefaultValue = "0x0000"
+        }
+    }
+
+struct NvmBlock_i2c_config {
+        i2c_pull_up_config {
+            DefaultValue = 
+"
+        {
+            .pull_up_4k7 = true,
+            .pull_up_10k = false
+        },
+        // I2C_BUS_PAYLOAD
+        {
+            .pull_up_4k7 = true,
+            .pull_up_10k = false
+        }
+"
+        }
+    }
+
+struct NvmBlock_cubeadcs_angle_limits {
+        stable_pointing_threshold_angle {
+            DefaultValue = "1000"
+        }
+        stable_pointing_threshold_angle_rate {
+            DefaultValue = "200"
+        }
+    }
+
+struct NvmBlock_aocs_pm_config {
+        parameters {
+            DefaultValue = 
+"
+    0x00000384,         // 480 seconds, duration of a pass
+    0x04,               // 4 seconds is the default update interval
+    0x00,               // EST_ATT_ANGL the default data type
+    0x000A              //samples to skip
+"
+        }
+    }
+
+struct NvmBlock_aocs_pm_threshold {
+        ^value {
+            DefaultValue = 
+"
+// 0
+{
+    6.0,     //tolerance
+    0.05     //safety factor of 50 in mili units
+},
+// 1
+{
+    6.0,     //tolerance
+    0.05     //safety factor of 50 in mili units
+},
+// 2
+{
+    6.0,      //tolerance
+    0.05      //safety factor of 50 in mili units
+}
+"
+        }
+    }
+
+struct NvmBlock_es_adcs_config {
+        EstimatorConfig {
+            DefaultValue = "ES_ADCS_ESTIMATOR_ALGO_NONE, ES_ADCS_ESTIMATOR_ALGO_NONE"
+        }
+        ControllerConfig {
+            DefaultValue = "ES_ADCS_CONTROLLER_ALGO_NONE, ES_ADCS_CONTROLLER_ALGO_NONE"
+        }
+        UsedMagnetometer {
+            DefaultValue = "ES_ADCS_USED_MAGNETOMETER_PRIMARY"
+        }
+    }
+
+struct NvmBlock_es_coordsys_frames {
+        gyroscopeFrame {
+            DefaultValue = "SAT_Z_AXIS_POSITIVE, SAT_Y_AXIS_POSITIVE, SAT_X_AXIS_POSITIVE"
+        }
+        magnetometerFrame {
+            DefaultValue = "SAT_X_AXIS_POSITIVE, SAT_Y_AXIS_POSITIVE, SAT_Z_AXIS_POSITIVE"
+        }
+        magnetorquerFrame {
+            DefaultValue = "SAT_Z_AXIS_POSITIVE, SAT_Y_AXIS_POSITIVE, SAT_X_AXIS_POSITIVE"
+        }
+        coarseSunSensorFrame {
+            DefaultValue = "SAT_Y_AXIS_NEGATIVE, SAT_X_AXIS_NEGATIVE, SAT_Z_AXIS_NEGATIVE,
+                            SAT_Z_AXIS_POSITIVE, SAT_Y_AXIS_POSITIVE, SAT_X_AXIS_POSITIVE
+"
+        }
+        accelerometerFrame {
+            DefaultValue = "SAT_Y_AXIS_NEGATIVE, SAT_X_AXIS_NEGATIVE, SAT_Z_AXIS_NEGATIVE"
+        }
+    }
+
+struct NvmBlock_sds_sens_read_freq {
+        enable {
+            DefaultValue = "SAFE_FALSE"
+        }
+        sens_cfg {
+            DefaultValue = 
+"
+        {
+                .freq_cfg = 10, // Magnetometer sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_MTM,
+        },
+        {
+                .freq_cfg = 10, // Rate sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_GYRO,
+        },
+        {
+                .freq_cfg = 10, // Coarse Sun sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_CSS,
+        },
+        {
+                .freq_cfg = 10, // Accelerometer sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_ACC,
+        },
+        {
+                .freq_cfg = 10, // Temperature (located on 1U panels) sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_TEMP,
+        },
+        {
+                .freq_cfg = 2, // Rate sensor group temperature sensors read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_GYRO_TEMP,
+        },
+        {
+                .freq_cfg = 0, // Reserved sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_RES_1,
+        },
+        {
+                .freq_cfg = 0, // Reserved sensor group read frequency in [Hz]
+                .event_cfg = SDS_THREAD_FLAGS_RES_2,
+        }
+"
+        }
+    }
+
+struct NvmBlock_crypto_cfg {
+        aes_key {
+            DefaultValue = "0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00"
+        }
+    }
+
+struct NvmBlock_cubeadcs_sim_mode {
+        en_sim_mode {
+            DefaultValue = "SAFE_FALSE"
+        }
+    }
+
+struct NvmBlock_rtc_calib_data {
+        calm {
+            DefaultValue = "0"
+        }
+        calp {
+            DefaultValue = "TIME_CALP_PULSES_RESET"
+        }
+    }
+
+struct NvmBlock_gyroscope_configs {
+        gyroscopeArray {
+            DefaultValue = 
+"
+// 0
+    {
+        .gyro_id = GYROSCOPE_1,
+        .generalStatus = GYRO_NOT_INIT,
+        .attachedPanel = PANEL_1,
+        .satelliteAxis = PAN_X_P,
+        .enabledFlag = ADIS16265_DISABLED
+    },
+// 1
+    {
+        .gyro_id = GYROSCOPE_2,
+        .generalStatus = GYRO_NOT_INIT,
+        .attachedPanel = PANEL_2,
+        .satelliteAxis = PAN_Y_P,
+        .enabledFlag = ADIS16265_DISABLED
+    },
+// 2
+    {
+        .gyro_id = GYROSCOPE_3,
+        .generalStatus = GYRO_NOT_INIT,
+        .attachedPanel = PANEL_3,
+        .satelliteAxis = PAN_Z_P,
+        .enabledFlag = ADIS16265_DISABLED
+    }
+"
+        }
+    }
+
+struct NvmBlock_ff_stats {
+        ff_api_err_counters {
+            DefaultValue = "0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0"
+        }
+    }
+
+struct NvmBlock_cubeADCS_sys_state_cfg {
+        CubeADCS_SysStates {
+            DefaultValue = 
+"
+            {eCUBEADCS_CFGTYPE_PWR_UP,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_NO_CNTRL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_NORMAL_DETUMBLING,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_DETUMB_CNTRL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_Y_THOMSON,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_Y_THOMPSON,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_Y_THOMSON_MEMS_RATE,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_Y_THOMPSON,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_FAST_DETUMBLING,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_FAST_SPIN_DETUMB,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_VERY_FAST_DETUMBLING,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_VERY_FAST_SPIN_DETUMB,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_Y_MOMENTUM,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_Y_WHEEL_INITIAL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_Y_MOMENTUM_FULL_STATE_EKF,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 1,
+                  .CubeSense2 = 1,
+                  .CubeStar   = 1,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_Y_WHEEL_STEADY,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_FULL_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_3AXIS,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 1,
+                  .CubeSense2 = 1,
+                  .CubeStar   = 1,
+                  .CubeWheel1 = 1,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 1
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_XYZ_WHEEL_CNTRL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_SUN_TRACKING,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 1,
+                  .CubeSense2 = 1,
+                  .CubeStar   = 1,
+                  .CubeWheel1 = 1,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 1
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_RWHEEL_SUN_TRACKING,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_TARGET_TRACKING,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 1,
+                  .CubeSense2 = 1,
+                  .CubeStar   = 1,
+                  .CubeWheel1 = 1,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 1
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_RWHEEL_TARGET_TRACKING,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_NO_CONTROL,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_NO_CNTRL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_RATE_SENS,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                0,
+          },
+          {     eCUBEADCS_CFGTYPE_ATTITUDE_CHANGE,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 0,
+                  .CubeSense2 = 0,
+                  .CubeStar   = 0,
+                  .CubeWheel1 = 0,
+                  .CubeWheel2 = 0,
+                  .CubeWheel3 = 0
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_Y_THOMPSON,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                1,
+          },
+          {     eCUBEADCS_CFGTYPE_ORBITAL_CHANGE,
+                { .CubeControl_Signal = 1,
+                  .CubeControl_Motor  = 1,
+                  .CubeSense1 = 1,
+                  .CubeSense2 = 1,
+                  .CubeStar   = 1,
+                  .CubeWheel1 = 1,
+                  .CubeWheel2 = 1,
+                  .CubeWheel3 = 1
+                },
+                eCUBE_ADCS_TC_13_CONTROLMODE_XYZ_WHEEL_CNTRL,
+                eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                1,
+          },
+          {     eCUBEADCS_CFGTYPE_GEO_TARGET_TRACKING,
+                  { .CubeControl_Signal = 1,
+                    .CubeControl_Motor  = 1,
+                    .CubeSense1 = 1,
+                    .CubeSense2 = 1,
+                    .CubeStar   = 1,
+                    .CubeWheel1 = 1,
+                    .CubeWheel2 = 1,
+                    .CubeWheel3 = 1
+                  },
+                  eCUBE_ADCS_TC_13_CONTROLMODE_USER_MODE_1,
+                  eCUBE_ADCS_TC_14_ESTIMATIONMODE_MEMS_GYRO_EKF,
+                  eCUBE_ADCS_TC10_RUNMODE_ENABLED,
+                  0,
+          }
+"
+        }
+    }
+struct NvmBlock_mac_address_book {
+        mac_address {
+            DefaultValue =
+            "
+                0x99,
+                0x66,
+                0x77,
+                0x11,
+                0x44,
+                0x51,
+                0x52,
+                0x53,
+                0x54,
+                0x00,
+                0x00,
+                0x00,
+                0x00,
+                0x00,
+                0x00
+            "
+        }
+    }
+}

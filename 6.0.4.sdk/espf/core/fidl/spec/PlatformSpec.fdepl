@@ -1,0 +1,24 @@
+package org.endurosat.spec
+
+/**
+ * This is the core specification model used for deployment of Franca interfaces in EnduroSat Platform modules
+ */
+specification PlatformSpec
+{
+    for interfaces {
+        IsClient: Boolean (default: false);
+        
+        // For the JS Generator, specify whether the target is going to be little endian or not.
+        IsLittleEndian : Boolean ( default: true ) ;
+        
+        // datacache-specific settings
+        DC_IO_DataTypesPackageName: String (default: "DataCacheTypes");
+        DC_IO_ProtocolID: Integer (default: 0x88);
+        Gen_DataCache_Bindings: Boolean (default: false);
+    }
+    
+    for attributes {
+        // datacache automatic status timeout setting
+        Status_timeout: Integer (default: 5000);
+    }
+}

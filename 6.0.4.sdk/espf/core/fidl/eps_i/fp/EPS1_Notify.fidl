@@ -1,0 +1,40 @@
+package endurosat.macif
+
+<** @description: EPS I notifications
+    @details: id = 0x0B
+**>
+
+interface EPS1_Notify
+{
+    version { major 0 minor 1 }
+    
+	<** @description: List of events that the device is monitoring and notifying all devices on the bus about them.
+    **>
+    enumeration eEventNumber
+    {
+		<** @description: Critical battery level. Follows switching to "Hell mode" **>
+    	HELL_MODE_BAT_CRIT_LVL
+		<** @description: Too High Temperature. Follows switching to "Hell mode" **>
+    	HELL_MODE_HIGH_TEMPERATURE
+		<** @description: Notification for low battery level. Entering to critical level may be expected. **>
+    	LOW_BAT
+		<** @description: Reset of the whole system (including the EPS) that is requested by an external command **>
+    	WATCHDOG_IMMEDIATE_RESET
+		<** @description: Reset of all payloads that is requested by an external command **>
+    	WATCHDOG_PAYLOAD_RESET
+    }
+
+    <** @description: Notify on event of the EPS by sending broadcast commands depending on the "NotificationsSettings" from "EPS1" interface.
+	The EPS will try to postpone power down until all notifying repetitions are sent. In order to protect the EPS, if a timeout is reached actions will be taken even if not all repetitions are sent. The timeouts depend on the type of each event.
+      @details: id = 0x0000001
+    **>
+    method EventsNotification
+    {
+    	in
+    	{
+    		eEventNumber Mode
+    		UInt8 timeout 
+    	}
+    }
+}
+    

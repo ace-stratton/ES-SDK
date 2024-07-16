@@ -1,0 +1,341 @@
+package endurosat.macif
+
+<** @description: Solar panels interface
+    @details: id = 18 
+**>
+
+interface SP
+{
+    version { major 0 minor 4 }
+    
+      <** @description: Version variant,
+	  0xFF for development state
+	  0x00 for release candidate **>
+	enumeration VersionVariant
+	{
+	        <** @description:  Development State **>
+		DevelopmentState = 0xFF,
+		<** @description:  Release Candidate **>
+		ReleaseCandidate = 0
+	}
+	
+	    <** @description: Acquire the software version information
+              @details: id = 0x00000000
+          **>
+    method GetSoftwareVersion
+    {
+        out
+        {
+		    <** @description: Software state,
+			0xFF for development state
+			0x00 for release candidat.**>
+            VersionVariant  verVariant
+            
+		    <** @description: Build number.
+			@details: size = 5 **>
+            Int8[] AppVersion
+		    
+			<** @description: Timestamp in format YYYYMMDDhhmmss,
+			ASCII chars,
+			fixed size,
+			no null-termination.                             
+		        @details: size = 14 
+            **>
+            Int8[] Timestamp
+        }
+    }
+
+    <** @description: List of all available deployment algorithms **>
+    enumeration DepCMD
+    {
+		<** @description: Turn OFF the running Algorithm. **>
+    	OFF
+		<** @description: Algorithm 1 is selected **>
+    	ALG1
+		<** @description: Algorithm 2 is selected **>
+    	ALG2
+		<** @description: Algorithm 3 is selected **>
+		ALG3
+    }
+    
+    <** @description: Start a panel deployment algorithm
+        @details: id = 0x00000001
+    **>
+    method StartDeployment
+    {
+    	in
+    	{
+			<** @description: Select one of the 3 available Algorithms or turn off the current one. **>
+    		DepCMD DeployCommand
+    	}
+    }
+    
+    <** @description: Get panel deployment status
+        @details: id = 0x00000002
+    **>
+    method GetDeploymentStatus
+    {
+    	out
+    	{
+			<** @description: Represents the current deployment status. 
+			Please review the status byte for more details. **>
+			UInt8 Status
+			<** @description: Represents the current status of the heaters. 
+			Please review the heaters byte for more details. **>
+			UInt8 Heaters
+			<** @description: Represents the algorithm run time in seconds. **>
+			UInt8 Timer
+			<** @description: Represents the status of the the feedbacks. 
+			Please review the feedback byte for more details. **>
+			UInt8 Feedback
+		}
+    }
+    
+    <** @description: Get the uptime after reset in seconds
+        @details: id = 0x00000003
+    **>
+    method GetUptime
+    {
+    	out
+    	{
+			<** @description: The run time of the device since the last power-on/FMWrestart in seconds. **>
+			UInt32 Uptime
+		}
+    }
+
+	<** @description: Structure that provides the data from all Sun sensors. **>
+    struct SunSensors
+	{
+		<** @description: The Stationary Panel sun sensor data. 
+		(output range: 1 - 2560)**>
+		UInt16 SunDataMain
+		<** @description: The Upper Panel sun sensor data 
+		(output range: 1 - 2560)**>
+		UInt16 SunDataExt
+    }
+
+		<** @description: Structure that provides the data from all Temperature sensors. **>	
+		struct TempSensors
+	{
+		<** @description: The Stationary Panel temperature sensor data.
+		 (output example: 347 = 34.7°C) **>
+		Int16 TempDataMain
+		<** @description: The Upper panel, bottom side, temperature sensor data.
+		(output example: 347 = 34.7°C) **>
+		Int16 TempDataExt1
+		<** @description: The Upper panel, top side, temperature sensor data.
+		(output example: 347 = 34.7°C) **>
+		Int16 TempDataExt2
+		<** @description: The internal MCU temperature sensor.
+		(output example: 347 = 34.7°C) **>
+		Int16 TempDataMCU
+    }
+
+    
+<** @description: Structure that provides the data from Sun and Temperature data. **>  
+    struct AllTelemetry
+	{
+		<** @description: Structure that provides the data from all sun sensors. **>
+		SunSensors SunData
+		<** @description: Structure that provides the data from all temperature sensors and the temperature of the MCU. **>
+		TempSensors TempData
+    }
+
+    <** @description: Get telemetry from Sun and Temperature sensors
+        @details: id = 0x00000004 
+    **>
+    method GetTelemetry
+    {
+    	out
+    	{
+			<** @description: Returns Telemetric data from the sun and temperature sensors. **>
+		    AllTelemetry Data
+		}
+    }
+    
+	<** @description: Structure that provides the data from the main gyroscope. **> 
+    struct GyroMain
+	{
+		<** @description: The gyroscope rotation rate. 
+		(output example: 46 = 4.6°/s) **>
+		Int16 GyroDataMainRate
+		<** @description: The gyroscope angle. 
+		(output example: 3460 = 346.0°) **>
+		UInt16 GyroDataMainAngle
+		<** @description: The gyroscope temperature. 
+		(output example: 347 = 34.7°C) **>
+		Int16 GyroDataMainTmp
+    }
+	
+	<** @description: Get telemetric data from The Main gyroscope.
+        @details: id = 0x00000005 
+    **>
+    method GetMainGyroData
+    {
+    	out
+    	{
+		<** @description: Returns the telemetry data from the Main gyroscope. **>
+		    GyroMain data
+		}
+    }
+	
+	<** @description: Structure that provides the data from the external gyroscope. **>     
+    struct GyroExt
+	{
+		<** @description: The gyroscope rotation rate. 
+		(output example: 46 = 0.84249°/s)**>
+        Int16 GyroDataExtRate
+		<** @description: The gyroscope angle. 
+		(output example: 3460 = 346.0°) **>
+        UInt16 GyroDataExtAngle
+		<** @description: The gyroscope temperature. 
+		(output example: 347 = 34.7°C)**>
+        Int16 GyroDataExtTmp
+    }
+ 
+    <** @description: Get telemetric data from The External gyroscope.
+        @details: id = 0x00000006
+    **>
+    method GetExtGyroData
+    {
+    	out
+    	{
+		<** @description: Returns the telemetry data from the External gyroscope. **>
+		    GyroExt data
+		}
+    }
+    
+    <** @description: Input value for the adress in the Main gyroscope
+        @details: id = 0x0000007
+    **>
+    method WriteMainGyroRegister
+    {
+    	in
+    	{
+		<** @description: Select an available Gyro Register address.
+			Please review the Gyroscope section for more information. **>
+    		UInt8 WriteMainGyroRegisterAddress
+		<** @description: Select a valid value for the Gyro Register.
+			Please review the Gyroscope section for more information. **>
+    		UInt16 WriteMainGyroRegisterValue
+    	}
+    }
+	<** @description: Input value for the adress in the External gyroscope
+    @details: id = 0x0000008
+	**>
+    method WriteExtGyroRegister
+    {
+    	in
+    	{
+		<** @description: Select an available Gyro Register address.
+			Please review the Gyroscope section for more information.**>
+    		UInt8 WriteExtGyroRegisterAddress
+		<** @description: Select a valid value for the Gyro Register.
+			Please review the Gyroscope section for more information.		**>
+    		UInt16 WriteExtGyroRegisterValue
+    	}
+    }
+	
+	<** @description: Get Main Gyro Register value
+    @details: id = 0x0000009
+    **>
+    method GetMainGyroRegister
+    {
+		in
+    	{
+		<** @description: Select available Gyro register. 
+			Please review the Gyroscope section for more information.**>
+    		UInt8 ReadMainGyroRegisterAdress
+    	}
+    	out
+    	{
+		<** @description: Main Gyro Register value. 
+			Please review the Gyroscope section for more details. **>
+    		UInt16 ReturnMainGyroRegister
+    	}
+    }
+	
+	<** @description: Get External Gyro Register value
+    @details: id = 0x0000000A
+    **>
+    method GetExtGyroRegister
+    {
+		in
+    	{
+		<** @description: Select available Gyro register. 
+			Please review the Gyroscope section for more information. **>
+    		UInt8 ReadExtGyroRegisterAddress
+		}
+    	out
+    	{
+		<** @description: External Gyro Register value. 
+			Please review the Gyroscope section for more information.**>
+    		UInt16 ReturnExtGyroRegister
+    	}
+    }
+	
+	<** @description: Restart The Firmware of the Solar Panel
+    @details: id = 0x0000000B
+    **>
+    method RestartFMW
+	{
+	}
+	
+	    <** @description: List of all available Magnetorquer modes **>
+    enumeration MTQ_Mode
+    {
+		<** @description: Clockwise mode. **>
+    	CW
+		<** @description: Counterclockwise mode.  **>
+    	CCW
+		<** @description: Turn OFF the Magnetorquer.  **>
+    	OFF		
+    }
+	
+	    <** @description: Return status list **>
+    enumeration RETURN
+    {
+		<** @description: The requested duty cycle is out of the available range. **>
+    	OUT_OF_RANGE
+		<** @description: The requested duty cycle was in the available range.  **>
+    	OK
+    }
+	
+	<** @description: Input Magnetorquer function parameters.
+    @details: id = 0x0000000C
+    **>
+    method WriteMTQParameters
+    {
+		in
+    	{
+		<** @description: Select available MTQ Mode. **>
+    		MTQ_Mode Mode		
+
+		<** @description: Select a valid Duty Cycle (1 - 100)%. **>
+    		UInt8 WriteMTQDutyCycle						
+		}
+		
+		out
+		{
+		<** @description: Return the duty cycle parameters data validation. **>
+    		RETURN MTQ_Duty_cycle_valid_range
+		}
+    }
+	
+	<** @description: Get current Magnetorquer mode state and duty cycle.
+    @details: id = 0x0000000D
+    **>
+    method GetMTQParameters
+    {
+		out
+    	{
+		<** @description: MTQ Mode. **>
+    		MTQ_Mode Mode
+
+		<** @description: Duty Cycle.
+			(output range: 1 - 100)**>
+    		UInt8 GetMTQDutyCycle						
+		}
+    }
+	
+} 

@@ -1,0 +1,28 @@
+@startuml
+package Application
+package Middlewares
+package Drivers
+package PlatformHAL
+package HAL
+
+legend
+ |<back:darkgreen>   </back>| Direct calls allowed |
+ |<back:orange>   </back>| Only callbacks |
+ |<back:red>   </back>| Dependency not allowed |
+ endlegend
+
+Application -[#darkgreen]-> Middlewares
+Middlewares -[#darkgreen]-> PlatformHAL
+Middlewares -[#darkgreen]-> Drivers
+Drivers -[#darkgreen]-> HAL
+HAL .[#orange].> Drivers
+PlatformHAL .[#orange].> Middlewares
+PlatformHAL -[#darkgreen]-> Drivers
+Drivers .[#orange].> Middlewares
+Drivers .[#orange].> PlatformHAL
+Middlewares .[#orange].> Application
+
+Application -[#red]-> HAL
+Middlewares -[#red]-> HAL
+PlatformHAL -[#red]-> HAL
+@enduml

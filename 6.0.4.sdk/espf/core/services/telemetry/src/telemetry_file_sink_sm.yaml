@@ -1,0 +1,54 @@
+---
+telemetry_file_sink_sm:
+    states:
+        - Not_Init:
+            transitions:
+                - Init:
+                    - { event: init }
+            attributes:
+               on_entry: False
+               on_exit: False
+               
+        - Init:
+            transitions:
+               - Wait_Storage:
+                  - { event: start, guard: can_start_operation, action: reload_config }
+               - "__self":
+                  - { event: "__periodic", action: reload_config }
+            attributes:
+               on_exit: False
+               
+        - Wait_Storage:
+           transitions:
+              - Started:
+                 - { event: "__periodic", guard: is_storage_available, action: perform_file_scan }
+           attributes:
+              on_entry: False
+              on_exit: False
+               
+        - Started:
+           transitions:
+              - Stopped:
+                 - { event: stop, guard: can_stop_operation }
+              - "__self":
+                 - { event: "__periodic", guard: is_storage_available, action: store_telemetry }
+              - Wait_Storage:
+                 - { event: "__periodic", guard: is_storage_blocked }
+              - Wait_Storage:
+                 - { event: restart, action: clean_and_reload_cfg }
+           attributes:
+              on_entry: False
+              on_exit: False
+                 
+        - Stopped:
+           transitions:
+              - Wait_Storage:
+                 - { event: start, guard: can_start_operation }
+              - Wait_Storage:
+                 - { event: "__periodic", guard: is_auto_resume_timer_elapsed }
+              - "__self":
+                 - { event: "__periodic", action: reload_config }
+           attributes:
+              on_exit: False
+    attributes:
+        initial: Not_Init

@@ -1,0 +1,159 @@
+// WARNING!!! THIS IS A GENERATED FILE! DO NOT MODIFY CONTENTS MANUALLY!!!
+
+package endurosat.macif
+
+
+<** @description: Interface for Cube ADCS Gen2 - CommonTransfer1
+    @details: id = 301
+**>
+
+interface CubeADCS_Gen2_CommonTransfer1
+{
+    version {major 1 minor 0}
+    
+    <** @description: This enumeration holds the IDs of CubeADCS Gen2 nodes for which this interface is applicable **>
+    enumeration CmdTargetNode
+    {
+        NodeInvalid = 0
+        NodeComputer = 1
+        NodeFss0 = 4
+        NodeFss1 = 5
+        NodeFss2 = 6
+        NodeFss3 = 7
+        NodeHss0 = 8
+        NodeHss1 = 9
+        
+    }
+    
+    
+    
+    
+    
+    <**
+        @description: Image frame to or from buffer
+        @details: id = 0
+    **>
+    method setTransferFrame
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: Number of next frame to be transferred **>
+            UInt16 NextFrame
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: A single frame of arbitrary data
+        @details: id = 1
+    **>
+    method setFrame
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: The effective frame size - number of bytes in FrameBytes populated with data **>
+            UInt16 FrameSize
+            
+            <** @description: frame bytes  
+            @details: size = 256 **>
+            UInt8[] FrameBytes
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Information about the current frame in memory
+        @details: id = 2
+    **>
+    method getFrameInfo
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: number of current frame loaded into download buffer **>
+            UInt16 FrameNumber
+            
+            <** @description: XOR checksum of frame loaded into download buffer **>
+            UInt8 CheckSum
+            
+            <** @description: Set if this is the last frame in the transfer **>
+            Boolean FrameLast
+            
+            <** @description: Set if an error was encountered while processing the frame **>
+            Boolean FrameError
+            
+            
+        }
+    }
+    
+    <**
+        @description: A single frame of arbitrary data
+        @details: id = 3
+    **>
+    method getFrame
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: The effective frame size - number of bytes in FrameBytes populated with data **>
+            UInt16 FrameSize
+            
+            <** @description: frame bytes  
+            @details: size = 256 **>
+            UInt8[] FrameBytes
+            
+            
+        }
+    }
+    
+}

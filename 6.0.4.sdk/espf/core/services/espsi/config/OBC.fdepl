@@ -1,0 +1,7 @@
+package org.endurosat.deploy
+
+import "../../../../core/fidl/spec/PlatformSpec.fdepl"
+import "../../../../core/fidl/obc/fp/OBC.fidl"
+
+define org.endurosat.spec.PlatformSpec for interface endurosat.macif.OBC               		   { IsClient = false }
+

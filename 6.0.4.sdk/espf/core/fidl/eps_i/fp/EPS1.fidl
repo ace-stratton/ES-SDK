@@ -1,0 +1,1140 @@
+package endurosat.macif
+
+<** @description: EnduroSat Power module type I, HW version >= 1.7. The following inteface methods correspond to the client requests for telemetry and set parameters as described hereby.
+    @details: id = 0x0A 
+**>
+interface EPS1
+{
+    version { major 0 minor 1 }
+
+    <** @description: Helper from getSoftwareVersion, version variant
+                      0xFF for development state
+                      0x00 for release candidate
+                      1..100 for major version number
+                      101-254 reserved
+    **>
+    enumeration VersionVariant
+    {
+        <** @description: Development State **>
+        DevelopmentState = 0xFF
+        <** @description: Release Candidate **>
+        ReleaseCandidate = 0
+        <** @description: Release Ready **>
+        Release = 1
+    }
+
+    <** @description: Helper structure to hold pair voltage/current. The returned values correspond to raw values and shall be calibrated by the user through the following calibration coefficients and formulas (when applicable). **>
+    struct VA_Pair
+    {
+        <** @description: Calibration Batt: \*0.0023394775 [V] Calibration BCR: \*0.0023394775 [V] Calibration 3V3 BUS: \*0.0023394775 [V] Calibration 5V BUS: \*0.0023394775 [V] Calibration LUP 3V3: \*0.0023394775 [V] Calibration LUP 5V: \*0.0023394775 [V] **>
+        UInt16 volt
+        <** @description: Calibration Batt: \*0.0030517578 [A] Calibration BCR: \*0.0015258789 [A] Calibration 3V3 BUS: \*0.0020345052 [A] Calibration 5V BUS: \*0.0020345052 [A] **>
+        UInt16 curr
+    }
+    
+    <** @description: Helper structure to keep voltage, negative and positive current. The returned values correspond to raw values and shall be calibrated by the user through the following calibration coefficients and formulas (when applicable). **>
+    struct VAA_Pack
+    {
+        <** @description: Calibration: \*0.0024414063 [V] **>
+        UInt16 volt
+        <** @description: Calibration: \*0.0006103516 [A] **>
+        UInt16 curr_neg
+        <** @description: Calibration: \*0.0006103516 [A] **>
+        UInt16 curr_pos
+    }
+
+    <** @description: Helper structure to keep counters for "getStatisticInfo" **>
+    struct Statistic_Counters
+    {
+        <** @description: Counter of incidence. No calibration **>
+        UInt32 powerOn
+        <** @description: Counter of incidence. No calibration **>
+        UInt32 chargeCycle
+        <** @description: Counter of incidence. No calibration **>
+        UInt32 underVoltage
+        <** @description: Counter of incidence. No calibration **>
+        UInt32 shortcutCircuit
+        <** @description: Counter of incidence. No calibration **>
+        UInt32 overtemperature
+    }
+
+    <** @description: Helper description from "queryControls" and "queryDefaults" **> 
+    enumeration QueryState
+    {
+        <** @description: Ignore - does not change, if used return the actual value **>
+        Ignored   = 0b00000000,
+        <** @description: Toggle OFF the specific control, as output, returns if OFF  **>
+        Off       = 0b00000001,
+        <** @description: Toggle ON the specific control, as output, return if ON **>
+        On        = 0b00000010,
+        <** @description: Returns to Default value **>
+        Default   = 0b00000011,
+        <** @description: Force the control to OFF **>
+        ForceOff  = 0b00000101,
+        <** @description: Force the control to ON **>
+        ForceOn   = 0b00000110,
+        <** @description: Mask for toggling values, above **>
+        ValueMask = 0b00001111,
+        <** @description: Mask for toggling flags below **>
+        FlagsMask = 0b11000000,
+        <** @description: Reserved, not used **>
+        Reserved  = 0b01000000,
+        <** @description: Mismatch between what was asked and what is the current state **>
+        Mismatch  = 0b10000000
+    }
+
+//    <** @description: Enumerator to switch between MAC and ESTTC driver **> 
+//    enumeration MACDriver
+//    {
+//        <**@description: Ignore - do not change that settings **>
+//        Ignored             = 0x00,
+//        
+//        <**@description: Set MAC Driver as Default, no changes before reset [set to NVM memory] **>
+//        MAC_Default         = 0x3A,
+//
+//        <**@description: Set ESTTC Driver as Default, no changes before reset [set to NVM memory] **>
+//        ESTTC_Default       = 0x35
+//
+//        <**@description: Set MAC Driver now, no changes to defaults, after reset use default driver [set to RAM memory] **>
+//        MAC_Now             = 0x5A,
+//
+//        <**@description: Set ESTTC Driver now, no changes to defaults, after reset use default driver [set to RAM memory] **>
+//        ESTTC_Now           = 0x55,
+//
+//        <**@description: Set MAC Driver now, also set it as default driver [set to NVM and RAM memory] **>
+//        MAC_Default_Now     = 0x6A,
+//
+//        <**@description: Set ESTTC Driver now, also set it as default driver [set to NVM and RAM memory]  **>
+//        ESTTC_Default_Now   = 0x65,
+//
+//        <**@description: Set default driver now [copy from NVM to RAM memory]  **>
+//        Now_set_Default     = 0xAE
+//    }
+
+    <** @description: Helper enum for accessing "queryControls" elements by named index **> 
+    enumeration QueryControlsIndex
+    {
+        <** @description: SW Self Lock **>
+        SWSelfLock,               //00
+        <** @description: Enable Battery Bus **>
+        VBattEn,                  //01
+        <** @description: Enable BCR Bus **> 
+        BCROutEn,                 //02 
+        <** @description: Enable 3V3 Bus **>
+        SHD_3v3,                  //03
+        <** @description: Enable 5V Bus **> 
+        SHD_5v,                   //04 
+        <** @description: Enable 3V3 LUP, High Level OFF **>
+        LUP3v3                    //05
+        <** @description: Enable 5V LUP, High Level OFF **>
+        LUP5v,                    //06
+        <** @description: Shutdown Battery Charger, High level = OFF **>
+        SHDChrg,                  //07 
+        <** @description: Fast battery charge, max current 230 mA **>
+        Chrg_I1,        // 230mA  //08 
+        <** @description: Fast Battery charge, max current 350 mA **>
+        Chrg_I2,        // 350mA  //09 
+        <** @description: Output 1 **>
+        OUT1,                     //10
+        <** @description: Output 2 **> 
+        OUT2,                     //11
+        <** @description: Output 3 **> 
+        OUT3,                     //12
+        <** @description: Output 4, OBC enable **> 
+        OUT4_OBC,                 //13
+        <** @description: Output 5 **> 
+        OUT5,                     //14
+        <** @description: Output 6 **> 
+        OUT6,                     //15 
+        <** @description: Battery heater 1 **>
+        Heater_1,                 //16 
+        <** @description: Battery heater 2 **>
+        Heater_2,                 //17 
+        <** @description: Battery heater 3 **>
+        Heater_3,                 //18 
+        <** @description: Pull-Up resistor for i2c comm, 10 kOhms **>
+        I2C_10k_pu,               //19 
+        <** @description: Pull-Up resistor for i2c comm, 4k7 Ohms **>
+        I2C_4k7_pu,               //20 
+        <** @description: Termination resistor for RS485 comm, 120 Ohms **>
+        RS485_120R,               //21 
+        <** @description: Reserved **>
+        Reserved,                 //22
+        <** @description: Output 7 **>
+        OUT7,                     //23
+        <** @description: Output 8 **> 
+        OUT8,                     //24 
+        <** @description: Reserved for MPPT **>
+        RESET_MPPT                //25 
+    }
+
+    <** @description: Helper enumeration for accessing "queryDefaults" elements by named index **> 
+    enumeration QueryDefaultsIndex
+    {
+        <** @description: Enable 3V3 LUP, High Level OFF **>
+        LUP3v3
+        <** @description: Enable 5V LUP, High Level OFF **>
+        LUP5v,  
+        <** @description: Reserved **>
+        Reserved1,
+        <** @description: Fast battery charge, max current 230 mA **>
+        Chrg_I1,        // +230mA  
+        <** @description: Fast Battery charge, max current 350 mA **>
+        Chrg_I2,        // +230mA 
+        <** @description: Reserved **>
+        Reserved2,
+        <** @description: Output 1 **>
+        Out_1,
+        <** @description: Output 2 **>     
+        Out_2,     
+        <** @description: Output 3 **>
+        Out_3,     
+        <** @description: Output 4 **>
+        Out_4_OBC, 
+        <** @description: Output 5 **>
+        Out_5,     
+        <** @description: Output 6 **>
+        Out_6,     
+        <** @description: Pull-Up resistor for i2c comm, 10 kOhms **>
+        I2C_10k_pu,
+        <** @description: Pull-Up resistor for i2c comm, 4k7 Ohms **>
+        I2C_4k7_pu,
+        <** @description: Termination resistor for RS485 comm, 120 Ohms **>
+        RS485_120R,
+        <** @description: Output 7 **>
+        Out_7,     
+        <** @description: Output 8 **>
+        Out_8,     
+        <** @description: Mac Driver Status **>
+        MAC_Driver
+    }
+
+    <** @description: Bootloader return codes **> 
+    enumeration BLoad_RetCode
+    {
+        <** @description: Success **>
+        Success = 0,
+        <** @description: Not erased **>
+        Not_Erased,
+        <** @description: Command not supported **>
+        Not_Supported,
+        <** @description: Wrong Address **>
+        Wrong_Addr,
+        <** @description: Verification Failure **>
+        Verify_Failure,
+        <** @description: No data **>
+        No_Data,
+        <** @description: Decoding failure **>
+        Decode_Failure
+    }
+
+    <** @description: Watchdog type **> 
+    enumeration WatchDogType
+    {
+        <**@description: Used in request only, no changed to mode will be introduced**>
+        Ignored,
+
+        <**@description: Watchdog timer never runs **>
+        Disabled,
+
+        <**@description: Watchdog timer will run after first command 'Feed the dog' ("resetWatchdog"), on Expired event the payload will be turned OFF for a short period of time **>
+        Payload_Auto,
+
+        <**@description: Watchdog timer will run after system startup is finished, on Expired event the payload will be turned OFF for a short period of time **>
+        Payload_On,
+
+        <**@description: Watchdog timer will runs after first command 'Feed the dog'  ("resetWatchdog"), on Expired event the whole system restarts, power-on counter is incremented **>
+        System_Auto,
+
+        <**@description: Watchdog timer will runs after system startup is finished, on Expired event the whole system restarts, power-on counter is incremented **>
+        System_On
+    }
+
+    <** @description: Reset return codes **> 
+    enumeration Reset_RetCode
+    {
+        <** @description: Request is pending **> 
+        Success,
+
+        <** @description: Wrong security key **> 
+        Wrong_Sequrity,
+
+        <** @description: Other reset request is currently processing**> 
+        Busy
+    }
+
+    <** @description: The EPS1 Response structure for Battery Info Request **>
+    struct BatteryInfo
+    {   
+        <** @description: Batt. BUS voltage/current - 12 bit ADC Units **>
+        VA_Pair batt
+        <** @description: Ext. Battery Pack - 12 bit ADC Units **>
+        VA_Pair bcr
+        <** @description: For internal use only. Calibration: \*2.3394775 [mV] **>
+        UInt16  reserved
+        //UInt16 vbat_ideal
+    }
+
+    <** @description: The EPS1 Response structure for Buses Info Request **>
+    struct BusesInfo
+    {
+        <** @description: 3V3 BUS voltage/current - 12 bit ADC Units **>
+        VA_Pair bus_3v3
+        <** @description: 5V BUS voltage/current - 12 bit ADC Units **>
+        VA_Pair bus_5v 
+        <** @description: 3V3 Latch-up Protected voltage - 12 bit ADC Units **>
+        UInt16 lup_3v3_volt
+        <** @description: 5V Latch-up Protected voltage - 12 bit ADC Units **>
+        UInt16 lup_5v_volt
+    }
+
+    <** @description: The EPS1 Response structure for Solar Panels Info Request **>
+    struct SolarPanelsInfo
+    {
+        <** @description: Solar Panel X axis voltage/current - 12 bit ADC Units **>
+        VAA_Pack x
+        <** @description: Solar Panel Y axis voltage/current - 12 bit ADC Units **>
+        VAA_Pack y
+        <** @description: Solar Panel Z axis voltage/current - 12 bit ADC Units **>
+        VAA_Pack z
+    }
+
+    <** @description: The EPS1 Response structure for Statistic Info Request **>
+    struct StatisticInfo
+    {
+        <** @description: Power on, charge, undervoltage, shortcut circuit and over temperature counters **>
+        Statistic_Counters counters
+
+        <** @description: Batt. Pack  temperature sensors with calibration identically to MCU temperature @details: size = 4 **>
+        UInt16[] maxTemp
+        <** @description: Batt. Pack  temperature sensors with calibration identically to MCU temperature @details: size = 4 **>
+        UInt16[] minTemp
+        <** @description: Calibration: \*1.4972656 [mOhm] **>
+        UInt16 rbat_initial
+        <** @description: Calibration: \*1.4972656 [mOhm] **>
+        UInt16 rbat_current
+        <** @description: For future use of external temp. sensor **>
+        UInt16 reserved
+        <** @description: Time elapsed since last boot. **>
+        UInt32 uptime
+    }
+
+    <** @description: The EPS1 Response structure for Temperatures Info Request. The returned values correspond to raw values and shall be calibrated by the user through the calibration factors and formulas hereby presented. **>
+    struct TemperatureInfo
+    {
+        <** @description: ((RV x 2.5/4096) - 0.986) / 0.00355 [C] **>
+        UInt16 mcu
+
+        <** @description: up to 8 temperatures read out
+                          1..4 are battery temperature sensors,
+                          5..7 are external temperature sensors,
+                          8    reserved. Positive value calibration: \*0.00390625, Negative value calibration: (((RV >> 4) - 1)XOR 0xFFFF)(-0.0624) [C]
+            @details: size = 8 **>
+        UInt16[] battery
+    }
+
+    <** @description: The EPS1 Response structure for Configuration Info Request **>
+    struct ConfigurationInfo
+    {
+        <** @description: Bitfield - Input conditions
+                          Bit 0 corresponds to Kill switches Lock and Statistics Reset 
+			   Bits 1 to 15 are note in use
+	**>		 
+        UInt16 inputConditions
+
+        <** @description: Bitfield - Output conditions, 2x uint16,
+    			outputConditions[0]
+                    Bit  0 - SW Self Lock
+			  		Bit  1 - Enable Battery BUS
+			  		Bit  2 - Enable BCR BUS
+			  		Bit  3 - Enable 3.3V BUS
+			  		Bit  4 - Enable 5V BUS
+			  		Bit  5 - RESERVED
+			  		Bit  6 - RESERVED
+			  		Bit  7 - Output 1
+			  		Bit  8 - Output 2
+			  		Bit  9 - Output 3
+			  		Bit 10 - Output 4/OBC
+			  		Bit 11 - Output 5/UHF
+			  		Bit 12 - Output 6
+			  		Bit 13 - Battery heater 1
+			  		Bit 14 - Battery heater 2
+			  		Bit 15 - Battery heater 3
+				outputConditions[1]
+                    Bit  0 - Latch-up Protected output 3.3V (High Level - OFF)
+			  		Bit  1 - Latch-up Protected output 5V (High Level - OFF)
+			  		Bit  2 - Shutdown Battery Charger (High Level - OFF) Maximum Current 230mA.
+			  		Bit  3 - Fast battery charge. Maximum current limit is increased with 230mA
+			  		Bit  4 - Fast battery charge. Maximum current limit is increased with 230mA
+			  		Bit  5 - Pull up resistor for I2C communication (10k ohms)
+			  		Bit  6 - Pull up resistor for I2C communication (4.7k ohms)
+			  		Bit  7 - Terminating resistor for RS485 communication (120 ohms)
+			  		Bit  8 - Output 7
+			  		Bit  9 - Output 8
+			  		Bit 10 - RESERVED
+			  		Bit 11 - RESERVED
+			  		Bit 12 - RESERVED
+			  		Bit 13 - RESERVED
+			  		Bit 14 - RESERVED
+			  		Bit 15 - RESERVED
+            @details: size = 2 **>
+        UInt16[] outputConditions
+
+        <** @description: Bitfield - Default Output states, 2x uint16, 
+                defaultOutputs[0]
+                    Bit  0 - LUP 3.3V Default
+			  		Bit  1 - LUP 5V Default
+			  		Bit  2 - Fast Charge +230mA Default
+			  		Bit  3 - Fast Charge +230mA Default
+			  		Bit  4 - I2C_PULLUP_RES_10K
+			  		Bit  5 - 2C_PULLUP_RES_4K7
+			  		Bit  6 - RS485_120ohm_TERMINATING_RES
+			  		Bit  7 - RESERVED
+			  		Bit  8 - RESERVED
+			  		Bit  9 - RESERVED
+			  		Bit 10 - RESERVED
+			  		Bit 11 - RESERVED
+			  		Bit 12 - RESERVED
+			  		Bit 13 - RESERVED
+			  		Bit 14 - RESERVED
+			  		Bit 15 - RESERVED
+				defaultOutputs[1]
+                    Bit  0 - Output 1 Default
+			  		Bit  1 - Output 2 Default
+			  		Bit  2 - Output 3 Default
+			  		Bit  3 - Output 4 Default
+			  		Bit  4 - Output 5 Default
+			  		Bit  5 - Output 6 Default
+			  		Bit  6 - Output 7 Default
+			  		Bit  7 - Output 8 Default
+			  		Bit  8 - RESERVED
+			  		Bit  9 - RESERVED
+			  		Bit 10 - RESERVED
+			  		Bit 11 - RESERVED
+			  		Bit 12 - RESERVED
+			  		Bit 13 - RESERVED
+			  		Bit 14 - RESERVED
+			  		Bit 15 - RESERVED
+            @details: size = 2 **>
+        UInt16[] defaultOutputs
+    }
+    
+    <** @description: Acquire the software version information for the EPS 1 module.
+        @details: id = 0x00000000
+    **>
+    method getSoftwareVersion
+    {
+        out
+        {
+            <** @description: software state **>
+            VersionVariant  ver_variant
+            
+            <** @description: FW version number **>
+            UInt16 ver_number
+
+            <** @description: timestamp in format: "MMM DD YYYY"("Dec 20 2021" => 20th December 2021 year)
+                @details: size = 12 **>
+            String buildDate
+            <** @description: timestamp in format: "hh:mm:ss" - hour:minutes:seconds
+                @details: size = 9 **>
+            String buildTime
+        }
+    }
+    
+    <** @description: Reads the battery information and telemetry of the EPS 1 Module.
+        @details: id = 0x00000001
+    **>
+    method getBatteryInfo
+    {
+        out
+        {
+            <** @description: Battery and BCR voltage + current parameters **>
+            BatteryInfo battery
+        }
+    }
+
+    <** @description: Reads the buses information and telemetry of the EPS 1 module.
+        @details: id = 0x00000002
+    **>
+    method getBusesInfo
+    {
+        out
+        {
+            <** @description: 3V3, 5V, LUP 3V3, LUP 5V voltage + current parameters **>
+            BusesInfo buses
+        }
+    }
+
+    <** @description: Provides solar panel information and telemetry (voltage/current) parameters as received by the EPS 1 module.
+        @details: id = 0x00000003
+    **>
+    method getSolarPanelsInfo
+    {
+        out
+        {
+            <** @description: Solar panels voltages and currents **>
+            SolarPanelsInfo solar
+        }
+    }
+    
+    <** @description: Reads statistic data
+        @details: id = 0x00000004
+    **>
+    method getStatisticInfo
+    {
+        out
+        {
+            <** @description: General statistics and counters info **>
+            StatisticInfo statistics
+        }
+    }
+    
+    <** @description: Reads the temperatures of MCU and batteries
+        @details: id = 0x00000005
+    **>
+    method getTemperaturesInfo
+    {
+        out
+        {
+            <** @description: MCU + Batt temperature parameters **>
+            TemperatureInfo temperatures
+        }
+    }
+    
+    <** @description: Reads the current state of inputs and outputs, and its default values    
+        @details: id = 0x00000006
+    **>
+    method getConfigurationInfo
+    {
+        out
+        {
+            <** @description: Input/Output/Default conditions of the EPS I module **>
+            ConfigurationInfo config
+        }
+    }
+    
+    <** @description: Changes the outputs state and receives its current states
+        @details: id = 0x00000007
+    **>
+    method queryControls
+    {
+        in
+        {
+            <** @description: Enumeration represents requested state for particular output,
+                              See enumerator OutputState. If currently output state mismatch the
+                              request, bit "Mismatch" will be set.
+                              [ 0] - SWSelfLock
+                              [ 1] - VBattEn   
+                              [ 2] - BCROutEn   
+                              [ 3] - SHD_3.3V 
+                              [ 4] - SHD_5V     
+                              [ 5] - LUP3.3V    
+                              [ 6] - LUP5V      
+                              [ 7] - SHDChrg    
+                              [ 8] - Chrg_I1    
+                              [ 9] - Chrg_I2    
+                              [10] - OUT1       
+                              [11] - OUT2       
+                              [12] - OUT3       
+                              [13] - OUT4/OBC  
+                              [14] - OUT5       
+                              [15] - OUT6       
+                              [16] - Heater 1   
+                              [17] - Heater 2    
+                              [18] - Heater 3   
+                              [19] - 10k I2C p/u 
+                              [20] - 4k7 I2C p/u 
+                              [21] - RS485 120R 
+                              [22] - reserved1 
+                              [23] - OUT7       
+                              [24] - OUT8      
+                              [25] - RESET_MPPT
+              @details: size = 26
+            **>
+            QueryState[] requested
+        }
+        out
+        {
+            <** @description: Enumeration represents requested state for particular output,
+                              See enumerator OutputState
+                              [ 0] - SWSelfLock
+                              [ 1] - VBattEn  
+                              [ 2] - BCROutEn  
+                              [ 3] - SHD_3.3V 
+                              [ 4] - SHD_5V    
+                              [ 5] - LUP3.3V~
+                              [ 6] - LUP5V~ 
+                              [ 7] - SHDChrg
+                              [ 8] - Chrg_I1 
+                              [ 9] - Chrg_I2 
+                              [10] - OUT1     
+                              [11] - OUT2      
+                              [12] - OUT3     
+                              [13] - OUT4/OBC 
+                              [14] - OUT5      
+                              [15] - OUT6      
+                              [16] - Heater 1 
+                              [17] - Heater 2  
+                              [18] - Heater 3 
+                              [19] - 10k I2C p/u
+                              [20] - 4k7 I2C p/u
+                              [21] - RS485 120R
+                              [22] - reserved1 
+                              [23] - OUT7      
+                              [24] - OUT8      
+                              [25] - RESET_MPPT
+              @details: size = 26
+            **>
+            QueryState[] reported
+        }
+    }
+    
+    <** @description: Sets the initial value of the resistance of the battery
+        @details: id = 0x00000008
+    **>
+    method queryRBatRaw
+    {
+        in
+        {
+            <** @description: new value of battery pack resistance.
+                              Values 0 and >0xFF will do no changes (but the commands will return the current value).
+            **>
+            UInt8 newValue
+        }
+        out
+        {
+            <** @description: Current value of batter resistance.
+            **>
+            UInt8 currentValue
+        }
+    }
+    
+    
+    <** @description: Changes the default outputs state and receives its current default states after executing the command
+        @details: id = 0x00000009
+    **>
+    method queryDefaults
+    {
+        in
+        {
+            <** @description: Enumeration represents requested state for particular output,
+                              See enumerator OutputState, valid states are ON and OFF,
+                              any value other than ON/OFF will be ignored.
+                              any value for Reserved fields will be ignored, however recommendation is to send 0.
+                              Some values are effective immediately, some are after reset only!
+                              [ 0] - LUP3v3    
+                              [ 1] - LUP5v
+                              [ 2] - Reserved
+                              [ 3] - Fast_charge1_230mA
+                              [ 4] - Fast_charge2_230mA
+                              [ 5] - Reserved
+                              [ 6] - Out_1    
+                              [ 7] - Out_2    
+                              [ 8] - Out_3   
+                              [ 9] - Out_4/OBC
+                              [10] - Out_5    
+                              [11] - Out_6   
+                              [12] - 10k I2C pull up
+                              [13] - 4k7 I2C pull up
+                              [14] - RS485 120R ohms termination resistor
+                              [15] - Out_7  
+                              [16] - Out_8   
+              @details: size = 17
+            **>
+            QueryState[] requested
+            <** @description: For internal Use only. Keep the value as 0x00 **>
+            UInt8 reserved 
+            //  MACDriver    requestedProtocol  = UInt8 reserved -> description: Special values as input for MAC driver - see "MACDriver" enumerator.
+        }
+        out
+        {
+            <** @description: Enumeration represents requested state for particular output,
+                              See enumerator OutputState, valid states are ON/OFF only, "Ignored" for reserved
+                              MAC driver: also ON/OFF values will be returned, flag "Mismatch" will indicates
+                              non-default driver running now.
+                              [ 0] - LUP3v3    
+                              [ 1] - LUP5v
+                              [ 2] - Reserved
+                              [ 3] - Fast_charge1_230mA
+                              [ 4] - Fast_charge2_230mA
+                              [ 5] - Reserved
+                              [ 6] - Out_1    
+                              [ 7] - Out_2    
+                              [ 8] - Out_3   
+                              [ 9] - Out_4/OBC
+                              [10] - Out_5    
+                              [11] - Out_6   
+                              [12] - 10k I2C pull up
+                              [13] - 4k7 I2C pull up
+                              [14] - RS485 120R ohms termination resistor
+                              [15] - Out_7  
+                              [16] - Out_8
+              @details: size = 17
+            **>
+            QueryState[] reported
+            <** @description: For internal Use only. Keep the value as 0x00 **>
+            UInt8 reserved 
+			//  MACDriver    requestedProtocol  = UInt8 reserved -> description: Special values as input for MAC driver - see "MACDriver" enumerator.
+        }
+    }
+    
+    <** @description: Changes the default outputs state and receives its current states
+        @details: id = 0x0000000A
+    **>
+    method queryLaunchState
+    {
+        in
+        {
+            <** @description: Enumeration represents requested state for next power-on cycle - would it be
+                              launch (by default 5 minutes delay before all power buses will be enabled), or not (immediately)
+                              Valid Input values are "On" and "Off", all values other than that will be ignored.
+            **>
+            QueryState requested
+            <** @description: Number of minutes to wait until providing power supply after lunch. That works only if the function is enabled by the above parameter.
+            **>
+            UInt8 writeDelayPeriod
+        }
+        out
+        {
+            <** @description: reported State with the new default value **>
+            QueryState reported
+            <** @description: number of minutes to wait until providing the new value after reboot **>
+            UInt8 readDelayPeriod
+        }
+    }
+
+    <** @description: Get/Set watchdog configuration - timer and output mask to reset
+        @details: id = 0x0000000B
+         Note: if any of values (timer or mode) is valid that value will be updated, otherwise ignored
+    **>
+    method queryWatchdog
+    {
+        in
+        {
+            <** @description: Watchdog timer period in seconds, minimum 10 seconds
+                              NOTE 1: values below 10 will be ignored, and could be used to obtain
+                                      current timer value
+                              NOTE 2: if Auto mode is set, the watchdog will be stopped after timer
+                                      value is set, even if it was already running in auto mode before!  
+            **>
+			UInt8 new_timer
+			
+            <** @description: See WatchDogType;
+                              BE AWARE: if Auto mode is set, the watchdog will not run automatically,
+                                even if it was already running in auto mode before!  
+            **>
+			WatchDogType new_type
+        }
+        out
+        {
+            <** @description: returns currently set watchdog timer and its type
+            **>
+			UInt8 remaining_time
+            <** @description: returns new set watch dog type
+            **>
+			WatchDogType type
+        }
+    }
+    
+    <** @description: Resets the Watchdog timer in order to prevent MCU Reset on its timeout
+        @details: id = 0x0000000C
+    **>
+    method resetWatchdog
+    {
+        out
+        {
+            <** @description: 'type' will let you know about current watchdog settings **>
+            WatchDogType type
+            <** @description: 'timer' is a time left until reset before the reset action,
+                                in other words: how much time you have left to watchdog expired.
+                               if no watchdog is running, the value of 'watchdog timer' is returned
+             **>
+            UInt8 timer
+        }
+    }
+
+    <** @description: Resets the MCU and/or all the outputs
+                  the delay of 100ms before reset is implemented in order to confirm the command.
+                  however, on a high ESPS load it is possible that response will not be sent due to time limits.
+        @details: id = 0x0000000D
+    **>
+    method resetPowerSupply
+    {
+        in
+        {
+            <** @description: Security key to avoid accidental resets.
+                    security = 0x00 - Payload reset (power failure simulation),
+                    security = 0x12 - Soft MCU reset - wait for critical tasks to be done first,
+                    security = 0x5A - Hard MCU reset - reset the MCU faster, however still try to send response,
+                    security = 0xDE - 'Kill It!' - reset MCU ASAP, no response is almost guaranteed.
+            **>
+            UInt8 security
+        }
+        
+        out
+        {
+            <** @description: reset code returns **>
+            Reset_RetCode result
+        }
+    }
+
+    <** @description: Write (once per lifetime) and Read afterwards the EPS1 serial number
+        @details: id = 0x0000000E
+                  Write could be performed only once
+    **>
+    method SetSerialNumber
+    {
+        in
+        {
+            <** @description: Serial number to write
+                @details: size = 32
+            **>
+			String DeviceSerialNumberWrite
+        }
+        out
+        {
+            <** @description: EPS1 Serial number
+                @details: size = 32
+            **>
+            String DeviceSerialNumberRead
+        }
+    }
+    
+        <** @description: Read the EPS1 serial number
+        @details: id = 0x0000000F
+                  Write could be performed only once
+    **>
+    method GetSerialNumber
+    {
+        out
+        {
+            <** @description: EPS1 Serial number
+                @details: size = 32
+            **>
+            String DeviceSerialNumber
+        }
+    }
+
+    <** @description: Read the Settings of hell mode
+        @details: id = 0x00000010
+    **>
+    method HellModeRead
+    {
+        out
+        {
+            <** @description: Battery voltage threshold under which will enter Hell mode
+            **>
+            UInt8 entryLevelVoltage
+            <** @description: Battery voltage threshold under which will exit Hell mode
+            **>
+            UInt8 exitLevelVoltage
+            <** @description: Temperature over which will enter Hell mode
+            **>
+            UInt8  entryLevelTemperature
+            <** @description: Temperature under which will enter Hell mode
+            **>
+            UInt8  exitLevelTemperature
+        }
+    }
+
+    <** @description: Write the Settings of hell mode
+        @details: id = 0x00000011
+    **>
+    method HellModeWrite
+    {
+        in
+        {
+            <** @description: Battery voltage threshold under which will enter Hell mode
+            **>
+            UInt8 writeEntryLevelVoltage
+            <** @description: Battery voltage threshold under which will exit Hell mode
+            **>
+            UInt8 writeExitLevelVoltage
+            <** @description: Temperature over which will enter Hell mode
+            **>
+            UInt8  writeEntryLevelTemperature
+            <** @description: Temperature under which will enter Hell mode
+            **>
+            UInt8  writeExitLevelTemperature
+        }
+        
+        out
+        {
+            <** @description: Battery voltage threshold under which will enter Hell mode
+            **>
+            UInt8 readEntryLevelVoltage
+            <** @description: Battery voltage threshold under which will exit Hell mode
+            **>
+            UInt8 readExitLevelVoltage
+            <** @description: Temperature over which will enter Hell mode
+            **>
+            UInt8  readEntryLevelTemperature
+            <** @description: Temperature under which will enter Hell mode
+            **>
+            UInt8  readExitLevelTemperature
+        }
+    }
+
+    <** @description: Read the Settings of all three heaters
+        @details: id = 0x00000012
+    **>
+    method HeatersSettingsRead
+    {
+        out
+        {
+            <** @description: Battery temperature under which will turn On each of the three heaters
+            	@details: size = 3
+            **>
+            Int8[] lowBatTemperetureHeater
+            
+            <** @description: Hysteresis to turn Off the heaters
+            	@details: size = 3
+            **>
+            UInt8[] hysteresisHeater
+        }
+    }
+
+    <** @description: Write and Read afterwards the Settings of all heaters
+        @details: id = 0x00000013
+    **>
+    method HeatersSettingsWrite
+    {
+        in
+        {
+            <** @description: Battery temperature under which will turn On the heaters
+            	@details: size = 3
+            **>
+            Int8[] writeLowBatTemperetureHeater
+            
+            <** @description: Hysteresis to turn Off the heaters
+            	@details: size = 3
+            **>
+            UInt8[] writeHysteresisHeater
+        }
+        
+        out
+        {
+            <** @description: Battery temperature under which will turn On the heaters
+            	@details: size = 3
+            **>
+            Int8[] readLowBatTemperetureHeater
+            
+            <** @description: Hysteresis to turn Off the heaters
+            	@details: size = 3
+            **>
+            UInt8[] readHysteresisHeater
+        }
+    }
+
+    <** @description: Changed the state of one output and after the toggle timeout will set it back to its original state
+        @details: id = 0x00000014
+    **>
+    method ToggleOutPut
+    {
+        in
+        {
+            <** @description: Output number to be toggled
+            **>
+            QueryControlsIndex toggleOutput
+            
+            <** @description: Time in seconds for the output to stay toggled state. If 0 - that will be ignored and last settings (or default) will be used
+            **>
+            UInt8 timeAtToggledState
+        }
+        
+        out
+        {
+            <** @description: status of the request, 1- done, 0- fail 
+            **>
+            Boolean requestStatus
+            <** @description: time to stay at the toggled state
+            **>
+            UInt8 actualTimeAtToggledState
+        }
+    }
+
+    <** @description: The EPS I will send broadcast commands to notify other devices for an event that may result in power down of all payloads.
+        @details: id = 0x00000015
+    **>
+    method NotificationsSettings
+    {
+        in
+        {
+            <** @description: repetition time - time between two notifying broadcasts; To read send value 0
+            **>
+            UInt8 repetitionsPeriod
+            
+            <** @description: number of repetitions for one notification; To read send value 0
+            **>
+            UInt8 numberRepetitions
+        }
+        out
+        {
+            <** @description: repetition time - time between two notifying broadcasts
+            **>
+            UInt8 actualRepetitionsPeriod
+            
+            <** @description: number of repetitions for one notification
+            **>
+            UInt8 actualNumberRepetitions
+        }
+    }
+
+    <** @description: some of the previous commands combined
+        @details: id = 0x00000016
+    **>
+    method GetTelemetryAltogether
+    {
+        out
+        {
+            <** @description: The EPS1 Response structure for Battery Info Request **>
+			BatteryInfo battery
+            <** @description: The EPS1 Response structure for Buses Info Request **>
+			BusesInfo buses
+            <** @description: The EPS1 Response structure for Solar Panels Info Request **>
+			SolarPanelsInfo solar
+            <** @description: The EPS1 Response structure for Temperatures Info Request. **>
+			TemperatureInfo temperatures
+            <** @description: The EPS1 Response structure for Configuration Info Request **>
+			ConfigurationInfo config
+            <** @description: Battery current raw value **>
+			UInt8 RBatRaw_currentValue
+        }
+    }
+
+    //<** @description: Settings for calculating Rbat
+    //    @details: id = 0x00000017
+    //**>
+    //method RbatSettingsRead
+    //{
+    //    out
+    //    {
+    //        <** @description: use the heaters for calculations
+    //        **>
+    //        UInt8 usedHeatersRead
+    //        
+    //        <** @description: use charging settings for calculations
+    //        **>
+    //        UInt8 chargeSettingsRead
+    //        
+    //        <** @description: The default period is multiplied by that ("extendPeriod" multiplied by 2)
+    //        **>
+    //        UInt8 extendPeriodRead
+    //    }
+    //}
+    
+    //<** @description: Settings for calculating Rbat
+    //    @details: id = 0x00000018
+    //**>
+    //method RbatSettingsWrite
+    //{
+    //    in
+    //    {
+    //        <** @description: use the heaters for calculations
+    //        **>
+    //        UInt8 usedHeaters
+    //        
+    //        <** @description: use charging settings for calculations
+    //        **>
+    //        UInt8 chargeSettings
+    //        
+    //        <** @description: The default period is multiplied by that ("extendPeriod" multiplied by 2)
+    //        **>
+    //        UInt8 extendPeriod
+    //    }
+    //    out
+    //    {
+    //        <** @description: use the heaters for calculations
+    //        **>
+    //        UInt8 usedHeatersRead
+    //        
+    //        <** @description: use charging settings for calculations
+    //        **>
+    //        UInt8 chargeSettingsRead
+    //        
+    //        <** @description: The default period is multiplied by that ("extendPeriod" multiplied by 2)
+    //        **>
+    //        UInt8 extendPeriodRead
+    //    }
+    //}
+
+    <** @description: Gets the current Bootloader version, if there is any
+    @details: id = 0x10000000 
+    **>
+    method bload_getVersion
+    {
+        out
+        {
+            <** @description: Bootloader revision (0 for A, 1 for B, etc.) **>
+
+            UInt8  revison
+	                <** @description: Bitmask of supported image types
+                              bit 0 corresponds to 'Plain Text',
+                              bit 1 corresponds to 'EnduroSat Crypto v1',
+                              other bits are reserved for next revisions.
+            **>
+            UInt8  supported
+        }
+    }
+
+    <** @description: Command to erase the storage flash memory for writing the new image of the application
+    @details: id = 0x10000001 
+    **>
+    method bload_eraseFlash
+    {
+        in
+        {
+            <** @description: 0x00000000 - Check if flash is empty 
+	                       0x12345678u - erase the flash memory and set image type to "Plain Text"
+			       0x74615345u - erase the flash memory and set image type to "EnduroSat Crypto v1"
+	    **>
+            UInt32 reqCode
+        }
+        out
+        {
+            <** @description: Bootloader return codes **>
+            BLoad_RetCode retCode
+        }
+    }
+
+    <** @description: Writes part of a image file of a new application in the storage flash memory
+    @details: id = 0x10000002
+    **>
+    method bload_writeFlash
+    {
+        in
+        {
+            <** @description: address in memory to write the specific block. Must be even.
+            **>
+            UInt16 address
+
+            <** @description: Data memory to write, up to 128 bytes. Must me even.
+                @details: size = 128
+            **>
+			UInt8[] data
+        }
+        out
+        {
+            <** @description: Bootloader return codes **>
+            BLoad_RetCode retCode
+        }
+    }
+
+    <** @description: Request the installation of the new image from the storage flash over the current application
+    @details: id = 0x10000003
+    **>
+    method bload_execute
+    {
+        in
+        {
+            <** @description: Cyclic redundancy check of the image of the new firmware. Poly: 0x04C11DB7L. Reverse : TRUE **>
+            UInt32 CRC32
+        }
+        out
+        {
+            <** @description: Bootloader return codes **>
+            BLoad_RetCode retCode
+        }
+    }
+
+}

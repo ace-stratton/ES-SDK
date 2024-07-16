@@ -1,0 +1,64 @@
+package endurosat.macif
+
+<** @description: Generic ESPS MAC services interface. Provides commands for controlling RS-485 bus termination and ESPS MAC addressing.
+    @details: id = 25 
+**>
+interface MacServices
+{
+    version { major 0 minor 1 }
+                                        
+    <** @description: Read the bus termination settings for all supported ESPS MAC HW interfaces
+        @details: id = 0x00000000
+    **>
+    method getMacBusTerminationSetting
+    {
+        in
+        {
+            <** @description: If set to true, the stored persistent setting is returned; otherwise - the actual GPIO pin state is provided **>
+            Boolean readPersistentSetting
+        }
+        out
+        {
+            <** @description: Each bit corresponds to a supported HW interface (mapping corresponds to MacHwInterfaceId enum) **>
+            UInt8 supportedInterfacesBitField
+            <** @description: Starting from LSB, each bit corresponds to the bus termination resistor activation
+                              setting for the respective HW interface in the supportedInterfacesBitField parameter **> 
+            UInt8 busTerminationSettingsBitField
+        }
+    }
+    
+    <** @description: Updates the bus termination settings for all supported MAC HW interfaces
+        @details: id = 0x00000001
+    **>
+    method setMacBusTerminationSetting
+    {
+        in
+        {
+            <** @description: Each bit corresponds to a supported HW interface (respective bit-masks are given in MacHwInterfaceId enum)
+                              If the bit at given position is 1, then the corresponding bit in the busTerminationSettingsBitField parameter is
+                              taken into account as a valid setting; positions with bit value of 0 are ignored
+            **>
+            UInt8 supportedInterfacesBitField
+            <** @description: Starting from LSB, each bit corresponds to the bus termination resistor activation
+                              setting for the respective HW interface in the supportedInterfacesBitField parameter **> 
+            UInt8 busTerminationSettingsBitField
+        }
+    }
+        
+    <** @description: Used to assign a physical address to the ESPS MAC interface 
+        @details: id = 0x00000010, esttc_id = X
+    **>
+    method setMacAddress
+    {
+        in
+        {
+            <** @description: Physical ESPS MAC address to be used by the device **>
+            UInt8 macAddr
+        }
+        out
+        {
+            <** @description: If the change is successful, this parameter will be set to macAddr **>
+            UInt8 updatedMacAddr
+        }
+    }
+}

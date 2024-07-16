@@ -1,0 +1,51 @@
+---
+eps_ctrl_sm:
+  states:
+    # Initialize the timer when exiting the off state
+    - "off":
+        transitions:
+          - idle:
+            - event: initialized
+        attributes:
+          on_entry: False
+          on_exit: True
+    # Waiting for a new request to arrive
+    - idle:
+        transitions:
+          - active_request: 
+              - event: new_request
+        attributes:
+          on_entry: False
+          on_exit: False
+    # On entry, try to send the request and store the result
+    - active_request:
+        transitions:
+          - retry_request:
+            -  { event: "__periodic", guard: response_timeout_elapsed }
+          - finish_request:
+            - event: response_received
+        attributes:
+          on_entry: True
+          on_exit: False
+    # On entry, increase the number of retries by one
+    - retry_request:
+        transitions:
+          - active_request:
+            - { event: "__periodic", guard: retries_left }
+          - finish_request:
+            - { event: "__periodic", guard: max_retries }
+        attributes:
+          on_entry: True
+          on_exit: False
+    # On entry, remove the request from queue and reset the retries counter
+    - finish_request:
+        transitions:
+          - active_request:
+            - { event: "__periodic", guard: queue_not_empty }
+          - idle:
+            - { event: "__periodic", guard: queue_empty }
+        attributes:
+          on_entry: True
+          on_exit: False
+  attributes:
+    initial: "off"

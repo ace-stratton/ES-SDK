@@ -1,0 +1,22 @@
+@startuml
+start
+:Initialization;
+package "Step 1 " {
+:        Read operational mode **(expected IDLE)**        ;
+}
+package "Step 2 " {
+:                     Read configured estimators                  ;
+}
+package "Step 3 " {
+:                     Read configured controller                    ;
+}
+package "Step 4 " {
+:           Read chosen controller configuration           ;
+}
+package "Step 5 " {
+:                Read configured magnetometer               ;
+}
+package "Step 6 " {
+:Enable ES ADCS **(Set operational mode to RUN)**;
+}
+@enduml

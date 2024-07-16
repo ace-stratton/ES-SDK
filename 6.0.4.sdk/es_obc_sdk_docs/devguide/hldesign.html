@@ -1,0 +1,1538 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://endurosat.com/devguide/hldesign.html">
+      
+      
+        <link rel="prev" href="../quickstart.html">
+      
+      
+        <link rel="next" href="devguide_dirstructure.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>High-Level Design - EnduroSat On-Board Computer SDK Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#high-level-design" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-header__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EnduroSat On-Board Computer SDK Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              High-Level Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart.html" class="md-tabs__link">
+        
+  
+    
+  
+  Quick-start Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="hldesign.html" class="md-tabs__link">
+          
+  
+  Developer's Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../assets/src-docs/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Code Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference_docs.html" class="md-tabs__link">
+        
+  
+    
+  
+  Reference documents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_history.html" class="md-tabs__link">
+        
+  
+    
+  
+  Change history
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contacts.html" class="md-tabs__link">
+        
+  
+    
+  
+  Contacts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-nav__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    EnduroSat On-Board Computer SDK Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick-start Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Developer's Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer's Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="hldesign.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#mcu-vendor-hal-and-platform-al-abstraction-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCU Vendor HAL and Platform AL (Abstraction Layer)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#middlewares" class="md-nav__link">
+    <span class="md-ellipsis">
+      Middlewares
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Drivers
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Libraries
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    <span class="md-ellipsis">
+      Services
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application" class="md-nav__link">
+    <span class="md-ellipsis">
+      Application
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_dirstructure.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directory structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cmake.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OBC configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            OBC configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_buildcfg.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_sysconfig.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development recipes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development recipes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_newcomp.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_esps_cmd_extend.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the set of OBC supported commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_fwupd.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootloader and firmware updates handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_debugtrace.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_assertions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_datacache.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_telemetry.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Telemetry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_micropython.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroPython
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_es_adcs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EnduroSat ADCS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5_10" id="__nav_3_5_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_conops.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_user_payloads.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_aocs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Attitude and Orbit Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_payload_scheduler.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Payload Scheduler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cubeadcs_gen2_service.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CubeADCS Gen2 Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_operations_guide.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_pm.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Performance monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Connectivity
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Connectivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_eth.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/src-docs/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference_docs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference documents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_history.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change history
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contacts.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contacts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="high-level-design">High-Level Design</h1>
+<p>The <abbr title="On-board Computer">OBC</abbr> SDK consists of the following packages:</p>
+<p><center><a class="glightbox" href="../assets/img/sw_packages.svg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="OBC Packages View" src="../assets/img/sw_packages.svg" /></a></center></p>
+<h2 id="mcu-vendor-hal-and-platform-al-abstraction-layer"><abbr title="MicroController Unit">MCU</abbr> Vendor <abbr title="Hardware Abstraction Layer">HAL</abbr> and Platform AL (Abstraction Layer)</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These packages contain <abbr title="MicroController Unit">MCU</abbr>-specific code.</p>
+</div>
+<h3 id="mcu-vendor-hal"><abbr title="MicroController Unit">MCU</abbr> Vendor <abbr title="Hardware Abstraction Layer">HAL</abbr></h3>
+<p>This package is implemented by the <abbr title="MicroController Unit">MCU</abbr> manufacturer (<abbr title="ST Microelectronics">ST</abbr>) and is a supporting package for projects based on STM32 MCUs. It is your decision whether to use the package or do your own register-level handling instead but keep in mind that the <abbr title="Hardware Abstraction Layer">HAL</abbr> provides a structured interface to the <abbr title="MicroController Unit">MCU</abbr> peripherals and easy to use configurable mechanisms to enable <abbr title="MicroController Unit">MCU</abbr> peripheral operation even by novice programmers. This package also ensures that peripheral operation is done in the “correct” way and saves much effort in working with the more complicated peripherals. All this flexibility and ease of use come at a price - more CPU/memory resources. If your <abbr title="On-board Computer">OBC</abbr> application allows it, however, it is recommended to rely on the vendor <abbr title="Hardware Abstraction Layer">HAL</abbr> interfaces to control the <abbr title="MicroController Unit">MCU</abbr> peripherals. The <abbr title="On-board Computer">OBC</abbr> SDK comes with drivers for most peripherals but you can completely exclude from your build anything that is unused in your project.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <abbr title="ST Microelectronics">ST</abbr> <abbr title="Hardware Abstraction Layer">HAL</abbr> packages provided as part of the <abbr title="On-board Computer">OBC</abbr> SDK are the most current at the time of the SDK release. If you want to ensure you are working with the latest version of those HALs, you can update the relevant files directly from the <a href="https://github.com/stm32-rs/stm32h7xx-hal"><abbr title="ST Microelectronics">ST</abbr> GitHub repository</a>.</p>
+</div>
+<h3 id="platform-al">Platform AL</h3>
+<p>The Platform Abstraction Layer is not implemented at the moment of writing this documentation but it will be intended to cut any direct dependencies of the existing top-level packages to Drivers and <abbr title="MicroController Unit">MCU</abbr> HALs, even the <abbr title="Real-Time Operating System">RTOS</abbr>. This would give users the possibility to completely run and simulate the <abbr title="On-board Computer">OBC</abbr> SDK on a computer without the real <abbr title="Hardware">HW</abbr>.</p>
+<h2 id="middlewares">Middlewares</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These packages contain <abbr title="Hardware">HW</abbr>-independent code.</p>
+</div>
+<h3 id="freertos"><a href="https://www.freertos.org/">FreeRTOS</a></h3>
+<p>This package represents the Operating System running on the CPU which provides task scheduling, task synchronization, <abbr title="Software">SW</abbr> timers and other useful services which enable the development of complex multi-task applications. This SDK ships with FreeRTOS but most modules can easily be ported to other <abbr title="Real-Time Operating System">RTOS</abbr> flavors especially if they are <a href="https://os.mbed.com/handbook/CMSIS-RTOS"><abbr title="Cortex Microcontroller Software Interface Standard">CMSIS</abbr>-<abbr title="Real-Time Operating System">RTOS</abbr></a>-compliant.</p>
+<h3 id="3rd-party-middleware">3<sup>rd</sup> party Middleware</h3>
+<p>This package contains externally provided software maintained separately from the <abbr title="On-board Computer">OBC</abbr> SDK and only integrated inside to enable more services for the end users. Currently, you can find the following software in this package:</p>
+<ul>
+<li><a href="https://github.com/libcsp/libcsp">Cubesat Space Protocol (<abbr title="Cubesat Space Protocol">CSP</abbr>)</a></li>
+<li><a href="http://elm-chan.org/fsw/ff/00index_e.html"><abbr title="File Allocation Table File System">FATFS</abbr> file system driver</a></li>
+</ul>
+<h3 id="platform-middleware">Platform Middleware</h3>
+<p>This package currently contains the <abbr title="EnduroSat">ES</abbr> Communication Protocol Stack (<abbr title="EnduroSat Protocol Stack">ESPS</abbr> I). This implementation is used in all EnduroSat platform modules.</p>
+<h2 id="drivers">Drivers</h2>
+<p>This package contains:</p>
+<ul>
+<li>Drivers which make use of the on-board <abbr title="On-board Computer">OBC</abbr> sensors or communicate to other modules via the PC104 connector.</li>
+<li><abbr title="EnduroSat Protocol Stack">ESPS</abbr> I bus communication drivers.</li>
+<li><abbr title="On-board Computer">OBC</abbr> peripheral drivers which provide more extended functionality not available as part of the <abbr title="MicroController Unit">MCU</abbr> vendor <abbr title="Hardware Abstraction Layer">HAL</abbr> package.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This package contains code specific to external <abbr title="Hardware">HW</abbr> modules.</p>
+</div>
+<h2 id="libraries">Libraries</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This package contains <abbr title="Hardware">HW</abbr>-independent code. Libraries can be used anywhere in the system and they usually do not carry additional dependencies.</p>
+</div>
+<p>This package has different stand-alone libraries that are used by different components in the <abbr title="On-board Computer">OBC</abbr> code, such as <abbr title="Cyclic Redundancy Check">CRC</abbr> calculation, date and time utilities, hierarchical state machine engine, timers, debug, compression, vetc.</p>
+<h2 id="services">Services</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This package contain <abbr title="Hardware">HW</abbr>-independent code.</p>
+</div>
+<p>The package contains service-level implementations which can work stand-alone or be used from a user-<abbr title="On-board Computer">OBC</abbr> application.</p>
+<p>Here you can find:</p>
+<ul>
+<li>Telemetry reporting</li>
+<li><abbr title="Ultra-High Frequency (denotes radio communcation frequencies between 0.3-3 GHz)">UHF</abbr> telemetry beacon transmission</li>
+<li><abbr title="Secure Digital (a flash memory card format)">SD</abbr> card management</li>
+<li>Payload power control and scheduling</li>
+<li>Solar panel sensors acquisition and reporting</li>
+<li>Debug/trace service</li>
+<li>Non-volatile memory service</li>
+<li>...and others</li>
+</ul>
+<h2 id="application">Application</h2>
+<p>The application package implements user-defined behavior on top of the existing <abbr title="On-board Computer">OBC</abbr> services. The <abbr title="On-board Computer">OBC</abbr> SDK comes with a pre-configured <abbr title="Concept of Operations">ConOps</abbr> application which can be used as-is or modified by the users.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This package contains <abbr title="Hardware">HW</abbr>-independent code.</p>
+</div>
+<h1 id="packages-dependency-matrix">Packages dependency matrix</h1>
+<p>The following matrix indicates the recommended dependency options between the <abbr title="Software">SW</abbr> packages in order to promote better feature encapsulation and to improve reusability of the individual components.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Application</th>
+<th>MW</th>
+<th>Libraries</th>
+<th>Services</th>
+<th>Drivers</th>
+<th><abbr title="Hardware Abstraction Layer">HAL</abbr></th>
+<th><abbr title="Real-Time Operating System">RTOS</abbr></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Application</strong></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td><strong>MW</strong></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td><strong>Libraries</strong></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Services</strong></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td><strong>Drivers</strong></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+</tr>
+<tr>
+<td><strong><abbr title="Hardware Abstraction Layer">HAL</abbr></strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m9 20.42-6.21-6.21 2.83-2.83L9 14.77l9.88-9.89 2.83 2.83L9 20.42Z"/></svg></span> symbol in a cell indicates that a dependency can exist between components hosted in the corresponding package on the same row/column where the symbol is placed. Some additional restrictions exist between components in the Application, MW, Drivers and <abbr title="Hardware Abstraction Layer">HAL</abbr> packages, though. They can have top-to-bottom direct vertical collaboration but bottom-to-top hard dependencies shall not exist. Such dependencies have to be modelled via <abbr title="Application Programming Interface">API</abbr>-configurable or weak callbacks only.</p>
+<p><center><a class="glightbox" href="../assets/plantuml/img/hld_package_deps.svg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Package dependencies" src="../assets/plantuml/img/hld_package_deps.svg" /></a></center></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="footer.title">
+      
+        
+        <a href="../quickstart.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Quick-start Guide" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Quick-start Guide
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="devguide_dirstructure.html" class="md-footer__link md-footer__link--next" aria-label="Next: Directory structure" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Directory structure
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            <i>Privileged and confidential</i>
+          </div>
+        
+      </div>
+      <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/endurosat/" target="_blank" rel="noopener" title="EnduroSat on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share", "navigation.tabs", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+
+
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

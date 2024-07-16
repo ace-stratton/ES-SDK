@@ -1,0 +1,1758 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://endurosat.com/devguide/devguide_debugtrace.html">
+      
+      
+        <link rel="prev" href="devguide_fwupd.html">
+      
+      
+        <link rel="next" href="devguide_assertions.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Debug and trace - EnduroSat On-Board Computer SDK Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#trace-instrumentation-for-your-modules" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-header__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EnduroSat On-Board Computer SDK Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Debug and trace
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart.html" class="md-tabs__link">
+        
+  
+    
+  
+  Quick-start Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="hldesign.html" class="md-tabs__link">
+          
+  
+  Developer's Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../assets/src-docs/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Code Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference_docs.html" class="md-tabs__link">
+        
+  
+    
+  
+  Reference documents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_history.html" class="md-tabs__link">
+        
+  
+    
+  
+  Change history
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contacts.html" class="md-tabs__link">
+        
+  
+    
+  
+  Contacts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-nav__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    EnduroSat On-Board Computer SDK Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick-start Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Developer's Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer's Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hldesign.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_dirstructure.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directory structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cmake.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OBC configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            OBC configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_buildcfg.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_sysconfig.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development recipes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development recipes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_newcomp.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_esps_cmd_extend.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the set of OBC supported commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_fwupd.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootloader and firmware updates handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="devguide_debugtrace.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#trace-instrumentation-for-your-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trace instrumentation for your modules
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exception-tracing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exception tracing
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cpu-exception-fault-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      CPU exception fault handling
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_assertions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_datacache.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_telemetry.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Telemetry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_micropython.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroPython
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_es_adcs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EnduroSat ADCS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_5_10" id="__nav_3_5_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_conops.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_user_payloads.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_aocs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Attitude and Orbit Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_payload_scheduler.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Payload Scheduler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cubeadcs_gen2_service.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CubeADCS Gen2 Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_operations_guide.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_pm.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Performance monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Connectivity
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Connectivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_eth.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/src-docs/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference_docs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference documents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_history.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change history
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contacts.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contacts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Debug and trace</h1>
+
+<p>In the course of using or modifying the <abbr title="On-board Computer">OBC</abbr> SDK, you will definitely need some ways to investigate what happens to the system in order to pinpoint bugs and fix them. While you have the debugger as the main tool for such activity, sometimes program behavior changes if breakpoints are used or <abbr title="Hardware">HW</abbr> tracing is performed, and bugs can only be reproduced when the program flow doesn't get interrupted every now and then.</p>
+<p>For that purpose, there are some very basic ways of tracing information in the <abbr title="On-board Computer">OBC</abbr> SDK which should be explained here to give you a headstart.</p>
+<h2 id="trace-instrumentation-for-your-modules">Trace instrumentation for your modules</h2>
+<p>If you want to introduce configurable serial tracing for your modules, you can perform the following steps:</p>
+<ul>
+<li>include <code>espf/core/lib/trace/inc/trace.h</code> in your implementation;</li>
+<li>use the <code>ES_TRACE_&lt;LEVEL&gt;(formatString, ...)</code> macros in order to trace information to various outputs.</li>
+</ul>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<ul>
+<li><code>ES_TRACE_&lt;LEVEL&gt;(...)</code> calls will not have any effect unless the <code>ES_TRACE_ENABLED</code> <em>CMake</em> option is set to <em>ON</em>;</li>
+<li>
+<p>These debug macros can output formatted data similar to <code>printf(...)</code>, e.g.
+    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="n">ES_TRACE_DEBUG</span><span class="p">(</span><span class="s">&quot;system started successfully!&quot;</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+    produces
+    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>system started successfully!
+</code></pre></div></td></tr></table></div></p>
+<p>And another example...
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kt">uint8_t</span><span class="w"> </span><span class="n">errCode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="n">ES_TRACE_ERROR</span><span class="p">(</span><span class="s">&quot;system error: [%d]&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">errCode</span><span class="p">);</span>
+</code></pre></div></td></tr></table></div>
+produces
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>system error: [5]
+</code></pre></div></td></tr></table></div></p>
+</li>
+</ul>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In case you want to introduce tracing in your implementation, it may be preferrable to make a wrapper macro over <code>ES_TRACE_&lt;LEVEL&gt;()</code> since the output channel may be only one and you probably don't want to flood it with traces from all components in your system but rather be able to turn on/off certain tracers.</p>
+<p>In your public header file, you can define:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;espf/core/lib/trace/inc/trace.h&quot;</span>
+
+<span class="cp">#if defined(ENABLE_MODULE_FOO_DEBUG_TRACE)</span>
+<span class="w">    </span><span class="cp">#define MODULE_FOO_DBG_PRINT(formatStr, ...)   ES_TRACE_DEBUG(formatStr OPT_VA_ARGS(__VA_ARGS__));</span>
+<span class="cp">#else</span>
+<span class="w">    </span><span class="cp">#define MODULE_FOO_DBG_PRINT(fmtString, ...)   asm(&quot;nop&quot;);</span>
+<span class="cp">#endif</span>
+</code></pre></div></td></tr></table></div></p>
+<p>In your module sources, use only the <code>MODULE_FOO_DBG_PRINT()</code> macro. This way you have the option to disable the traces for this module separately and thus limit the output only to the traces that you are currently interested in.</p>
+</div>
+<h3 id="severity-levels-of-traces">Severity levels of traces</h3>
+<p>There are five severity levels defined for trace entries:</p>
+<ul>
+<li>ERROR - any fault which prevents the proper execution of a functionality, but doesn't necessarily affect the system as a whole. Usually not recoverable without user intervention.</li>
+<li>WARNING - any anomaly that may affect the proper execution of a functionality, but is recoverable.</li>
+<li>INFO - any piece of information that is useful to be available all the time.</li>
+<li>FATAL - any error which prevents the whole system from operating correclty (or at all). Recoverable only through reset.</li>
+<li>DEBUG - any details that provide insight into the operation of the system but are not expected to be available all the time. Used mainly during development and defect analysis.</li>
+</ul>
+<h3 id="trace-output">Trace output</h3>
+<p>Currently there are three types of channels you can use as sinks for the trace output - debugger, <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr> and file. The default trace configuration has one of each type configured. You can add more trace outputs by modifying the implementation in file <code>espf/config/trace_config/src/trace_config.c</code>.</p>
+<h4 id="debugger">Debugger</h4>
+<p>Trace data is output directly to the ARM trace cell output which can be captured in the STM32CubeIDE in the following way:</p>
+<ol>
+<li>Instrument your code with <code>ES_TRACE_&lt;LEVEL&gt;</code> macro calls.</li>
+<li>Make sure that the <strong>STM32_SWV_SUPPORT</strong> <em>CMake</em> option is set to ON and <strong>DEBUG_ENABLED</strong> is defined (available by default in debug builds).</li>
+<li>Build your code.</li>
+<li>Open the debug configuration dialog -&gt; <code>Debugger</code> tab and make sure to select the <code>Enable</code> checkbox in the <code>Serial Wire Viewer (SWV)</code> group.</li>
+<li>Set <code>Core Clock (MHz):</code> edit box value to <code>108.0</code><sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> and click the <code>Apply</code> button.</li>
+<li>Start a debugging session with your code by clicking on the <code>Debug</code> button.</li>
+<li>When you first hit the default <code>main</code> function breakpoint, open the <code>Window</code> -&gt; <code>Show View</code> -&gt; <code>SWV</code> -&gt; <code>SWV ITM Data Console</code> view from the Eclipse main menu.</li>
+<li>Click on the <code>Configure trace</code> <a class="glightbox" href="../assets/img/configure_trace_icon.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Configure trace" src="../assets/img/configure_trace_icon.png" /></a> icon and click on the <code>Enable port:</code> check box <code>0</code> inside the <code>ITM Stimulus Ports</code> group confirming the choice with the <code>OK</code> button.</li>
+<li>Click on the <code>Start Trace</code> <a class="glightbox" href="../assets/img/start_trace_icon.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Start Trace" src="../assets/img/start_trace_icon.png" /></a> icon to arm the recording of trace data in the data console.</li>
+<li>Run the program image by pressing <span class="keys"><kbd class="key-f8">F8</kbd></span> key on your keyboard.</li>
+</ol>
+<p>If everything is setup correctly, you should see the instrumented traces being printed in the <code>Port 0</code> tab of the <code>SWV ITM Data Console</code>.</p>
+<p><a class="glightbox" href="../assets/img/arm_cell_trace_demo.gif" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="OBC SDK debugger tracing" src="../assets/img/arm_cell_trace_demo.gif" /></a></p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default, all severity levels are output through the debugger. This can be changed in <code>trace_config.c</code> through the <code>.levels</code> attribute of the <code>fs_channel_list</code> element corresponding to the debugger output.</p>
+</div>
+<h4 id="uart"><abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr></h4>
+<p>Trace data is output via an available <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr>. Default implementation checks three <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr> channels for availability - <strong>UART5</strong> (not available when <abbr title="Global Navigation Satellite System">GNSS</abbr> is used), <strong>UART7</strong> (not available when <abbr title="Electronic Power Supply">EPS</abbr> M is used) and <strong>UART8</strong> (not available when <abbr title="Cubesat Space Protocol">CSP</abbr> or SLIP are enabled).
+In the rare case when all three UARTs are unavaliable due to specific module usage, you have to rely on the debugger and/or file outputs.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>All trace output going to the <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr> port can be captured outside of the STM32CubeIDE by using a serial emulator <abbr title="Software">SW</abbr> such as <a href="https://putty.org/">Putty</a> However, we suggest the use of <a href="#trace-decoder">EnduroSat Trace Decoder</a> for better user experience.</p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default, all severity levels are output via <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr>. This can be changed in <code>trace_config.c</code> through the <code>.levels</code> attribute of the <code>fs_channel_list</code> element corresponding to the <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr> output.</p>
+</div>
+<h4 id="file">File</h4>
+<p>Trace data is output to a rolling file on the <abbr title="Secure Digital (a flash memory card format)">SD</abbr> card. Current implementation works with 10 instances of the rolling file, but this number can be adjusted in <code>espf/config/trace_config/src/trace_config.c</code>. The active instance, i.e. the one that trace is currently working with is named <code>trace_log.doN</code> where N is a number between zero and the maximum number of instances minus 1. The inactive instances are named <code>trace_log.dxN</code> where N is again an index number.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>By default, all severity levels <strong>except DEBUG and INFO</strong> are output to file. This is done to reduce wear of the <abbr title="Secure Digital (a flash memory card format)">SD</abbr> card storage by reducing output only to critical information. This setting can be changed in <code>trace_config.c</code> through the <code>.levels</code> attribute of the <code>fs_channel_list</code> element corresponding to the file output.</p>
+</div>
+<h3 id="trace-decoder">Trace Decoder</h3>
+<p>The EnduroSat Trace Decoder is a tool for presenting the output of <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr> and file traces in a convenient format with limited filtering capability. What makes it better than serial emulators (for <abbr title="Universal Asynchronous Receiver-Trasnmitter">UART</abbr>) or text editors (for files) are features like:</p>
+<ul>
+<li>Decoding of timestamps set on <abbr title="On-board Computer">OBC</abbr> side for each entry</li>
+<li>Filtering by file and severity level</li>
+<li>CRC16 check on the trace data. Entries with failed <abbr title="Cyclic Redundancy Check">CRC</abbr> check are not displayed.</li>
+</ul>
+<p>The Trace Decoder is a Python script that can be found in folder <code>other/scripts/trace_decode/</code> of the SDK delivery.
+You don't need to install it, just run:
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>python trace_decode.py [OPTIONS]
+</code></pre></div></td></tr></table></div>
+For a summary of its usage call the script with <code>--help</code> or no options at all.</p>
+<h2 id="exception-tracing">Exception tracing</h2>
+<p>For basic exception tracing out-of-the-box, there is a dedicated service implemented in the <abbr title="On-board Computer">OBC</abbr> SDK called <code>exeh</code>. Please refer to its doxygen documentation for details on how to use the service and what it can do for you to help with debugging your software.</p>
+<h2 id="cpu-exception-fault-handling">CPU exception fault handling</h2>
+<p><abbr title="On-board Computer">OBC</abbr> is based on an ARM Cortex-M7 CPU core which provides some useful <abbr title="Hardware">HW</abbr> exception handling mechanisms. The <abbr title="On-board Computer">OBC</abbr> SDK ships with drivers and services working together to detect and persist the fault information so that if something happens in the field, there will be a trace in the system and end-users will be able to analyze what actually happened. This chapter gives more insight on what information gets stored by the <abbr title="On-board Computer">OBC</abbr> in case of <abbr title="Hardware">HW</abbr> failure and how it can be obtained and interpreted.</p>
+<p>Before delving deeper into the storage data format, let's briefly see which modules are involved in the CPU exception fault handling:</p>
+<p><center>
+<pre class="mermaid"><code>classDiagram
+    direction TB
+    class fault_persistor { &lt;&lt;Service&gt;&gt; }
+    class nvm { &lt;&lt;Service&gt;&gt; }
+    class arm_fault_handler {
+        &lt;&lt;Driver&gt;&gt;
+        +void MemManage_Handler()
+        +void BusFault_Handler()
+        +void UsageFault_Handler()
+        +void HardFault_Handler()
+    }
+
+    fault_persistor ..&gt; arm_fault_handler : get fault data
+    fault_persistor ..&gt; nvm : store fault persistently</code></pre>
+</center></p>
+<p>The <code>fault_persistor</code> module is a high-level service which provides:</p>
+<ul>
+<li>sequential and random access to the last <code>5</code> captured exceptions</li>
+<li>management of the <abbr title="Non-volatile memory (e.g. such as FLASH ROM, EEPROM, FRAM)">NVM</abbr> fault storage (in <abbr title="Ferroelectric Random Access Memory">FRAM</abbr>)</li>
+<li>export of the available exception entries to a binary file for offline analysis<sup id="fnref3:2"><a class="footnote-ref" href="#fn:2">2</a></sup></li>
+</ul>
+<p>The <code>arm_fault_handler</code> is a CPU-specific driver module which implements the detection and capture of dedicated CPU register data at the time of the fault. Its whole responsibility is to store the last captured exception to a dedicated <em>no-init</em> region in RAM. <code>arm_fault_handler</code> implements the ARM exception handlers called by the CPU in case of exception (interrupting any other activity at this time).</p>
+<h3 id="information-collected-by-arm_fault_handler">Information collected by <code>arm_fault_handler</code></h3>
+<p>The <a href="https://documentation-service.arm.com/static/5f8fef3af86e16515cdbf816">ARMv7-M Architecture Reference Manual</a> provides very detailed information on how the CPU handles exceptions in general and which registers can be inspected when an exception occurs. Here the registers will only be briefly listed for general reference:</p>
+<table>
+<thead>
+<tr>
+<th>Register name</th>
+<th>Size (bytes)</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CFSR</code></td>
+<td>4</td>
+<td>Configurable Fault Status Register<br>32-bit register which contains a summary of the faults leading to the <abbr title="Hardware">HW</abbr> exception<br><br>Comprises the following registers:<br> <code>UFSR</code> <em>(Usage Fault Status Register)</em><br><code>BFSR</code> <em>(BusFault Status Register)</em><br><code>MMFSR</code> <em>(MemManage Status Register)</em></td>
+</tr>
+<tr>
+<td><code>ABFSR</code></td>
+<td>4</td>
+<td>Auxiliary Bus Fault Status Register<br>It gives an indication of the memory bus on which a fault occurred</td>
+</tr>
+<tr>
+<td><code>HFSR</code></td>
+<td>4</td>
+<td>HardFault Status Register</td>
+</tr>
+<tr>
+<td><code>MMFAR</code></td>
+<td>4</td>
+<td>MemManage Fault Address Register<br>Provides the address of the memory location that caused an MPU fault (in case MPU is used)</td>
+</tr>
+<tr>
+<td><code>BFAR</code></td>
+<td>4</td>
+<td>BusFault Address Register</td>
+</tr>
+</tbody>
+</table>
+<p><code>arm_fault_handler</code> also captures the active <code>SP</code> <em>(Stack Pointer)</em> at the time of the fault.</p>
+<h4 id="exception-stack-frame-format">Exception stack frame format</h4>
+<p>According to the <a href="https://documentation-service.arm.com/static/5f8fef3af86e16515cdbf816">ARMv7-M Architecture Reference Manual</a> there are two exception stack frame types based on the availability of the CPU <abbr title="Function Protocol (a custom command and query protocol for ESPS I)">FP</abbr> extension:</p>
+<ul>
+<li>
+<p><strong>Basic stack frame</strong> (8 words / 32 bytes)</p>
+<ul>
+<li><code>R0</code></li>
+<li><code>R1</code></li>
+<li><code>R2</code></li>
+<li><code>R3</code></li>
+<li><code>R12</code></li>
+<li><code>PC</code> <em>(Program Counter)</em></li>
+<li><code>LR</code> <em>(Link Register)</em> (the address to which execution returns after the CPU has handled the exception)</li>
+<li><code>xPSR</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Extended stack frame</strong> (26 words / 104 bytes)</p>
+<ul>
+<li>Includes a basic stack frame (see above)…</li>
+<li><code>S0</code> .. <code>S15</code> (<abbr title="Function Protocol (a custom command and query protocol for ESPS I)">FP</abbr> extension registers - 16 32-bit registers)</li>
+<li><code>FPSCR</code> (Floating Point Status and Control Register)</li>
+</ul>
+</li>
+</ul>
+<p>There are two stack types supported by the CPU - main stack <code>MSP</code> and process stack <code>PSP</code> (determined by bit <code>2</code> of the <code>LR</code> at the time of the exception). If the bit is set, <code>PSP</code> was active prior to the exception entry, else - the <code>MSP</code> was active.</p>
+<h4 id="persistent-fault-storage">Persistent fault storage</h4>
+<p>When a <abbr title="Hardware">HW</abbr> exception occurs, any complicated processing such as writing to files or external memory should be avoided because those operations may be unreliable in an exception context. While some exceptions may be recoverable, it is most recommended that the CPU is reset if any exception occurs to avoid potential side effects caused by incorrect attempts to recover from the exception. Therefore the exception stack frame is temporarily stored in a RAM memory region which is not initialized during reset so that it can be processed as soon as the application restarts and detects the <abbr title="Hardware">HW</abbr> exception. The RAM region which holds information on the last active exception is protected via a 32-bit <abbr title="Cyclic Redundancy Check">CRC</abbr> to ensure that correct data will be persisted eventually.</p>
+<h4 id="storage-format">Storage format</h4>
+<p>Apart from the register values described in the previous sections, the persisted fault data includes also other fields which represent the frame context and come from the <abbr title="On-board Computer">OBC</abbr> environment (i.e. they are not handled by the <abbr title="Hardware">HW</abbr> automatically but by the accompanying stack frame capture routine). For a detailed list of all items included in the persisted exception frame, you should refer to the <code>arm_fault_handler.h::persisted_ram_x_frame_t</code> type.</p>
+<h4 id="how-to-retrieve-the-fault-data-from-obc">How to retrieve the fault data from <abbr title="On-board Computer">OBC</abbr>?</h4>
+<p>Persisted fault data can be retrieved from the system for offline inspection.</p>
+<p>There are several ways to do this<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>:</p>
+<ul>
+<li>collect all stored fault records in one shot via a <abbr title="ESPS I Command Protocol">CP</abbr> command<ul>
+<li><code>espf/core/fidl/obc/cp/cp_fault_ops.fidl</code></li>
+</ul>
+</li>
+<li>get (and manage) individual fault records via <abbr title="Function Protocol (a custom command and query protocol for ESPS I)">FP</abbr> commands<ul>
+<li><code>espf/core/fidl/obc/fp/fault_ops.fidl</code></li>
+</ul>
+</li>
+<li>download the fault dump file<sup id="fnref2:2"><a class="footnote-ref" href="#fn:2">2</a></sup> from the <abbr title="On-board Computer">OBC</abbr> <abbr title="Secure Digital (a flash memory card format)">SD</abbr> card</li>
+</ul>
+<h4 id="how-to-interpret-the-captured-fault-data">How to interpret the captured fault data?</h4>
+<p>If you just want to inspect a single fault, you can directly use the <code>fault_ops.fidl::read_fault_by_index</code> method<sup id="fnref2:3"><a class="footnote-ref" href="#fn:3">3</a></sup>.</p>
+<p>The best way to get information for all the faults is to use the provided Python script for obtaining a high-level interpretation of the data using the fault dump file<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> stored on the <abbr title="On-board Computer">OBC</abbr> <abbr title="Secure Digital (a flash memory card format)">SD</abbr> card.</p>
+<p>Download the file and run <code>espf/core/services/fault_persistor/scripts/parse_faults.py</code> as shown below:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span></pre></div></td><td class="code"><div><pre><span></span><code>python<span class="w"> </span>parse_faults.py<span class="w"> </span>-in<span class="w"> </span>fault.dmp
+</code></pre></div></td></tr></table></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Now we will look into the most useful information stored in such a fault record. Here is an example result from the operation above:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code>exception: &#39;0&#39; =&gt;
+    rec_type: b&#39;A\x00\x00\x00&#39; &quot;A   &quot;
+    reserved: 0
+    RTC timestamp: 2023-10-30 12:52:13
+    uptime (ms): 1133072
+    CFSR: 0x00008200 =&gt;
+        MFSR: {&#39;IACCVIOL&#39;: 0, &#39;DACCVIOL&#39;: 0, &#39;MUNSTKERR&#39;: 0, &#39;MSTKERR&#39;: 0, &#39;MLSPERR&#39;: 0, &#39;MMARVALID&#39;: 0}
+        BFSR: {&#39;IBUSERR&#39;: 0, &#39;PRECISERR&#39;: 1, &#39;IMPRECISERR&#39;: 0, &#39;UNSTKERR&#39;: 0, &#39;STKERR&#39;: 0, &#39;LSPERR&#39;: 0, &#39;BFARVALID&#39;: 1}
+        UFSR: {&#39;UNDEFINSTR&#39;: 0, &#39;INVSTATE&#39;: 0, &#39;INVPC&#39;: 0, &#39;NOCP&#39;: 0, &#39;UNALIGNED&#39;: 0, &#39;DIVBYZERO&#39;: 0}
+    HFSR: 0x00000000 =&gt; {&#39;VECTTBL&#39;: 0, &#39;FORCED&#39;: 0, &#39;DEBUGEVT&#39;: 0}
+    MMFAR: 0x0badcafe
+    BFAR: 0x0badcafe
+    ABFSR: 0x00000000 =&gt; {&#39;ITCM&#39;: 0, &#39;DTCM&#39;: 0, &#39;AHBP&#39;: 0, &#39;AXIM&#39;: 0, &#39;EPPB&#39;: 0, &#39;AXIMTYPE&#39;: 0} / AXIMTYPE status =&gt;
+&#39;OKAY&#39;
+    SP: 0x2403ee40
+    VTOR: 0x08000000
+    stack frame len: 32 bytes
+    STACK FRAME (
+        R0 :   0x2403eec0
+        R1 :   0x00000001
+        R2 :   0x240007b4
+        R3 :   0x0badc000
+        R12:   0x08057358
+        LR :   0x0802fa73
+        PC :   0x0802f882
+        PSR:   0x61000000 =&gt; {&#39;ISR_NUMBER&#39;: 0, &#39;ICI/IT[15:10]&#39;: 0, &#39;GE[3:0]&#39;: 0, &#39;T&#39;: 1, &#39;IC/IT[26:25]&#39;: 0, &#39;Q&#39;: 0,
+&#39;V&#39;: 0, &#39;C&#39;: 1, &#39;Z&#39;: 1, &#39;N&#39;: 0, &#39;ISR_NAME&#39;: &#39;Thread mode&#39;}
+        fp_ext_reg_s[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        FPSCR: 0x00000000 =&gt; {&#39;IOC&#39;: 0, &#39;DZC&#39;: 0, &#39;OFC&#39;: 0, &#39;UFC&#39;: 0, &#39;IXC&#39;: 0, &#39;IDC&#39;: 0, &#39;RMode&#39;: 0, &#39;FZ&#39;: 0, &#39;DN&#39;: 0,
+&#39;AHP&#39;: 0, &#39;V&#39;: 0, &#39;C&#39;: 0, &#39;Z&#39;: 0, &#39;N&#39;: 0}
+    )
+    frame crc: 0x45730d16 OK
+</code></pre></div></td></tr></table></div>
+<p>From this excerpt, you can see that the <code>frame crc</code> at the end is <code>OK</code> which means this is a valid fault record. Now to pinpoint the location where the fault most probably occurred, check the following values:</p>
+<ul>
+<li><code>PC</code> <em>(Program Counter)</em> - gives you the address of the executed instruction when the fault occurred</li>
+<li><code>LR</code> <em>(Link Register)</em> - gives you the address of the instruction to which the CPU will return after servicing the fault exception</li>
+</ul>
+<p>In the <abbr title="On-board Computer">OBC</abbr> case, these are FLASH addresses which can be checked in the generated lst file by the linker. You can find this file in the <code>&lt;OBC build folder&gt;/&lt;build configuration name&gt;</code> <em>(e.g. <code>build/noboot_debug</code>)</em>. By searching those addresses in the lst file you can pinpoint the fault location but you must be certain that the fault was generated by the same <abbr title="Software">SW</abbr> build which matches the produced lst file.</p>
+<p>Another way to check those addresses is to load the <abbr title="Software">SW</abbr> image via <code>STM32CubeIDE</code> and connect an <abbr title="ST Microelectronics">ST</abbr>-Link debugger. Run the <abbr title="Software">SW</abbr> and pause the execution or just put a breakpoint at the <code>main()</code> function to stop immediately after running. Open the <code>Disassembly</code> view and enter the <code>PC</code>- or <code>LR</code>-reported address in the address box shown on the image below:</p>
+<p><a class="glightbox" href="../assets/img/stm32_cubeide_disassembly_view.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../assets/img/stm32_cubeide_disassembly_view.png" /></a></p>
+<p>The information captured by the fault mechanism is actually the same as given in the <code>STM32CubeIDE</code> <code>Fault Analyzer</code> view:<br><br>
+<a class="glightbox" href="../assets/img/stm32_cubeide_fault_analyzer_view.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="" src="../assets/img/stm32_cubeide_fault_analyzer_view.png" /></a></p>
+<p>So you can also use that view to read a high-level description of the individual bits for the captured registers. The names are exactly the same as reported by the Python script referred here.</p>
+</div>
+<h4 id="how-to-test-the-fault-persistence-mechanism">How to test the fault persistence mechanism?</h4>
+<p>Since, it is difficult to test <abbr title="Hardware">HW</abbr> exceptions which should usually not happen in your system, an injection fault command is provded in <code>espf/core/fidl/obc/fp/fault_ops.fidl</code> called <code>simulate_fault</code>. You can use it to trigger several common <abbr title="Hardware">HW</abbr> exceptions and see how the system would react.</p>
+<h4 id="can-i-use-the-fault-persistence-mechanism-to-handle-pure-sw-faults">Can I use the fault persistence mechanism to handle pure <abbr title="Software">SW</abbr> faults?</h4>
+<p>Yes, indeed. This is supported via the <code>arm_fault_handler::arm_fault_handler_generic()</code> method. The generic handling can store a binary buffer of arbitrary content in place of the <abbr title="Hardware">HW</abbr> register capture data. The length of this buffer must match the regular <abbr title="Hardware">HW</abbr> frame length (you should refer to the <code>arm_fault_handler.h::persisted_ram_generic_frame_t</code> type for details). This would usually be a string describing the exception but it could also be any other relevant context data.</p>
+<p>Here is an example on how this can be used to capture stack overflow errors which are detected by the <abbr title="Real-Time Operating System">RTOS</abbr> via a configurable <code>vApplicationStackOverflowHook</code> callback function:</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="kt">void</span><span class="w"> </span><span class="nf">vApplicationStackOverflowHook</span><span class="p">(</span><span class="n">TaskHandle_t</span><span class="w"> </span><span class="n">xTask</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">pcTaskName</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">msg</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;STKOVFL&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="n">buf</span><span class="p">[</span><span class="n">configMAX_TASK_NAME_LEN</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">msg</span><span class="p">)]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="sc">&#39;\0&#39;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">snprintf</span><span class="p">(</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%s:%s&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">msg</span><span class="p">,</span><span class="w"> </span><span class="n">pcTaskName</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Call the generic fault handler which will store the fault in memory for later processing by the</span>
+<span class="w">    </span><span class="c1">// fault_persistor module (contextual information such as RTC timestamp will be captured along with the trace).</span>
+<span class="w">    </span><span class="c1">//</span>
+<span class="w">    </span><span class="c1">// In this case, the stored fault contains an ASCII string of the following format:</span>
+<span class="w">    </span><span class="c1">// &quot;STKOVFL:&lt;name of the task which triggered the stack overflow event&gt;&quot;</span>
+<span class="w">    </span><span class="n">arm_fault_handler_generic</span><span class="p">((</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">strlen</span><span class="p">(</span><span class="n">buf</span><span class="p">));</span>
+
+<span class="w">    </span><span class="c1">// This is called because we want the system to process this fault as if it is a HW fault (usually resulting in OBC reset).</span>
+<span class="w">    </span><span class="n">Error_Handler</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+When generic fault frames are captured, the provided Python script will display them in the following way:</p>
+<p><div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code>exception: &#39;3&#39; =&gt;
+    rec_type: b&#39;AG\x00\x00&#39; &quot;AG  &quot;
+    reserved: 0
+    RTC timestamp: 2000-01-01 01:06:57
+    uptime (ms): 1006
+---------------
+raw frame dump:
+---------------
+000000: 53 54 4B 4F 56 46 4C 3A 53 74 61 72 74 41 70 70 | STKOVFL:StartApp
+000010: 54 61 73 6B 00 00 00 00 00 00 00 00 00 00 00 00 | Task............
+000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000040: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000050: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000070: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................
+000080: 00 00 00 00 2B F4 06 B7                         | ....+...
+</code></pre></div></td></tr></table></div>
+<img alt="❗" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2757.svg" title=":exclamation:" /> The script will not interpret the data stored in this frame.</p>
+<div class="admonition info">
+<p class="admonition-title">Fault behavior during an active debug session</p>
+<p>If a debugger is connected to the <abbr title="On-board Computer">OBC</abbr> <abbr title="MicroController Unit">MCU</abbr> at the time of the exception, you will end up in a breakpoint instruction in the fault handler. This is the standard behavior so that you can inspect the fault directly via the debugger if you need to.</p>
+<p>If the debugger is disconnected, the system will store the fault and perform an <abbr title="On-board Computer">OBC</abbr> reset.</p>
+</div>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This setting depends on the <abbr title="MicroController Unit">MCU</abbr> clock configuration. The value used here matches the current settings applied in the <abbr title="On-board Computer">OBC</abbr> SDK package.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>All available exceptions in the fault storage get persisted to a file once the <abbr title="On-board Computer">OBC</abbr> starts. The file name is hard-coded to <code>/sd/fault.dmp</code>.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:2" title="Jump back to footnote 2 in the text">&#8617;</a><a class="footnote-backref" href="#fnref3:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p>Communication to <abbr title="On-board Computer">OBC</abbr> is facilitated by the <code>SpacePY</code> package.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="footer.title">
+      
+        
+        <a href="devguide_fwupd.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: Bootloader and firmware updates handling" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Bootloader and firmware updates handling
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="devguide_assertions.html" class="md-footer__link md-footer__link--next" aria-label="Next: Assertions" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Assertions
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            <i>Privileged and confidential</i>
+          </div>
+        
+      </div>
+      <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/endurosat/" target="_blank" rel="noopener" title="EnduroSat on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share", "navigation.tabs", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+
+
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

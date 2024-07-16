@@ -1,0 +1,183 @@
+#include <stddef.h>
+#include "libhsm.h"
+#include "{{ sm.name }}_config_user.h"
+#include "{{ sm.name }}_user.h"
+
+{%      for state_obj in states %}
+{%-            for trans in state_obj.transitions_list %}
+static const sTransition_t {{ trans.trans_generated_name }};
+{%-            endfor -%}
+{%      endfor %}
+
+{%      for state_obj in states %}
+{%-          if state_obj.has_transitions() %}
+static const sTransition_t* trans_{{ state_obj.name }}[] =
+{
+{%-            for trans in state_obj.transitions_list %}
+    &{{ trans.trans_generated_name }},
+{%-            endfor %}
+    NULL
+};
+{%-          endif %}
+{%      endfor %}
+
+// {{ sm.name }} states forward declarations
+{%-      for state_obj in states %}
+static {% if state_obj.is_composite() %}sCompositeState_t{% else %}const sState_t{% endif %} state_{{ state_obj.name }};
+{%-     endfor %}
+
+// {{ sm.name }} root state definition
+sCompositeState_t state_{{ sm.name }} =
+{
+    {
+        // state id
+        STATE_ROOT,
+        // pName
+        "state_{{ sm.name }}",
+        // onEntryFunc
+        NULL,
+        // onExitFunc
+        NULL,
+        // pTransitionList
+        NULL,
+        // eType
+        eHSM_StateType_Composite,
+        // pParent
+        NULL
+    },
+    // pInitialState
+    HSM_UPCAST_STATE(&state_{{ attributes.initial }}),
+    // pHistoryState
+    HSM_UPCAST_STATE(&state_{{ attributes.initial }}),
+    // pActiveState
+    HSM_UPCAST_STATE(&state_{{ sm.name }})
+};
+
+{%-     for state_obj in states %}
+{%          if state_obj.is_composite() %}
+static sCompositeState_t state_{{ state_obj.name }} = 
+{
+    {
+        // state id
+        STATE_{{ state_obj.name.upper() }},
+        // pName
+        "state_{{ state_obj.name }}",
+        // onEntryFunc
+{%-          if state_obj.supports_bool_attr("on_entry") %}        
+        &{{ sm.name }}_on_entry_{{ state_obj.name }},
+{%-          else %}
+        NULL,
+{%-          endif %}
+        // onExitFunc
+{%-          if state_obj.supports_bool_attr("on_exit") %}                
+        &{{ sm.name }}_on_exit_{{ state_obj.name }},
+{%-          else %}
+        NULL,
+{%-          endif %}
+        // pTransitionList
+{%- if state_obj.has_transitions() %}        
+        trans_{{ state_obj.name }},
+{%- else %}        
+        NULL,
+{%- endif %}
+        // eType
+        eHSM_StateType_Composite,
+        // pParent
+        HSM_UPCAST_STATE(&state_{{ state_obj.parent }})
+    },
+    // pInitialState
+    HSM_UPCAST_STATE(&state_{{ state_obj.get_attributes()['initial'] }}),
+    // pHistoryState
+    HSM_UPCAST_STATE(&state_{{ state_obj.get_attributes()['initial'] }}),
+    // pActiveState
+    HSM_UPCAST_STATE(&state_{{ state_obj.name }})
+    };
+{%          else %}
+static const sState_t state_{{ state_obj.name }} = 
+{
+    // state id
+    STATE_{{ state_obj.name.upper() }},
+    // pName
+    "state_{{ state_obj.name }}",
+    // onEntryFunc
+{%-          if state_obj.supports_bool_attr("on_entry") %}
+    &{{ sm.name }}_on_entry_{{ state_obj.name }},
+{%-          else %}
+    NULL,
+{%-          endif %}
+    // onExitFunc
+{%-          if state_obj.supports_bool_attr("on_exit") %}
+    &{{ sm.name }}_on_exit_{{ state_obj.name }},
+{%-          else %}
+    NULL,
+{%-          endif %}
+    // pTransitionList
+    trans_{{ state_obj.name }},
+    // eType
+    eHSM_StateType_Simple,
+    // pParent
+    HSM_UPCAST_STATE(&state_{{ state_obj.parent }})
+};
+{%          endif %}
+{%-    endfor %}
+
+{%- for state_obj in states %}
+{%-     for trans in state_obj.transitions_list %}
+{%-         if trans.is_history_state_transition() %}
+static const sState_t state_{{ trans.target_state }} = 
+{
+    // state id
+    STATE_{{ trans.target_state.upper() }},
+    // pName
+    "state_{{ trans.target_state }}",
+    // onEntryFunc
+    NULL,
+    // onExitFunc
+    NULL,
+    // pTransitionList
+    NULL,
+    // eType
+    eHSM_StateType_History,
+    // pParent
+    HSM_UPCAST_STATE(&state_{{ trans.history_target_state }})
+};
+            {%- endif %}
+        {%- endfor %}
+{%- endfor %}
+
+{%-      for state_obj in states %}
+{%-            for trans in state_obj.transitions_list %}
+static const sTransition_t {{ trans.trans_generated_name }} =
+{
+    // event
+{%- if trans.is_trans_event_special() %}
+    {%- if trans.get_printable_event_name() == "periodic" %}
+    eHSM_StdEvent_Periodic,
+    {%- else %}
+    ev_{{ sm.name }}_{{ trans.get_printable_event_name() }},
+    {%- endif %}
+{%- else %}
+    ev_{{ sm.name }}_{{ trans.get_printable_event_name() }},
+{%- endif %}
+    // guard
+{%- if trans.get_printable_guard_name() %}    
+    &{{ sm.name }}_guard_{{ trans.get_printable_guard_name(state_obj.name) }},
+{%- else %}
+    NULL,
+{%- endif %}
+    // target state
+    {%- if trans.is_transition_to_self %}
+    NULL,
+    {%- else %}
+    HSM_UPCAST_STATE(&state_{{ trans.target_state }}),
+    {%- endif %}
+    // action
+{%- if trans.get_trans_action() %}
+    &{{ sm.name }}_action_{{ trans.get_printable_action_name(state_obj.name) }},
+{%- else %}
+    NULL
+{%- endif %}
+};
+{%            endfor %}
+{%-     endfor %}
+

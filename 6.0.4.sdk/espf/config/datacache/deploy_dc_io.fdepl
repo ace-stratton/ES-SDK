@@ -1,0 +1,7 @@
+package org.endurosat.deploy
+
+import "../../core/fidl/spec/PlatformSpec.fdepl"
+import "datacache_io.fidl"
+
+define org.endurosat.spec.PlatformSpec for interface endurosat.pf.DataCache.data_cache            { IsClient = false, Gen_DataCache_Bindings = true }
+

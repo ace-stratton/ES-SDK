@@ -1,0 +1,1305 @@
+package endurosat.macif
+
+<** @description: SBAND TMTC
+    @details: id = 0x20 
+**>
+
+interface SBAND_TMTC
+{
+    version { major 1 minor 1 }
+    
+	 <** @description: Result of an operation performed by the radio **>
+    enumeration eESSA_TMTCStatus
+    {
+		<** @description: Operation succeeded**>
+		OK
+		<**	@description: Operation failed, general error**>
+		ERROR
+		<**	@description: Operation failed, not enogh memory**>
+		ERROR_NOMEM
+		<**	@description: Operation failed, ivalid parametter provided**>
+		ERROR_BAD_PARAM
+		<**	@description: Operation failed, invalid value in data section**>
+		ERROR_BAD_DATA
+		<**	@description: Operation failed, module is busy, cannot process the operation**>
+		ERROR_BUSY
+		<**	@description: Operation failed, authentication failed**>
+		ERROR_AUTHENTICATION
+		<**	@description: Operation failed, operation is not supported**>
+		ERROR_NOT_SUPPORTED
+		<** @description: Operation failed, not in requested state**>
+		ERROR_NOT_IN_CORRECT_STATE
+    }
+    
+    enumeration eCipherKeySlotStatus
+    {
+		<** @description: Operation succeeded**>
+		SUCCESS
+		<** @description: Operation succeeded, requested slot is empty**>
+		EMPTY
+		<** @description: Operation succeeded, requested slot is occupied**>
+		OCCUPIED
+		<** @description: Operation failed, input paremtter out of range**>
+		ERR_OUT_OF_RANGE
+		<** @description: Operation failed, internal critical error failed**>
+		ERR_IO
+		<** @description: Operation failed, requested slot is already occupied**>
+		ERR_OCCUPIED
+		<** @description: Operation failed, requested slot is empty**>
+		ERR_EMPTY
+		<** @description: Operation failed, invalid key size**>
+		ERR_KEYSIZE
+		<** @description: Operation failed, provide Master key first**>
+		ERR_NOMASTER
+		<** @description: Operation failed, provided key do not match**>
+		ERR_KEYNOTMATCH
+		<** @description: Operation failed, general error**>
+		ERR
+    }
+
+	<** @description: Physical interfaces**>
+    enumeration ePortID
+    {
+		<** @description: USB-C interface**>
+		PORT_SERIAL_USB_C
+		<** @description: System UART interface (UART - PC104, H1, Rx-31, Tx-35; RS485 - PC104 H1, A-24, B-25) **>
+		PORT_SERIAL_PRIMARY
+		<** @description: Payload UART interface (UART - PC104, H1, Rx-39, Tx-40; RS485 - PC104 H1, A-38, B-37)**>
+		PORT_SERIAL_SECONDARY
+		<** @description: CAN interface (PC104, H1, CANH-2, CANL-1)**>
+		PORT_CAN
+    }
+
+	<** @description: Protocol type assigned to an interface**>
+    enumeration ePortProtocolID
+    {
+		<** @description: No protocol , interface is in idle mode**>
+		DISABLED
+		<** @description: Debug protocol**>
+		DEBUG
+		<** @description: Log feature, see also LoggerCfg how to configure the verbose pattern **>
+		LOG,
+		<** @description: Transparent link between radio and an interface**>
+		TRANSPARENT
+		<** @description: Endurosat MACGW protocol**>
+		MAC_GW
+		<** @description: Endurosat RS485 ESPS prtocol, multi-master enviroment**>
+		RS485_ESMAC_MM
+		<** @description: Endurosat RS485 ESPS prtocol, point to point**>
+		RS485_ESMAC_PP
+		<** @description: CSP protocol**>
+		CCSDS
+    }
+    
+	<** @description: Physical interface secondary function configuration, see manual**>
+    enumeration ePortCfgID
+    {
+		AUTO
+		CONFIG_1
+		CONFIG_2
+		CONFIG_3
+		CONFIG_4
+    }
+    
+    enumeration ePortConnTypeCfg
+    {
+		UNDEFINED
+		USER_PRI
+		USER_SEC
+		SYSTEM_PRI
+		SYSTEM_SEC
+    }
+    
+	<** @description: Digital filter for ConOps hysteresis**>
+    enumeration eConOpsHystFilterID
+    {
+		<** @description: No filter, direct action on the incomming value**>
+		NONE
+    }
+    
+	<** @description: Slot ID for SBAND TMTC security keys**>
+    enumeration eKeySlotID
+    {
+		<** @description: Slot ID reserved for Master key**>
+		MASTER
+		<** @description: General purpose slot 0**>
+		GP00
+		<** @description: General purpose slot 1**>
+		GP01
+		<** @description: General purpose slot 2**>
+		GP02
+		<** @description: General purpose slot 3**>
+		GP03
+		<** @description: General purpose slot 4**>
+		GP04
+		<** @description: General purpose slot 5**>
+		GP05
+		<** @description: General purpose slot 6**>
+		GP06
+		<** @description: General purpose slot 7**>
+		GP07
+		<** @description: General purpose slot 8**>
+		GP08
+    }
+    
+	<** @description: Types of Services assigned to security key**>
+    enumeration eKeyServiceID
+    {
+		<** @description: No service connected to the key**>
+		NONE
+		<** @description: Security key is used for session based key generation for radio encryption**>
+		DYNAMYC_ENCRYPTION
+		<** @description: Security key is used for static radio encryption**>
+		STATIC_ENCRYPTION
+    }
+    
+	<** @description: Types of transmitting data packets**>
+    enumeration eTxMessageType 
+    {
+		<** @description: If encryption is enabled the data packet is encrypted, otherwise not **>
+		AUTO
+		<** @description: Data packet is sent as is, regardles of the radio encryption state **>
+		RAW
+		<** @description: Data packet is encapsulated into AX.25 frame **>
+		AX25
+		<** @description: Endurosat telemetry packet format**>
+		ES_TELEMETRY
+    }
+    
+    enumeration ePresetCfgType 
+    {
+		<** @description: No change **>
+		NONE
+		<** @description: Default configuration**>
+		DEFAULT 
+		<** @description: Default configuration when not used in ES platforms**>
+		STANDALONE 
+		<** @description: Default ES platform configuration**>
+		PLATFORM 
+    }
+
+    <** @description: Validity flag for a configuration **>
+	enumeration eValidity
+	{
+		<** @description: Configuration is invalid **>
+		INVALID_CONFIG
+		<** @description: Configuration is valid**>
+		VALID_CONFIG
+	}
+	
+	<** @description: Dual power amplifier control **>
+    enumeration ePowerAmpControl
+    {
+    	<** @description: On when transmitting, off otherwise **>
+    	AUTO
+		<** @description: Keep both PAs on irregardless of transmission **>
+    	FORCE_ON
+		<** @description: Even during a transmission no PAs will turn on **>
+    	FORCE_OFF
+		<** @description: Only the first PA turns on when transmitting **>
+    	AUTO_1_OFF_2
+		<** @description: Only the second PA turns on when transmitting**>
+    	OFF_1_AUTO_2
+    }
+	
+	<** @description: Provided for ledgability **>
+	enumeration eOnOff
+	{
+		OFF
+		ON
+	}
+
+    struct sHealthStatus
+    {
+        <** @description: Bit-field indicating the health status of the SBAND hardware
+                          Bit 0 -> Radio
+                          Bit 1 -> RFMixer
+                          Bit 2 -> MCU
+                          Bit 3 -> Memory
+                          Bit 4 -> Interface
+                          Bit 5 -> Sensors
+						  Bit 23 -> UnderVoltage
+                          Bit 29 -> DefconBit0
+                          Bit 30 -> DefconBit1
+                          Bit 31 -> DefconBit2
+                           
+        **>
+        
+        UInt32 HSBitField
+    }
+	
+	<** @description: Available modulations. Gaussian filter selected separately. Default is FSK. Deviation is treated as the distance of the carrier frequency to the closest symbol frequency. **>
+	enumeration Modulation
+	{
+		<** @description: Default. Deviation 0.(6) of baudrate. **>
+		FSK
+		<** @description: Frequencies are mapped to bits from low to high: 00 01 11 10. Maximum baudrate is 50k **>
+		FSK4
+		<** @description: Deviation 0.5 of baudrate. **>
+		MSK
+		<** @description: Binary phase shift keying **>
+		PSK
+	}
+
+	<** @description: Available baudrates, default is 50k. Effective transmission baudrate when using FEC/HDLC is half of the shown. **>
+	enumeration Baudrate
+	{
+		b100
+		b1k
+		b10k
+		b25k
+		<** @description: default **>
+		b50k
+		b75k
+		b100k
+		b125k
+	}
+
+	<** @description: None or Gaussian filter with BT = 0.3 or 0.5 **>
+	enumeration Filtering 
+	{
+		<** @description: No shaping **>
+		None
+		<** @description: Gaussian filter with BT = 0.3 **>
+		BT03
+		<** @description: Gaussian filter with BT = 0.5 **>
+		BT05
+	}
+    
+	<** @description: Up-time in seconds **>
+	struct sUpTime
+    {
+		UInt32 u32UpTime
+    }
+    
+	<** @description: Sattelite configuration **>
+    struct sSatCfg
+    {
+		<** @description: Sattelite address/ID **>
+		UInt64  SatID
+    }
+
+	<** @description: EPS configuration **>
+    struct sEpsCfg
+    {
+		<** @description: EPS type **>
+		UInt8      u8Type
+		<** @description: MAC address **>
+		UInt8      Addr
+		<** @description: Active EPS API request mask in Phoenix ConOps mode
+			API ID range 0-31 **>
+		UInt32     PhoenixMask
+		<** @description: Active EPS API request mask in Normal ConOps mode
+			API ID range 0-31 **>
+		UInt32     NormalMask
+		<** @description: Period in seconds between API requests in Phoenix ConOps mode **>
+		UInt16     PhoenixTime
+		<** @description: Period in seconds between API requests in Normal ConOps mode **>
+		UInt16     NormalTime
+		<** @description: Vailidity of the configuration **>
+		eValidity  Validity
+    }
+    
+	<** @description: Configuration for automatic data beacons **>
+    struct sAutoBeaconsCfg
+    {
+		<** @description: Period in seconds between beacon bursts in Phoenix ConOps mode**>
+		UInt32    PhoenixPeriod
+		<** @description: Period in seconds between beacon bursts in Phoenix Normal mode, default mode**>
+		UInt32    NormalPeriod
+		<** @description: Active Beacon maskPeriod in seconds between beacon bursts in Phoenix ConOps mode, default mode**>
+		UInt64    PhoenixMask
+		<** @description: Active Beacon maskPeriod in seconds between beacon bursts in Normal ConOps mode, default mode**>
+		UInt64    NormalMask
+		eValidity Validity
+    }
+    
+	<** @description: Statistical Counters**>
+    struct sErrCounters
+    {
+		<** @description: Power-On reset**>
+		UInt32 POR
+		<** @description: Collisions on MAC ESPS layer**>
+		UInt32 MAC_Collisions
+		<** @description: Failed messages on MAC ESPS layer**>
+		UInt32 MAC_fails
+		<** @description: Handshakes with Ground segment**>
+		UInt32 GS_Handshakes
+		<** @description: Write oepration in NvM failed**>
+		UInt32 NvMWriteFails
+		<** @description: Read oepration from NvM failed**>
+		UInt32 NvMReadFails
+		<** @description: Configuration entry was restored from its defaults**>
+		UInt32 NvMDefaultEntry
+		<** @description: Curruption on configuration in internal NvM occured and and was restored**>
+		UInt32 IntFRAM_corruptions
+		<** @description: Curruption on configuration in external NvM occured and and was restored**>
+		UInt32 ExtFRAM_corruptions
+		<** @description: External NvM module not responded**>
+		UInt32 ExtFRAM_gone
+    }
+
+	<** @description: Radio-ESPS Pipe mode configuration**>
+    struct sPipeModeCfg
+    {
+		<** @description: Duration in seconds when no activity on the Pipe**>
+		UInt16    Duration
+		<** @description: MAC address of peer module**>
+		UInt8     PeerAddr
+		<** @description: Validity of the configuration**>
+		eValidity Validity
+    }
+
+	<** @description: Text beacon configuration**>
+    struct sTxtBeaconContentCfg
+	{
+	<** @description: Size of the message in bytes before encoding**>
+		UInt8     Size
+		<** @description: Message
+		    @details: size = 98 **>
+		UInt8[]   Message
+		<** @description: Validity of the configuration**>
+		eValidity Validity
+	}
+
+	<** @description: Size of the message in bytes before encoding**>
+	struct sAx25Cfg
+    {
+		<** @description: MAC address of peer module**>
+		UInt8      PeerAddr
+		<** @description: Ax25 Source Address
+			@details: size = 6 **>
+		UInt8[]    Src
+		<** @description: Ax25 Destination Address
+			@details: size = 6 **>
+		UInt8[]    Dst
+		<** @description: Validity of the configuration**>
+		eValidity  Validity
+    }
+    
+	<** @description: Input Slot structure for erasing or writing security keys**>
+	struct sCipherKeySlot
+	{
+		<** @description:  ServiceID of the Key**>
+		eKeyServiceID  ServiceID
+		<** @description:  SlotID of the Key**>
+		eKeySlotID     SlotID
+		<** @description:  Data of the key
+			@details: size = 32 **>
+		UInt8[]        Data
+		<** @description:  Size of the key, use 32 for AES256 key**>
+		UInt8          Size
+	}
+
+	<** @description:  Hysteresis of ConOps**>
+	struct sConOps_Hysteresis
+	{
+		<** @description:    Voltage for Normal Mode enter threshold, see EPS documentation for units**>
+		UInt16               EnterNormalVoltage
+		<** @description:    Voltage for Phoenix Mode enter threshold, see EPS documentation for units**>
+		UInt16               EnterPhoenixVoltage
+		<** @description:    Applied filter ID**>
+		eConOpsHystFilterID  FilterID
+		<** @description: Validity of the configuration**>
+		eValidity            Validity
+	}
+
+	<** @description: Input structure for writing interface configurations**>
+	struct sCommPortCfgIn
+	{
+		<** @description: Interface ID**>
+		ePortID         PortID
+		<** @description: Protocol ID**>
+		ePortProtocolID ProtoID
+		<** @description: Secondary sonfiguration ID**>
+		ePortCfgID      CfgID
+	}
+	
+	<** @description: Output structure for reading interface configurations**>
+	struct sCommPortCfgOut
+	{
+		<** @description:   Interface ID**>
+		UInt8               PortID
+		<** @description: Protocol ID**>
+		ePortProtocolID     ProtoID
+		<** @description: Secondary sonfiguration ID**>
+		ePortCfgID          CfgID
+		<** @description: Bitmask for Interface capabilities based on ePortProtocolID enumerator**>
+		UInt32              Capabilities
+		<** @description: Phy type of the interface**>
+		ePortConnTypeCfg    ConnectionType
+		<** @description: Number of Supported interfaces **>
+		UInt8               PortMaxCount
+		<** @description: Validity of the configuration**>
+		eValidity           Validity
+	}
+
+	<** @description: Logging verbose configuration
+					Bit-masks
+					Bit 0 -> Event data loging enable
+					Bit 1 -> System events loging enable
+					Bit 2 -> App events loging enable
+					Bit 3 -> ESPS loging enable**>
+	struct sLogger_Cfg
+	{
+	<** @description: Bit mask for log output to NvM, NOT SUPPORTED!**>
+		UInt32          NvMLogMaskCfg
+		<** @description: Bit mask for log output to an interface**>
+		UInt32          DebugLogMaskCfg
+		<** @description: Validity of the configuration**>
+		eValidity       Validity
+	}
+
+	<** @description: Module capabilities**>
+	struct sCapabilities
+	{
+		UInt32 RadioHWCapabilities
+		UInt32 Reserved1
+		UInt32 RadioProtoCapabilities
+		UInt32 Reserved2
+		UInt32 TxMessageCapabilities
+		UInt32 Reserved3
+		UInt32 IFPhyCapabilities
+		UInt32 IFProtoCapabilities
+		UInt32 Reserved4
+		UInt32 Reserved5
+		UInt32 Reserved6
+		UInt32 Reserved7
+		UInt32 Reserved8
+		UInt32 Reserved9
+		UInt32 Reserved10
+		UInt32 Reserved11
+		UInt32 Reserved12
+		UInt32 Reserved13
+	}
+
+	<** @description: Input structure for transmitting data**>
+	struct sTxRadioMsg
+	{
+		<** @description: Message type**>
+		eTxMessageType Type
+		<** @description: Message size in bytes**>
+		UInt8 Size
+		<** @description: Message content
+			@details: size = 128 **>
+		UInt8[] Data
+	}
+	
+	<** @description: Structure for module Ping-Pong functionality**>
+	struct sPing
+	{
+		<** @description: Size**>
+		UInt8   Size
+		<** @description: Data
+		@details: size = 16 **>
+		UInt8[] Data
+	}
+	
+	<** @description: Test packet configuration**>
+	struct sTestPacket
+	{
+		<** @description: Start/stop of test packet**>
+		eOnOff Run
+		<** @description: Pattern - 0x00-0xFF**>
+		UInt8 pattern
+	}
+
+	<** @description: Radio frequency configuration**>
+	struct sRfFreqCfg
+	{
+		<** @description: Rx frequency, Hz**>
+		UInt32 Rx
+		<** @description: Tx frequency, Hz**>
+		UInt32 Tx
+		<** @description: Validity of configuration**>
+		eValidity Validity
+	}
+	
+	<** @description: Trouble codes structure**>
+	struct sTC
+	{
+		<** @description: Bitmask for MCU codes**>
+		UInt32 MCU
+		<** @description: Bitmask for Memory codes**>
+		UInt32 Memory
+		<** @description: Bitmask for Interface codes**>
+		UInt32 Interface
+		<** @description: Bitmask for Sensor codes**>
+		UInt32 Sensor
+		<** @description: Bitmask for Radio codes**>
+		UInt32 Radio
+		<** @description: Bitmask for Radio Mixer codes**>
+		UInt32 Mixer
+	}
+
+	<** @description: Data structure for temperature sensors on board. New data is provided at 5s intervals. **>
+	struct sTempSensors
+	{
+		<** @description: System temperature **>
+		Float MCUtemp
+		<** @description: Radio power amplifier temperature **>
+		Float PAtemp
+	}
+	
+	<** @description: default on, CRC-32, seed is 0xFFFFFFFF **>
+	struct sRadioCRC
+	{
+		eOnOff enable
+		UInt32 seed
+	}
+	
+	<** @description: Counters for the transmitted packets, received packets and crc errors **>
+	struct sRFPacketCounters
+	{
+		<** @description: Counted at end of transmission **> 
+		UInt32 TransmittedPackets
+		<** @description: Counted at end of reception **>
+		UInt32 ReceivedPackets
+		<** @description: Packets that do not pass the radio CRC check **>
+		UInt32 CRCError
+	}
+
+	<** @description: Get module capabilities
+        @details: id = 0x0000001
+    **>
+    method GetCapabilities
+    {
+    	out
+    	{
+			sCapabilities Capabilities
+    	}
+    }
+
+    <** @description: Read Uptime
+        @details: id = 0x0000002
+    **>
+    method ReadUpTime
+    {
+    	out
+    	{
+			sUpTime UpTime
+    	}
+    }
+
+   <** @description: Read HW Health status
+        @details: id = 0x0000003
+    **>
+    method ReadHWHealth
+    {
+    	out
+    	{
+			sHealthStatus Status
+    	}
+    }
+
+   <** @description: Read EPS Configuration
+        @details: id = 0x0000004
+    **>
+    method ReadEpsCfg
+    {
+    	out
+    	{
+			sEpsCfg Cfg
+    	}
+    }
+
+    <** @description: Write EPS Configuration
+        @details: id = 0x0000005
+    **>
+    method WriteEpsCfg
+    {
+    	in
+    	{
+    		sEpsCfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+    <** @description: Read Automated beacons Configuration
+        @details: id = 0x0000006
+    **>
+    method ReadAutomatedBeaconsCfg
+    {
+    	out
+    	{
+			sAutoBeaconsCfg Cfg
+    	}
+    }
+
+    <** @description: Write Automated beacons Configuration
+        @details: id = 0x0000007
+    **>
+    method WriteAutomatedBeaconsCfg
+    {
+    	in
+    	{
+    		sAutoBeaconsCfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+    <** @description: Read Error Counters
+        @details: id = 0x0000008
+    **>
+    method ReadErrorCounters
+    {
+    	out
+    	{
+			sErrCounters ErrCounters
+    	}
+    }
+
+    <** @description: Read Transparent mode Configuration
+        @details: id = 0x0000009
+    **>
+    method ReadPipeModeCfg
+    {
+    	out
+    	{
+			sPipeModeCfg Cfg
+    	}
+    }
+
+    <** @description: Write Transparent mode Configuration
+        @details: id = 0x000000A
+    **>
+    method WritePipeModeCfg
+    {
+    	in
+    	{
+    		sPipeModeCfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+    <** @description: Read Text Beacon Content Configuration
+        @details: id = 0x000000B
+    **>
+    method ReadTxtBeaconContentCfg
+    {
+    	out
+    	{
+			sTxtBeaconContentCfg Cfg
+    	}
+    }
+
+    <** @description: Write Text Beacon Content Configuration
+        @details: id = 0x000000C
+    **>
+    method WriteTxtBeaconContentCfg
+    {
+    	in
+    	{
+    		sTxtBeaconContentCfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+    <** @description: Read Ax25 Configuration
+        @details: id = 0x000000D
+    **>
+    method ReadAx25Cfg
+    {
+    	out
+    	{
+			sAx25Cfg Cfg
+    	}
+    }
+
+    <** @description: Write Ax25 Configuration
+        @details: id = 0x000000E
+    **>
+    method WriteAx25Cfg
+    {
+    	in
+    	{
+    		sAx25Cfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+    <** @description: Write cipher key slot
+    @details: id = 0x000000F
+    **>
+    method WriteCipherKeySlot
+    {
+    	in
+    	{
+			sCipherKeySlot sKeySlot
+    	}
+    	
+    	out
+    	{
+    		eCipherKeySlotStatus Status
+    	}
+    }
+
+    <** @description: Read cipher key slot status
+      @details: id = 0x0000010
+    **>
+    method ReadCipherKeySlotStatus
+    {
+    	in
+    	{
+    		eKeySlotID SlotId
+    	}
+    	out
+    	{
+			eCipherKeySlotStatus eSlotStatus
+    	}
+    }
+
+    <** @description: Erase cipher key slot
+    @details: id = 0x0000011
+    **>
+    method EraseCipherKeySlot
+    {
+    	in
+    	{
+			sCipherKeySlot sKeySlot
+    	}
+    	
+    	out
+    	{
+    		eCipherKeySlotStatus opResult
+    	}
+    }
+
+    <** @description: Read ConOps Hysteresis Configuration
+        @details: id = 0x0000012
+    **>
+    method ReadConOps_HystCfg
+    {
+    	out
+    	{
+			sConOps_Hysteresis Cfg
+    	}
+    }
+
+    <** @description: Write ConOps Hysteresis Configuration
+        @details: id = 0x0000013
+    **>
+    method WriteConOps_HystCfg
+    {
+    	in
+    	{
+    		sConOps_Hysteresis Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+   <** @description: Read Communication Port Configuration
+        @details: id = 0x0000014
+    **>
+    method ReadPortCfg
+    {
+    	in
+    	{
+    		ePortID PortID
+    	}
+    	out
+    	{
+			sCommPortCfgOut Cfg
+    	}
+    }
+
+    <** @description: Write Communication Port Configuration
+        @details: id = 0x0000015
+    **>
+    method WritePortCfg
+    {
+    	in
+    	{
+    		sCommPortCfgIn Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+
+	<** @description: Read Logger Configuration
+		@details: id = 0x0000016
+	**>
+	method ReadLoggerCfg
+	{
+
+		out
+		{
+			sLogger_Cfg Cfg
+		}
+	}
+
+    <** @description: Write Logger Configuration
+        @details: id = 0x0000017
+    **>
+    method WriteLoggerCfg
+    {
+    	in
+    	{
+    		sLogger_Cfg Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }  
+
+    <** @description: Transmit radio packet
+        @details: id = 0x0000018
+    **>
+    method TransmitData
+    {
+    	in
+    	{
+    		sTxRadioMsg Msg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }   
+
+    <** @description: Load pre-set configuration, not affecting mission critical configurations
+        @details: id = 0x0000019
+    **>
+    method LoadPresetCfg
+    {
+    	in
+    	{
+    		ePresetCfgType Cfg
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    } 
+
+	<** @description: Ping
+		@details: id = 0x000001A
+	**>
+	method Ping
+	{
+		in
+		{
+			sPing Data
+		}
+		out
+		{
+			sPing opResult
+		}
+	}
+	
+	   <** @description: Set dual PA mode. Auto - on when transmitting, off otherwise. 
+        @details: id = 0x000001B
+    **>
+    method SetDualPAMode
+    {
+    	in
+    	{
+    		ePowerAmpControl ctl
+    	}
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+    }
+    
+    <** @description: Get dual PA mode. PA is automatically forced off when overheating ( temp > 70 deg ). 
+					  The last state of the PA control is restored when temp is below 55 degrees after an overtemperature event occurs. 
+					  This algorithm can be disabled with the ignore_TC command but that is not recommended. 
+        @details: id = 0x000001C
+    **>
+    method GetDualPAMode
+    {
+    	out
+    	{
+			ePowerAmpControl ctl
+    	}
+    }
+	
+	<** @description: Send a 210 byte packet as fast as possible. 10 bytes are packet info, the rest are the specified one
+        @details: id = 0x000001D
+	**>
+    method SetTestPacketState 
+    {
+    	in
+    	{
+			sTestPacket tp
+		}
+	}
+	
+	<** @description: Read RF frequency configuration
+        @details: id = 0x000001E
+    **>
+    method ReadRfFreqCfg
+    {
+    	out
+    	{
+			<** @description: Data is values configured in NVM. **>
+			sRfFreqCfg Cfg
+		}
+	}
+	
+	<** @description: Write RF frequency configuration. If the set frequency is the same no action is taken.
+        @details: id = 0x000001F
+    **>
+    method WriteRfFreqCfg
+    {
+    	in
+    	{
+			sRfFreqCfg Cfg
+		}
+		
+		out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Module power-cycle reset
+        @details: id = 0x0000020
+    **>
+    method Reset
+    {
+		out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Reset error counters
+        @details: id = 0x0000021
+    **>
+    method ResetErrorCounters
+    {
+		out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Read module Sat configuration
+        @details: id = 0x0000022
+    **>
+    method ReadSatCfg
+    {
+		out
+    	{
+			sSatCfg Cfg
+    	}
+	}
+	
+	<** @description: Write module Sat configuration
+        @details: id = 0x0000023
+    **>
+    method WriteSatCfg
+    {
+		in
+    	{
+			sSatCfg Cfg
+    	}
+    	
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Read trouble codes
+        @details: id = 0x0000024
+    **>
+    method ReadTC
+    {
+		out
+    	{
+			sTC TC
+    	}
+	}
+	
+	<** @description: Clear trouble codes
+        @details: id = 0x0000025
+    **>
+    method ClearTC
+    {  	
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Read temperature sensors
+        @details: id = 0x0000026
+    **>
+    method ReadTempSensors
+    {  	
+    	out
+    	{
+			sTempSensors Temp
+    	}
+	}
+	
+	<** @description: Ignore the temperature sensor located between the PAs. WARNING: May cause catastrophic failure if used incorrectly. Reset clears this setting.
+        @details: id = 0x0000027
+    **>
+    method Ignore_PA_TS
+    {  	
+    	out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Get the setting for the radio packet crc for both radios. CRC-32 alg 0x04C11DB7
+        @details: id = 0x0000028
+    **>
+    method ReadRadioCRCCfg
+    {
+		out
+    	{
+			<** @description: The data is read directly from one of the radios **>
+			sRadioCRC Cfg
+    	}
+	}
+	
+	<** @description: Set the setting for the radio packet crc for both radios.
+        @details: id = 0x0000029
+    **>
+    method WriteRadioCRCCfg
+    {
+		in
+    	{
+			sRadioCRC Cfg
+    	}
+    	
+    	out
+    	{
+			<** @description:
+			ERROR_NOT_IN_CORRECT_STATE - if radio has encountered an error during operation
+			ERROR_BAD_DATA - if nvm is invalid
+			OK - if everything goes smoothly
+			**>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Turn on or off the FEC/HDLC radio packet setting.
+	Note: setting the FEC to on will also set the CRC to on, setting it to off will not remove CRC.
+        @details: id = 0x000002A
+    **>
+    method WriteRadioPacketFecHdlc
+    {
+		in
+    	{
+			eOnOff onoff
+    	}
+		out
+    	{
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Get the configured FEC/HDLC setting
+		@details: id = 0x000002B
+	**>
+	method ReadRadioPacketFecHdlc {
+		out {
+			eOnOff onoff
+		}
+	}
+	
+	<** @description: Get the packet counters. Counters reset on boot.
+        @details: id = 0x000002C
+    **>
+    method GetPacketCounters
+	{
+		out
+    	{
+			sRFPacketCounters counters
+    	}
+	}
+	
+	
+	
+	<** @description: Return a bit field of the current errors encountered by the radio.
+		@details: id = 0x000002D
+    **>
+	method ReadRadioErrors
+	{
+		out
+		{
+			<** @description: Bits are:
+			0: rx_radio_init_failed
+			1: tx_radio_init_failed
+			2: rx_mixer_init_failed
+			3: tx_mixer_init_failed
+			4: temp_sensor_init_failed
+			5: rx_radio_error
+			6: tx_radio_error
+			7: rx_mixer_error
+			8: tx_mixer_error
+			9: temp_sensor_error
+			10: LUP_alert
+			11: LUP_multiple_failure 
+			**>
+			UInt32 errors
+		}
+	}
+	
+	<** @description: Gets the modulation that is configured in the module
+		@details: id = 0x000002E
+    **>
+	method GetModulation {
+		out {
+			<** @description: Default: 2FSK **>
+			Modulation m
+		}
+	}
+	
+	<** @description: Sets the modulation for both of the radios 
+		@details: id = 0x000002F
+    **>
+	method SetModulation {
+		in {
+			<** @description: Default: 2FSK **>
+			Modulation m
+		}
+		out {
+			<** @description: OK if reconfiguration was successful **>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Gets the baudrate that is configured in the module
+		@details: id = 0x0000030
+    **>
+	method GetBaudrate {
+		out {
+			<** @description: This is the symbol speed not the bitrate. Actual speed depends on FEC/HDLC status. Default: 50ksps **>
+			Baudrate b
+		}
+	}
+	
+	<** @description: Sets the baudrate for both of the radios 
+		@details: id = 0x0000031
+    **>
+	method SetBaudrate {
+		in {
+			<** @description: This is the symbol speed not the bitrate. Actual speed depends on FEC/HDLC status. Default: 50ksps **>
+			Baudrate b
+		}
+		out {
+			<** @description: OK if reconfiguration was successful **>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Gets the frequency shaping that is configured in the module
+		@details: id = 0x0000032
+    **>
+	method GetFreqShaping {
+		out {
+			<** @description: None or Gaussian filter with BT = 0.3 or 0.5. Default: BT = 0.5 **>
+			Filtering f
+		}
+	}
+	
+	<** @description: Sets the frequency shaping for both of the radios 
+		@details: id = 0x0000033
+    **>
+	method SetFreqShaping {
+		in {
+			<** @description: None or Gaussian filter with BT = 0.3 or 0.5. Default: BT = 0.5 **>
+			Filtering f
+		}
+		out {
+			<** @description: OK if reconfiguration was successful **>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Get the state of the Stream mode. If enabled does not wrap the sent data in the packet structure, just sends it.
+		@details: id = 0x0000034
+    **>
+	method GetStreamMode {
+		out {
+			<** @description: Default: off **>
+			eOnOff s
+		}
+	}
+	
+	<** @description: Set the state of the Stream mode. If set correct reception is not possible.
+		@details: id = 0x0000035
+    **>
+	method SetStreamMode {
+		in {
+			<** @description: Default: off **>
+			eOnOff s
+		}
+		out {
+			<** @description: OK if reconfiguration was successful **>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	
+	<** @description: Get the desired output power for transmission.
+		@details: id = 0x0000036
+	**>
+	method GetTargetPower {
+		out {
+			UInt16 power
+		}
+	}
+	
+	<** @description: Set the desired output power for transmission.
+		@details: id = 0x0000037
+	**>
+	method SetTargetPower {
+		in {
+			<** @description: Power is limited between 26 and 33 dBm in steps of 1 dBm. **>
+			UInt16 power
+		}
+		out {
+			<** @description: OK if reconfiguration was successful, NOT_SUPPORTED if out of range **>
+			eESSA_TMTCStatus Status
+    	}
+	}
+	<** @description: Get the packet scrambling. If on data is being scrambled and is expected scrambled.
+		@details: id = 0x0000038
+	**>
+	method GetPacketScrambler {
+		out {
+			eOnOff s
+		}
+	}
+	
+	<** @description: Set the packet scrambling. Descrambler polinomial is 1 + x^12 + x^17, compatible with K9NG/G3RUH
+		@details: id = 0x0000039
+	**>
+	method SetPacketScrambler {
+		in {
+			eOnOff s
+		}
+		out {
+			eESSA_TMTCStatus Status
+    	}
+	}
+}

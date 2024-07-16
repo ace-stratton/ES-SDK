@@ -1,0 +1,706 @@
+// WARNING!!! THIS IS A GENERATED FILE! DO NOT MODIFY CONTENTS MANUALLY!!!
+
+package endurosat.macif
+
+
+<** @description: Interface for Cube ADCS Gen2 - CubeMagControlProgramCommon1
+    @details: id = 306
+**>
+
+interface CubeADCS_Gen2_CubeMagControlProgramCommon1
+{
+    version {major 1 minor 0}
+    
+    <** @description: This enumeration holds the IDs of CubeADCS Gen2 nodes for which this interface is applicable **>
+    enumeration CmdTargetNode
+    {
+        NodeInvalid = 0
+        NodeMag0 = 10
+        NodeMag1 = 11
+        
+    }
+    
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MagType
+    {
+        
+        <** @description: PNI RM3100 Magnetometer **>
+        PNI = 0
+        
+        <** @description: MMC5883 Magnetometer **>
+        MMC = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_FilterType
+    {
+        
+        <** @description: Simple Averaging Filter **>
+        Average = 0
+        
+        <** @description: Butterworth Filter **>
+        Butter = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_FilterOrder
+    {
+        
+        <** @description: Butterworth 2nd order low-pass **>
+        bw_order_2 = 0
+        
+        <** @description: Butterworth 4th order low-pass **>
+        bw_order_4 = 1
+        
+        <** @description: Butterworth 6th order low-pass **>
+        bw_order_6 = 2
+        
+        <** @description: Butterworth 8th order low-pass **>
+        bw_order_8 = 3
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SampleBusy
+    {
+        
+        <** @description: Wait for the current sample to complete **>
+        sample_wait = 0
+        
+        <** @description: Use the last cached sample and return **>
+        sample_cached = 1
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SamplePeriod
+    {
+        
+        <** @description: 10ms **>
+        t_10ms = 0
+        
+        <** @description: 20ms **>
+        t_20ms = 1
+        
+        <** @description: 30ms **>
+        t_30ms = 2
+        
+        <** @description: 40ms **>
+        t_40ms = 3
+        
+        <** @description: 50ms **>
+        t_50ms = 4
+        
+        <** @description: 60ms **>
+        t_60ms = 5
+        
+        <** @description: 70ms **>
+        t_70ms = 6
+        
+        <** @description: 80ms **>
+        t_80ms = 7
+        
+        <** @description: 90ms **>
+        t_90ms = 8
+        
+        <** @description: 100ms **>
+        t_100ms = 9
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_SampleDuration
+    {
+        
+        <** @description: Single Measurement **>
+        SingleMeasurement = 0
+        
+        <** @description: 20ms **>
+        d_20ms = 4
+        
+        <** @description: 30ms **>
+        d_30ms = 5
+        
+        <** @description: 40ms **>
+        d_40ms = 6
+        
+        <** @description: 50ms **>
+        d_50ms = 7
+        
+        <** @description: 60ms **>
+        d_60ms = 8
+        
+        <** @description: 100ms **>
+        d_100ms = 9
+        
+        <** @description: 150ms **>
+        d_150ms = 10
+        
+        <** @description: 200ms **>
+        d_200ms = 11
+        
+        <** @description: 400ms **>
+        d_400ms = 12
+        
+        <** @description: 800ms **>
+        d_800ms = 13
+        
+        <** @description: 3000ms **>
+        d_3000ms = 14
+        
+        <** @description: 5000ms **>
+        d_5000ms = 15
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MagState
+    {
+        
+        <** @description: CubeMag Svc is Armed to Deploy **>
+        MagSvcDeployArm = 0
+        
+        <** @description: CubeMag Svc is Deploying **>
+        MagSvcDeploy = 1
+        
+        <** @description: CubeMag Svc is Idle **>
+        MagSvcIdle = 2
+        
+        <** @description: CubeMag Svc is in an error state **>
+        MagSvcError = 3
+        
+    }
+    
+    <** @description: No enumeration description provided by CubeSpace
+    **>
+    enumeration CubeMagControlProgramCommonEnums_MntState
+    {
+        
+        <** @description: Mnt Svc is off **>
+        MntSvcOff = 0
+        
+        <** @description: Mnt Svc is Initializing **>
+        MntSvcInit = 1
+        
+        <** @description: Mnt Svc is Idle **>
+        MntSvcIdle = 2
+        
+        <** @description: Mnt Svc is Auto Sampling **>
+        MntSvcAuto = 3
+        
+        <** @description: Mnt Svc is Sampling **>
+        MntSvcSample = 4
+        
+        <** @description: Mnt Svc is in an error state **>
+        MntSvcError = 5
+        
+    }
+    
+    
+    
+    
+    <**
+        @description: MMC Magnetometer Specific Config
+        @details: id = 0
+    **>
+    method setMmcConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: MMC Auto-Sample Enable/Disable **>
+            Boolean AutoSample
+            
+            <** @description: MMC Auto Sample Period **>
+            CubeMagControlProgramCommonEnums_SamplePeriod AutoSamplePeriod
+            
+            <** @description: MMC Sample Filter Type **>
+            CubeMagControlProgramCommonEnums_FilterType SampleFilterType
+            
+            <** @description: MMC Sample Butterworth filter order **>
+            CubeMagControlProgramCommonEnums_FilterOrder SampleFilterOrder
+            
+            <** @description: MMC Sample Filter Depth when using Simple Averaging **>
+            UInt8 SampleFilterDepth
+            
+            <** @description: MMC Sample Duration when Auto-Sample is disabled **>
+            CubeMagControlProgramCommonEnums_SampleDuration SingleSampleTime
+            
+            <** @description: MMC Action to take when sample is busy when requested **>
+            CubeMagControlProgramCommonEnums_SampleBusy SampleBusyAction
+            
+            <** @description: MMC Maximum number of allowed megnetometer measurement errors **>
+            UInt32 MaxErrorsMag
+            
+            <** @description: MMC Maximum number of allowed temperature measurement errors **>
+            UInt32 MaxErrorsTmp
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: Trigger a single Sample the Primary Magnetometer (auto-sample == OFF)
+        @details: id = 1
+    **>
+    method setSamplePrimary
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: CubeMag Config Items
+        @details: id = 2
+    **>
+    method setConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: The Prefered Primary Magnetometer **>
+            CubeMagControlProgramCommonEnums_MagType PrimaryMagnetometerPref
+            
+            <** @description: The Magnetometer to set as the primary **>
+            CubeMagControlProgramCommonEnums_MagType PrimaryMagnetometerCurr
+            
+            <** @description: Depoyment Timeout. Applied to Burn Wire **>
+            UInt16 DeployTimeout
+            
+            <** @description: Allow the firmware to change the primary magnetometer based on error conditions **>
+            Boolean PrimaryAutoSelect
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: MMC Magnetometer Calibration Parameters
+        @details: id = 3
+    **>
+    method setMmcCalibration
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+            <** @description: X-Axis: d1 **>
+            Float Xd1
+            
+            <** @description: X-Axis: d2 **>
+            Float Xd2
+            
+            <** @description: X-Axis: s1 **>
+            Float Xs1
+            
+            <** @description: X-Axis: s2 **>
+            Float Xs2
+            
+            <** @description: Y-Axis: d1 **>
+            Float Yd1
+            
+            <** @description: Y-Axis: d2 **>
+            Float Yd2
+            
+            <** @description: Y-Axis: s1 **>
+            Float Ys1
+            
+            <** @description: Y-Axis: s2 **>
+            Float Ys2
+            
+            <** @description: Z-Axis: d1 **>
+            Float Zd1
+            
+            <** @description: Z-Axis: d2 **>
+            Float Zd2
+            
+            <** @description: Z-Axis: s1 **>
+            Float Zs1
+            
+            <** @description: Z-Axis: s2 **>
+            Float Zs2
+            
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+        }
+    }
+    
+    <**
+        @description: MMC Magnetometer Specific Config
+        @details: id = 4
+    **>
+    method getMmcConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: MMC Auto-Sample Enable/Disable **>
+            Boolean AutoSample
+            
+            <** @description: MMC Auto Sample Period **>
+            CubeMagControlProgramCommonEnums_SamplePeriod AutoSamplePeriod
+            
+            <** @description: MMC Sample Filter Type **>
+            CubeMagControlProgramCommonEnums_FilterType SampleFilterType
+            
+            <** @description: MMC Sample Butterworth filter order **>
+            CubeMagControlProgramCommonEnums_FilterOrder SampleFilterOrder
+            
+            <** @description: MMC Sample Filter Depth when using Simple Averaging **>
+            UInt8 SampleFilterDepth
+            
+            <** @description: MMC Sample Duration when Auto-Sample is disabled **>
+            CubeMagControlProgramCommonEnums_SampleDuration SingleSampleTime
+            
+            <** @description: MMC Action to take when sample is busy when requested **>
+            CubeMagControlProgramCommonEnums_SampleBusy SampleBusyAction
+            
+            <** @description: MMC Maximum number of allowed megnetometer measurement errors **>
+            UInt32 MaxErrorsMag
+            
+            <** @description: MMC Maximum number of allowed temperature measurement errors **>
+            UInt32 MaxErrorsTmp
+            
+            
+        }
+    }
+    
+    <**
+        @description: All Service States
+        @details: id = 5
+    **>
+    method getState
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: CubeMag Service State **>
+            CubeMagControlProgramCommonEnums_MagState MagState
+            
+            <** @description: Primary Magnetometer State **>
+            CubeMagControlProgramCommonEnums_MntState PrimaryMagState
+            
+            <** @description: Redundant Magnetometer State **>
+            CubeMagControlProgramCommonEnums_MntState RedMagState
+            
+            
+        }
+    }
+    
+    <**
+        @description: Primary Magnetometer Measurement
+        @details: id = 6
+    **>
+    method getPrimaryMagMeasurement
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: X_axis **>
+            Float X_axis
+            
+            <** @description: Y_axis **>
+            Float Y_axis
+            
+            <** @description: Z_axis **>
+            Float Z_axis
+            
+            <** @description: Is Data Valid **>
+            Boolean DataValid
+            
+            
+        }
+    }
+    
+    <**
+        @description: Unfiltered last Primary Magnetometer Measurement
+        @details: id = 7
+    **>
+    method getPrimaryMagMeasurementRaw
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: X_axis **>
+            Float X_axis
+            
+            <** @description: Y_axis **>
+            Float Y_axis
+            
+            <** @description: Z_axis **>
+            Float Z_axis
+            
+            <** @description: Is Data Valid **>
+            Boolean DataValid
+            
+            
+        }
+    }
+    
+    <**
+        @description: Main Magnetometer Measurement
+        @details: id = 8
+    **>
+    method getPrimaryMagTemp
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Temperature **>
+            Float Temp
+            
+            
+        }
+    }
+    
+    <**
+        @description: CubeMag Config Items
+        @details: id = 9
+    **>
+    method getConfig
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: The Prefered Primary Magnetometer **>
+            CubeMagControlProgramCommonEnums_MagType PrimaryMagnetometerPref
+            
+            <** @description: The Magnetometer to set as the primary **>
+            CubeMagControlProgramCommonEnums_MagType PrimaryMagnetometerCurr
+            
+            <** @description: Depoyment Timeout. Applied to Burn Wire **>
+            UInt16 DeployTimeout
+            
+            <** @description: Allow the firmware to change the primary magnetometer based on error conditions **>
+            Boolean PrimaryAutoSelect
+            
+            
+        }
+    }
+    
+    <**
+        @description: Primary Magnetometer Diagnostics
+        @details: id = 10
+    **>
+    method getPrimaryMagDiagnostics
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: Last Error Code from magnetometer measurement **>
+            UInt32 lastErrorMag
+            
+            <** @description: Error Counter for megnetometer measurement **>
+            UInt32 errorCountMag
+            
+            <** @description: Last Error Code from temperature measurement **>
+            UInt32 lastErrorTmp
+            
+            <** @description: Error Counter for temperature measurement **>
+            UInt32 errorCountTmp
+            
+            
+        }
+    }
+    
+    <**
+        @description: MMC Magnetometer Calibration Parameters
+        @details: id = 11
+    **>
+    method getMmcCalibration
+    {
+        in
+        {
+			<** @description: CubeADCS Gen2 node to receive the request.
+			@details: size = 1 **>
+			CmdTargetNode cmdTargetNode
+			
+        }
+        
+        
+
+        out
+        {
+            <** @description: Return status of the CubeADCS Gen2 API operation. **>
+            UInt32 adcsErrorCode
+            
+            <** @description: X-Axis: d1 **>
+            Float Xd1
+            
+            <** @description: X-Axis: d2 **>
+            Float Xd2
+            
+            <** @description: X-Axis: s1 **>
+            Float Xs1
+            
+            <** @description: X-Axis: s2 **>
+            Float Xs2
+            
+            <** @description: Y-Axis: d1 **>
+            Float Yd1
+            
+            <** @description: Y-Axis: d2 **>
+            Float Yd2
+            
+            <** @description: Y-Axis: s1 **>
+            Float Ys1
+            
+            <** @description: Y-Axis: s2 **>
+            Float Ys2
+            
+            <** @description: Z-Axis: d1 **>
+            Float Zd1
+            
+            <** @description: Z-Axis: d2 **>
+            Float Zd2
+            
+            <** @description: Z-Axis: s1 **>
+            Float Zs1
+            
+            <** @description: Z-Axis: s2 **>
+            Float Zs2
+            
+            
+        }
+    }
+    
+}

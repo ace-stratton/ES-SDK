@@ -1,0 +1,163 @@
+package endurosat.faults.fp
+
+<** @description: Onboard Computer Fault-related commands 
+    @details: id = 200 
+**>
+interface fault_ops
+{
+    version { major 0 minor 1 }
+
+    struct basic_x_frame
+    {
+        UInt32 r0
+        UInt32 r1
+        UInt32 r2
+        UInt32 r3
+        UInt32 r12
+        <** @description: Link Register **>
+        UInt32 lr
+        <** @description: Program Counter **>
+        UInt32 pc
+        <** @description: Program Status Resgister **>
+        UInt32 psr
+    }
+    
+    struct extended_x_frame
+    {
+        <** @description: Basic registers **>
+        basic_x_frame basic_regs
+        <** @description: Extended FP registers S0..S15
+            @details: size = 16 
+        **>
+        UInt32[] fp_ext_reg_s
+        <** @description: Floating Point Status and Control Register **>
+        UInt32 fpscr
+    }
+
+    struct x_header
+    {
+        <** @description: ASCII symbol indicating whether this is an empty 'E', application 'A' or a bootloader 'B' record **>
+        UInt32 record_type
+        <** @description: Reserved fields for future use - currently set to zero
+            @details: size = 4 
+        **>
+        UInt8[] reserved
+        <** @description: RTC timestamp indicating when the exception occurred **>
+        UInt32 rtc_timestamp
+        <** @description: Uptime in milliseconds since last reset **>
+        UInt32 uptime
+    }
+
+    struct x_frame
+    {
+        <** @description: Exception header **>
+        x_header hdr
+        <** @description: Configurable Fault Status Register **>
+        UInt32 cfsr
+        <** @description: Hard Fault Status Register **>
+        UInt32 hfsr
+        <** @description: MemManage Fault Address Register **>
+        UInt32 mmfar
+        <** @description: BusFault Address Register **>
+        UInt32 bfar
+        <** @description: Auxiliary Bus Fault Status Register **>
+        UInt32 abfsr
+        <** @description: Stack pointer (MSP or PSP) when the exception occurred **>
+        UInt32 sp
+        <** @description: Vector table address offset (could be used to distinguish between separate apps in different linker sections) **>
+        UInt32 vtor
+        <** @description: Number of actual bytes in the stack_frame field **>
+        UInt32 stack_frame_len
+        <** @description: Exception stack frame data **>
+        extended_x_frame stack_frame
+        <** @description: CRC32 of all previous fields **>
+        UInt32 crc
+    }
+
+    enumeration FaultType
+    {
+        USAGE_FAULT
+        MEM_FAULT
+        BUS_FAULT
+    } 
+
+    <** @description: Provides information about the current number of faults stored
+        @details: id = 0x00 
+    **>
+    method get_fault_info
+    {
+        out
+        {
+            <** @description: Number of fault slots occupied currently (starting from slot index 0 in fault memory) **>
+            UInt8 occupied_fault_slots
+            <** @description: Maximum available fault slots in the fault storage **>
+            UInt8 available_fault_slots
+        }
+    }
+
+    <** @description: Reads a specified HW exception fault from the persistent storage (as raw bytes)
+        @details: id = 0x01  
+    **>
+    method read_fault_by_index_raw
+    {
+        in
+        {
+            <** @description: Slot index in NVM to read a fault from**>
+            UInt8 slot_id
+        }
+        out
+        {
+            <** @description: Indicates whether the specified slot contains a valid exception frame **>
+            Boolean is_data_valid
+            <** @description: Raw exception data                 
+                @details: size = 152
+            **>
+            UInt8[] exception_data_raw
+        }
+    }
+    
+    <** @description: Clears the NVM exception storage
+        @details: id = 0x02  
+    **>
+    method clear_all_faults
+    {
+        out
+        {
+            <** @description: Indicates whether the clear operation succeeded **>
+            Boolean is_clear_ok
+        }
+    }
+    
+    <** @description: Triggers a fault of a given type to be able to test the exception fault mechanism under normal operation
+        @details: id = 0x03  
+    **>
+    method simulate_fault
+    {
+        in
+        {
+            <** @description: Fault type to simulate **>
+            FaultType fault_type
+        }
+    }
+    
+    <** @description: Reads a specified HW exception fault from the persistent storage (typed - for non-generic faults only)
+        @details: id = 0x04  
+    **>
+    method read_fault_by_index
+    {
+        in
+        {
+            <** @description: Slot index in NVM to read a fault from**>
+            UInt8 slot_id
+        }
+        out
+        {
+            <** @description: Indicates whether the specified slot contains a valid exception frame **>
+            Boolean is_data_valid
+            <** @description: Exception data                 
+                @details: size = 152
+            **>
+            x_frame exception_data
+        }
+    }
+}

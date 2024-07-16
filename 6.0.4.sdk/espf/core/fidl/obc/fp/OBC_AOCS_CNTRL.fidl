@@ -1,0 +1,305 @@
+package endurosat.macif
+
+<** @description: AOCS performance monitor interface as part of the Onboard Computer  
+    @details: id = 71 
+**>
+interface OBC_AOCS_CNTRL
+{
+    version { major 1 minor 0 }
+    
+	
+	enumeration StandardResult
+    {
+        SUCCESS,
+        ERROR,
+        INVALID_ARGS,
+        NOT_SUPPORTED2
+    }
+    
+    enumeration AocsServiceError
+    {
+    	AOCS_ERR_OK,
+    	AOCS_ERR_BUSY,
+    	AOCS_ERR_FAILED
+    }
+    
+	enumeration logDataTypes
+	{
+		EST_ATT_ANGL,
+		EST_ANG_RATES,
+		MEAS_MAG_FIELD_VEC,
+		EST_INNOVATION_VEC,
+		Q_ERR_VEC,
+		MAG_MCU_TEMP,
+		RATE_SENS_TEMP,
+		RATE_CONVERGENCE
+	}
+
+    enumeration AocsState
+    {
+        AOCS_STATE_UNDEFINED,
+        AOCS_STATE_EXISTING_CONTROL,
+        AOCS_STATE_NO_CONTROL,
+        AOCS_STATE_NORMAL_DETUMBLING,
+        AOCS_STATE_Y_THOMSON,
+        AOCS_STATE_Y_THOMSON_MEMS_RATE,
+        AOCS_STATE_FAST_DETUMBLING,
+        AOCS_STATE_VERY_FAST_DETUMBLING,
+        AOCS_STATE_Y_MOMENTUM,
+        AOCS_STATE_Y_MOMENTUM_FULL_STATE_EKF,
+        AOCS_STATE_3AXIS,
+        AOCS_STATE_SUN_TRACKING,
+        AOCS_STATE_TARGET_TRACKING,
+        AOCS_STATE_USER1,
+        AOCS_STATE_USER2,
+        AOCS_STATE_USER3
+    }
+	
+    enumeration AocsStateReqState
+    {
+        AOCS_STATE_REQ_COMPLETED,
+        AOCS_STATE_REQ_NEW_REQ,
+        AOCS_REQ_IN_PROGRESS,
+        AOCS_STATE_REQ_FAILED
+    }
+
+	struct thresholdValues
+	{
+		<** @description: Tolerance for performance **> 
+		Float tolerance
+		<** @description: The hysteresis on the threshold, expressed as a fraction of it **>
+		Float safety_factor
+	}
+	
+	struct PMoutput
+	{
+		UInt8  longTermMetric
+		UInt16 encodedStability 
+	}
+	
+	struct Config
+	{
+		<** @description: Time in seconds **>
+		UInt32 max_time_for_logging
+		UInt8 update_interval
+		logDataTypes data_type
+		<** @description: Data samples to skip when offset change is detected **>
+		UInt16 samples_to_skip
+	}
+	
+	struct AocsRefParams
+	{
+		Float refParam1
+		Float refParam2
+		Float refParam3
+	}
+	
+	
+    <** @description: Reset AOCS performance monitor buffer
+        @details: id = 0x00000000
+    **>
+    method resetAOCSPMbuff
+    {
+
+    }
+	
+    <** @description: Get the time for logging 
+        @details: id = 0x00000001
+    **>
+    method getMaxTimeForAutoLogging
+    {
+        out
+        { 
+			<** @description: Time in seconds **>
+            UInt32 maxTimeForAutoLogging
+        }
+    }	
+	<** @description: Set the time for logging 
+	@details: id = 0x00000002
+    **>
+    method setMaxTimeForAutoLogging
+    {
+		in
+		{
+			<** @description: Time in seconds **>
+			UInt32 maxTimeForAutoLogging
+		}
+        out
+        { 
+            StandardResult opResult
+        }
+    }
+	<** @description: Set the time for logging 
+        @details: id = 0x00000003
+    **>
+    method startLogging
+    {
+		in
+		{	
+			<** @description: Time in seconds **>
+			UInt32 timeWindowForLogging
+		}
+    }
+		
+    <** @description:  Get data type for logging
+        @details: id = 0x00000004
+    **>
+    method getDataTypeForAssessment
+    {
+        out
+        { 
+            logDataTypes dataType
+        }
+    }		
+	
+	<** @description:  Set data type for logging. Attention this will reset the algorythm.
+        @details: id = 0x00000005
+    **>
+    method setDataTypeForAssessment
+    {
+        in
+        { 
+            logDataTypes dataType
+        }
+		out
+        { 
+            StandardResult opResult
+        }
+    }
+	<** @description:  Get threshold levels for all 3 values 
+        @details: id = 0x00000006
+    **>
+    method getThresholdLevels
+    {
+        out
+        { 
+	        <** @details: size = 3 **>
+            thresholdValues[] threshold
+        }
+    }
+	
+	<** @description:  Set threshold levels for all 3 values 
+    @details: id = 0x00000007
+    **>
+    method setThresholdLevels
+    {
+    	in
+        { 
+	        <** @details: size = 3 **>
+            thresholdValues[] threshold
+        }
+        out
+        { 
+            StandardResult opResult
+        }
+    }
+    <** @description:  Get output of the algorithm  
+        @details: id = 0x00000008
+    **>
+    method getPMOutput
+    {
+        out
+        { 
+	        <** @details: size = 3 **>
+            PMoutput[] output
+        }
+    }
+	
+	<** @description:  Get config
+	@details: id = 0x00000009
+    **>
+    method getConfig
+    {
+        out
+        { 
+			<** @description: Time in seconds **>
+	       Config current_config
+        }
+    }
+	<** @description:  Get update interval in seconds 
+	@details: id = 0x0000000A
+    **>
+    method getUpdateInterval
+    {
+		out
+        { 
+			<** @description: Time in seconds **>
+	       UInt8 update_interval
+        }
+    }
+	<** @description:  Set update interval in seconds. Attention this will reset the algorythm.
+	@details: id = 0x0000000B
+    **>
+    method setUpdateInterval
+    {
+        in
+        { 	
+			<** @description: Time in seconds **>
+	       UInt8 update_interval
+        }
+		out
+        { 
+            StandardResult opResult
+        }
+    }
+	
+	<** @description:  Get samples to skip 
+	@details: id = 0x0000000C
+    **>
+    method getSamplesToSkip
+    {
+		out
+        { 
+	       UInt16 samples_to_skip
+        }
+    }
+	<** @description:  Set samples to skip 
+	@details: id = 0x0000000D
+    **>
+    method setSamplesToSkip
+    {
+        in
+        { 	
+	       UInt16 samples_to_skip
+        }
+		out
+        { 
+            StandardResult opResult
+        }
+    }
+    
+    <** @description:  Set a new state to the AOCS 
+	@details: id = 0x0000000E
+    **>
+    method setAocsState
+    {
+        in
+        {
+        	<** @description: Requested AOCS state **>
+            AocsState aocsState
+            <** @description: Parameters of the request **>
+            AocsRefParams refParams
+        }
+        out
+        {
+            <** @description: Result of the operation **>
+            AocsServiceError opResult
+        }
+    }
+    
+    <** @description:  Get the current state of the AOCS 
+	@details: id = 0x0000000F
+    **>
+    method getAocsState
+    {
+        out
+        {
+            <** @description: Result of the operation **>
+            AocsServiceError opResult
+            <** @description: Current requested AOCS state **>
+            AocsState aocsState
+            <** @description: State of the request **>
+            AocsStateReqState reqState
+        }
+    }
+}

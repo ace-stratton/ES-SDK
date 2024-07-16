@@ -1,0 +1,48 @@
+#ifndef {{ sm.name | upper }}_USER_H
+#define {{ sm.name | upper }}_USER_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "libhsm.h"
+
+// Stated identifiers
+enum {{ sm.name }}_states
+{
+    STATE_ROOT,
+{%-      for state_obj in states %}
+    STATE_{{ state_obj.name.upper() }},
+{%-     endfor %}
+{%- for state_obj in states %}
+{%-     for trans in state_obj.transitions_list %}
+{%-         if trans.is_history_state_transition() %}
+    STATE_{{ trans.target_state.upper() }},
+            {%- endif %}
+        {%- endfor %}
+{%- endfor %}
+    STATE_MAX
+};
+
+// User state machine events
+enum {{ sm.name }}_events
+{
+    evStart = eHSM_StdEvent_UserEvStart,
+{%-  for event in sm.get_events() %}
+    ev_{{ sm.name }}_{{ event }},
+{%-  endfor %}
+    evMAX
+};
+
+// State machine root object
+extern sCompositeState_t state_{{ sm.name }};
+
+// Use this macro to access the SM instance instead of a direct reference to
+// state_{{ sm.name }} variable
+#define {{ sm.name }}_instance  HSM_UPCAST_STATE(&state_{{ sm.name }})
+
+#ifdef __cplusplus
+};
+#endif
+
+#endif  // #ifndef {{ sm.name | upper }}_USER_H

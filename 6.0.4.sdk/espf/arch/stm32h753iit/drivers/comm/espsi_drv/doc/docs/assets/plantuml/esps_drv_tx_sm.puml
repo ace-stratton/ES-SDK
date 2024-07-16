@@ -1,0 +1,44 @@
+@startuml
+
+title ESPS Driver TX State Machine
+
+' List of states
+[eMACTransmit_Off]
+[eMACTransmit_Idle]
+[eMACTransmit_WaitPriority]
+[eMACTransmit_Active]
+[eMACTransmit_ProcessNext]
+[eMACTransmit_Retry]
+
+legend right
+- eTXEvent_None: After a transition is complete
+- eTXEvent_NewMessage: When a message is added to the queue. After exhaust all retries. Triggered by Process Next.
+- eTXEvent_CollisionDetected: On UART Events (OverRun Error Flag, Framing Error Flag, Noise error detected Flag).
+- eTXEvent_PriorityWaitFinished: When TX timer expires (not cancelled).
+- eTXEvent_MessageSendFinished: Uart Transmission Complete Flag.
+- eTXEvent_Retry: Tx global timeout hasn't yet elapsed or it did, but the message still has retries left.
+- eTXEvent_QueueEmptied: When try to process the next message but TX Context doesn't have a message.
+- eTXEvent_BusBusy: Triggered from MAC_IRQ_vRXIndication (on UART RX event).
+endlegend
+
+[eMACTransmit_Off]          --> [eMACTransmit_Idle]          : fs_vInitInterface()
+
+[eMACTransmit_Idle]         --> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+[eMACTransmit_WaitPriority] --> [eMACTransmit_Retry]         : eTXEvent_BusBusy (Should restart Timers)
+[eMACTransmit_WaitPriority] --> [eMACTransmit_Idle]          : eTXEvent_CollisionDetected
+[eMACTransmit_WaitPriority] --> [eMACTransmit_Active]        : eTXEvent_PriorityWaitFinished AND NOT receiving
+[eMACTransmit_WaitPriority] --> [eMACTransmit_Retry]         : eTXEvent_PriorityWaitFinished AND receiving
+
+[eMACTransmit_Active]       --> [eMACTransmit_Retry]         : eTXEvent_CollisionDetected
+[eMACTransmit_Active]       --> [eMACTransmit_ProcessNext]   : eTXEvent_MessageSendFinished
+
+[eMACTransmit_ProcessNext]  --> [eMACTransmit_Idle]          : eTXEvent_QueueEmptied
+[eMACTransmit_ProcessNext]  --> [eMACTransmit_WaitPriority]  : eTXEvent_NewMessage (Reset Timer)
+[eMACTransmit_ProcessNext]  --> [eMACTransmit_WaitPriority]  : eTXEvent_BusBusy (Reset Timer)
+[eMACTransmit_ProcessNext]  --> [eMACTransmit_WaitPriority]  : eTXEvent_CollisionDetected (Reset Timer)
+
+[eMACTransmit_Retry]        --> [eMACTransmit_WaitPriority]  : eTXEvent_Retry
+[eMACTransmit_Retry]        --> [eMACTransmit_ProcessNext]   : eTXEvent_NewMessage
+
+@enduml

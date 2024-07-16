@@ -1,0 +1,2032 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://endurosat.com/devguide/devguide_conops.html">
+      
+      
+        <link rel="prev" href="devguide_es_adcs.html">
+      
+      
+        <link rel="next" href="devguide_user_payloads.html">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.27">
+    
+    
+      
+        <title>Concept of Operations - EnduroSat On-Board Computer SDK Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+        <script src="https://unpkg.com/iframe-worker/shim"></script>
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.7/katex.min.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }
+    .gscrollbar-fixer { padding-right: 15px; }
+    .gdesc-inner { font-size: 0.75rem; }
+    body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+    body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+    body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#operational-modes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-header__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            EnduroSat On-Board Computer SDK Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Concept of Operations
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart.html" class="md-tabs__link">
+        
+  
+    
+  
+  Quick-start Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="hldesign.html" class="md-tabs__link">
+          
+  
+  Developer's Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../assets/src-docs/index.html" class="md-tabs__link">
+        
+  
+    
+  
+  Code Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../reference_docs.html" class="md-tabs__link">
+        
+  
+    
+  
+  Reference documents
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../change_history.html" class="md-tabs__link">
+        
+  
+    
+  
+  Change history
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contacts.html" class="md-tabs__link">
+        
+  
+    
+  
+  Contacts
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../index.html" title="EnduroSat On-Board Computer SDK Documentation" class="md-nav__button md-logo" aria-label="EnduroSat On-Board Computer SDK Documentation" data-md-component="logo">
+      
+  <img src="../EnduroSat_horLogo_symbol@2x-min.png" alt="logo">
+
+    </a>
+    EnduroSat On-Board Computer SDK Documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick-start Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Developer's Guide
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Developer's Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="hldesign.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    High-Level Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_dirstructure.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Directory structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cmake.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build structure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OBC configuration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            OBC configuration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_buildcfg.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_sysconfig.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Run-time configuration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Development recipes
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Development recipes
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_newcomp.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the SDK with new components
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_esps_cmd_extend.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extending the set of OBC supported commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_fwupd.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bootloader and firmware updates handling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_debugtrace.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Debug and trace
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_assertions.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Assertions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_datacache.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Data Cache
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_telemetry.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Telemetry
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_micropython.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MicroPython
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_es_adcs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    EnduroSat ADCS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_5_10" id="__nav_3_5_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_5_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_5_10">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="devguide_conops.html" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Concept of Operations
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#operational-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operational Modes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mode-transitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mode Transitions
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-conops-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using the ConOps interface
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_user_payloads.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    User Payloads
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_aocs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Attitude and Orbit Control
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_payload_scheduler.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Payload Scheduler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_cubeadcs_gen2_service.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CubeADCS Gen2 Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_operations_guide.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operations Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_pm.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Performance monitor
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Connectivity
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            Connectivity
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="devguide_eth.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Ethernet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../assets/src-docs/index.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference_docs.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reference documents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../change_history.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Change history
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contacts.html" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contacts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Concept of Operations</h1>
+
+<p>The <strong>Concept of Operations</strong> (<abbr title="Concept of Operations">ConOps</abbr>) provides the backbone for automated spacecraft control and operations. It consists of three main component:</p>
+<ul>
+<li>Logic controlling the transitions between the different <strong><abbr title="Concept of Operations">ConOps</abbr></strong> modes</li>
+<li>Automated recovery to Sun-Tracking (or Nadir Pointing)</li>
+<li>Configuration</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The implementation details of the presented <strong><abbr title="Concept of Operations">ConOps</abbr></strong> are documented in the <strong>Code Reference</strong> section, under <a href="../assets/src-docs/group__app__conops.html"><code>Files/File List/espf/app/conops</code></a>.</p>
+</div>
+<h2 id="operational-modes">Operational Modes</h2>
+<p>There are four different main modes in the <strong><abbr title="Concept of Operations">ConOps</abbr></strong>.</p>
+<h3 id="safe">SAFE</h3>
+<p>This is the default mode after power-up of the <abbr title="On-board Computer">OBC</abbr>. When this mode is activated all payloads are powered-off and all internally used logical flags are cleared.</p>
+<p>This mode is used in several ways:</p>
+<ul>
+<li>To commission the platform and more specifically the used <abbr title="Attitude Determination and Control System">ADCS</abbr> (<abbr title="Attitude and Orbit Control System">AOCS</abbr>) subsystem</li>
+<li>To automatically control the satellite to Sun-Tracking mode (<abbr title="Sun-Tracking Transition">STT</abbr>) or Nadir pointing</li>
+<li>As the SAFE place to return to when an <a href="../assets/src-docs/group__app__conops.html">error</a> in the platform is detected</li>
+</ul>
+<h3 id="detumbling">DETUMBLING</h3>
+<p>This mode is entered once the platform detumbling needs are not met. This can happen when:</p>
+<ul>
+<li>The angular velocity norm exceeds a user configurable threshold</li>
+<li>The angular velocity per axis is not within a user configurable threshold</li>
+<li>A specific <a href="devguide_aocs.html"><abbr title="Attitude and Orbit Control System">AOCS</abbr> State</a> has been activated (for example, by the <abbr title="Failure Detection Isolation and Recovery">FDIR</abbr> logic of the used <abbr title="Attitude Determination and Control System">ADCS</abbr> or during <a href="../assets/src-docs/group__app__conops.html"><abbr title="Sun-Tracking Transition">STT</abbr> transitions</a>)</li>
+<li>Non-nominal behaviour detected, which has introduced large angular velocity in the platform (such as sudden stop of the reaction wheels)</li>
+</ul>
+<p>The embedded logic will execute until either the angular velocity norm is brought below the user configured threshold or the angular velocity per axis is contained within the user configured thresholds.</p>
+<h3 id="idle">IDLE</h3>
+<p><strong>IDLE mode</strong> is the standard mode of operation once the platform has been successfully commissioned. It is accessible only via a command initiated from ground and it is the only mode from which
+any payload can be activated.</p>
+<h3 id="payload-modes">Payload Modes</h3>
+<p>The <strong>Payload Modes</strong> can be activated once the platform is in <strong>IDLE</strong> mode. The payload modes can be anything - from downlink, file transfer, inertial pointing or specific payload operation. It is up to the
+user to define these.</p>
+<h2 id="mode-transitions">Mode Transitions</h2>
+<p>Transitions are based on parameters, which are fed to the <abbr title="Concept of Operations">ConOps</abbr>. The thresholds which dictate the transitions are based on the input parameters after applying user-configurable multipliers.</p>
+<p>The multipliers, parameters and the transitions (high-level and detailed) are depicted further down.</p>
+<h3 id="used-physical-parameters">Used Physical Parameters</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Physical Parameter</th>
+<th>Description</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>C_batt</code></td>
+<td>Measured battery capacity</td>
+<td>[mWh]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>C_Safe</code></td>
+<td>Battery capacity threshold for entrance into <strong>Safe</strong> mode</td>
+<td>[mWh]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>S_safe</code></td>
+<td>Multiplier, used to configure the battery capacity threshold in <strong>SAFE</strong> mode after which the <abbr title="On-board Computer">OBC</abbr> can transition back into <strong>IDLE</strong> mode</td>
+<td>[mWh]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>S_Det</code></td>
+<td>Multiplier, used to configure the battery capacity threshold in <strong>SAFE</strong> mode after which the <abbr title="On-board Computer">OBC</abbr> can transition into <strong>Detumbling</strong> mode</td>
+<td>[mWh]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>S_Pay[i]</code></td>
+<td>Multiplier, used to configure the battery capacity threshold in <strong>IDLE</strong> mode after which the <abbr title="On-board Computer">OBC</abbr> can transition into <strong>Pay[i]</strong> mode</td>
+<td>[mWh]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Ω</code></td>
+<td>Measured norm of the angular velocity vector as measured in the satellite body-frame</td>
+<td>[mrad/s]</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Ω_max</code></td>
+<td>Angular rate threshold above which the platform will automatically transition to <strong>Detumbling</strong> mode</td>
+<td>[mrad/s]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="used-logical-parameters">Used Logical Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Logical Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>IDLE_Flag</code></td>
+<td>Logical variable which indicates whether we can go from <strong>SAFE</strong> mode to <strong>IDLE</strong> mode</td>
+</tr>
+<tr>
+<td><code>Error_Flags</code></td>
+<td>Logical variable which indicates whether an error occurred and if <strong>SAFE</strong> mode or <strong>IDLE</strong> mode has to be entered</td>
+</tr>
+<tr>
+<td><code>Detumbled_Flag</code></td>
+<td>Logical variable which indicates that detumbling has been completed and we can transition back to <strong>SAFE</strong> mode</td>
+</tr>
+<tr>
+<td><code>Pay_Flag[i]</code></td>
+<td>Logical variable which indicates that we can transition from <strong>IDLE</strong> to <strong>Pay[i]</strong> mode</td>
+</tr>
+<tr>
+<td><code>Timeout[i]</code></td>
+<td>Logical variable which indicates the timeout for the operation of the corresponding <strong>Pay[i]</strong> mode</td>
+</tr>
+</tbody>
+</table>
+<h3 id="general-transitions">General Transitions</h3>
+<p>The following table gives the high-level transitions used in the <abbr title="Concept of Operations">ConOps</abbr>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">FROM MODE / TO MODE</th>
+<th style="text-align: center;">SAFE</th>
+<th style="text-align: center;">IDLE</th>
+<th style="text-align: center;">DETUMBLING</th>
+<th style="text-align: center;">Pay[i] Mode</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><abbr title="Not Applicable">N/A</abbr></td>
+<td style="text-align: center;">(<strong>IDLE_Flag</strong>) AND (<strong>C_batt</strong> &gt; <strong>S_Safe</strong> * <strong>C_Safe</strong>)</td>
+<td style="text-align: center;">(<strong>C_batt</strong> &gt; <strong>S_Det</strong> * <strong>C_Safe</strong>) AND (<strong>Ω &gt; Ω_max</strong>)</td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;">(<strong>C_batt &lt; C_Safe</strong>) OR (<strong>Error_Flag</strong>)</td>
+<td style="text-align: center;"><abbr title="Not Applicable">N/A</abbr></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;">(<strong>C_batt</strong> &gt; <strong>S_pay[ i ]</strong> * <strong>C_Safe</strong>) AND (<strong>Pay_Flag[ i ]</strong>)</td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+<td style="text-align: center;">(<strong>C_batt</strong> &lt; <strong>C_Safe</strong>) OR (<strong>Error_Flag</strong>) OR (<strong>Detumbled_Flag</strong>)</td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><abbr title="Not Applicable">N/A</abbr></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>Pay[i] Mode</code></td>
+<td style="text-align: center;">(<strong>C_batt</strong> &lt; <strong>C_Safe</strong>) OR (<strong>Error_Flag</strong>)</td>
+<td style="text-align: center;">(<strong>!Pay_Flag[ i ]</strong>) OR (<strong>Timeout[ i ]</strong>)</td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><abbr title="Not Applicable">N/A</abbr></td>
+</tr>
+</tbody>
+</table>
+<h3 id="detailed-transitions">Detailed Transitions</h3>
+<h4 id="safe-to-detumbling">SAFE to DETUMBLING</h4>
+<p>This section describes in a table view the conditions and changes in the <abbr title="Attitude Determination and Control System">ADCS</abbr> system state when the <strong><abbr title="Concept of Operations">ConOps</abbr></strong> transitions from <strong>SAFE</strong> mode to <strong>DETUMBLING</strong> mode</p>
+<h5 id="guard-condition">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &gt; Thresh</th>
+<th style="text-align: center;">Angular Rate &gt; Thresh</th>
+<th style="text-align: center;">ADCS_State == DETUMB<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></th>
+<th style="text-align: center;">ADCS_State == FAST_DETUMB<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></th>
+<th style="text-align: center;">Commissioning Status</th>
+<th style="text-align: center;">End State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" />  &gt; 1</td>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" />  &gt; 1</td>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code>-</code> indicates that the condition is don't care</p>
+</div>
+<h5 id="on-entering-detumbling">On entering DETUMBLING</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin ADCS_State</th>
+<th style="text-align: center;">ADCS_STATE == PWR_UP</th>
+<th style="text-align: center;">End <abbr title="Attitude Determination and Control System">ADCS</abbr> State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>PWR_UP</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>FAST_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>VERY_FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>VERY_FAST_DETUMBLING</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="detumbling-to-safe">DETUMBLING to SAFE</h4>
+<p>This section describes in a table view the conditions and changes in the <abbr title="Attitude Determination and Control System">ADCS</abbr> system state when the <strong><abbr title="Concept of Operations">ConOps</abbr></strong> transitions from <strong>DETUMBLING</strong> mode to <strong>SAFE</strong> mode</p>
+<h5 id="guard-condition_1">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &lt; Thresh</th>
+<th style="text-align: center;">Error Flag</th>
+<th style="text-align: center;">Detumb Completed</th>
+<th style="text-align: center;">End State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="on-exiting-detumbling">On exiting DETUMBLING</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin ADCS_State</th>
+<th style="text-align: center;">Detumb Completed</th>
+<th style="text-align: center;">ADCS_STATE == FAST_DETUMBLING</th>
+<th style="text-align: center;">ADCS_STATE == VERY_FAST_DETUMBLING</th>
+<th style="text-align: center;">Commissioning Status</th>
+<th style="text-align: center;">End <abbr title="Attitude Determination and Control System">ADCS</abbr> State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>PWR_UP</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /> &gt; 1</td>
+<td style="text-align: center;"><code>Y_THOMSON_MEMS_RATE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>VERY_FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /> &gt; 1</td>
+<td style="text-align: center;"><code>Y_THOMSON_MEMS_RATE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /> &gt; 1</td>
+<td style="text-align: center;"><code>PWR_UP</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>VERY_FAST_DETUMBLING</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /> &gt; 1</td>
+<td style="text-align: center;"><code>PWR_UP</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>Y_THOMSON</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="safe-to-idle">SAFE to IDLE</h4>
+<h5 id="guard-condition_2">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &gt; Thresh</th>
+<th style="text-align: center;">ADCS_STATE == SUN_TRACKING</th>
+<th style="text-align: center;">ADCS_STATE == Y_MOMENTUM</th>
+<th style="text-align: center;">ADCS_STATE == Y_MOMENTUM_FULL_STATE_EKF</th>
+<th style="text-align: center;">ADCS_STATE == 3AXIS</th>
+<th style="text-align: center;">End State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>IDLE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>IDLE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>IDLE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>IDLE</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="idle-to-safe">IDLE to SAFE</h4>
+<h5 id="guard-condition_3">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &lt; Thresh</th>
+<th style="text-align: center;">Error Flag</th>
+<th style="text-align: center;">ADCS_STATE != SUN_TRACKING</th>
+<th style="text-align: center;">ADCS_STATE != Y_MOMENTUM</th>
+<th style="text-align: center;">ADCS_STATE != Y_MOMENTUM_FULL_STATE_EKF</th>
+<th style="text-align: center;">ADCS_STATE != 3AXIS</th>
+<th style="text-align: center;">Angular Rate &lt; Thresh*</th>
+<th style="text-align: center;">3-Axis <abbr title="Attitude Determination and Control System">ADCS</abbr><sup id="fnref2:3"><a class="footnote-ref" href="#fn:3">3</a></sup></th>
+<th style="text-align: center;">End State</th>
+<th style="text-align: center;">End <abbr title="Attitude Determination and Control System">ADCS</abbr> State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>SUN_TRACKING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>Y_MOMENTUM</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>SUN_TRACKING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>Y_MOMENTUM</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><strong>3-Axis <abbr title="Attitude Determination and Control System">ADCS</abbr></strong> indicates that the <abbr title="Attitude Determination and Control System">ADCS</abbr> subsystem is capable of 3-axis maneuvres. This is a configuration that the user must update based on the used <abbr title="Attitude Determination and Control System">ADCS</abbr>.</p>
+</div>
+<h4 id="idle-to-payload">IDLE to PAYLOAD</h4>
+<h5 id="guard-condition_4">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &gt; Thresh</th>
+<th style="text-align: center;">End State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>IDLE</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>PAYLOAD</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="payload-to-safe">PAYLOAD to SAFE</h4>
+<h5 id="guard-condition_5">Guard Condition</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin State</th>
+<th style="text-align: center;">Batt_Cap &lt; Thresh</th>
+<th style="text-align: center;">Error Flag</th>
+<th style="text-align: center;">End State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>PAYLOAD</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>PAYLOAD</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>SAFE</code></td>
+</tr>
+</tbody>
+</table>
+<h5 id="on-exiting-payload">On exiting PAYLOAD</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Begin ADCS_State</th>
+<th style="text-align: center;">Angular Rate &lt; Thresh<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></th>
+<th style="text-align: center;">3-Axis <abbr title="Attitude Determination and Control System">ADCS</abbr></th>
+<th style="text-align: center;">End <abbr title="Attitude Determination and Control System">ADCS</abbr> State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><code>SUN_TRACKING</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/2705.svg" title=":white_check_mark:" /></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>Y_MOMENTUM</code></td>
+</tr>
+<tr>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><img alt="❌" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@15.0.3/assets/svg/274c.svg" title=":x:" /></td>
+<td style="text-align: center;"><code>-</code></td>
+<td style="text-align: center;"><code>NORMAL_DETUMBLING</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="using-the-conops-interface">Using the <abbr title="Concept of Operations">ConOps</abbr> interface</h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This section assumes that the reader is already familiar with the <abbr title="Concept of Operations">ConOps</abbr> description presented up to this point.</p>
+</div>
+<p>The following section gives an overview of some typical use cases of the <strong>Concept of Operations</strong>.</p>
+<h3 id="changing-the-mode">Changing the mode</h3>
+<p>The user can request to change the <strong><abbr title="Concept of Operations">ConOps</abbr></strong> state machine mode at any moment by issuing the <code>ConOps.fidl::sendNewEvent</code> command from the <code>&lt;OBC SDK&gt;/espf/core/fidl/obc/fp/ConOps.fidl</code> interface (from now on referred to as the <strong><abbr title="Concept of Operations">ConOps</abbr> interface</strong>).
+The user will have to specify the requested mode, as well as the parameters, which can be used by that mode. In reality, only the payload modes make use of these parameters and the other modes just ignore them.
+The change to the new mode may or may not happen. The transition will depend on the state machine allowed transitions and on the guard conditions evaluation.</p>
+<p>The user can check if a commanded transtion has been successful, by requesting the currently active mode from the <code>ConOps.fidl::getOpMode</code> command.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Details regarding the state machine as well as supporting logic can be found in the <a href="../assets/src-docs/group__app__conops.html"><strong>Code Reference</strong></a> section.</p>
+</div>
+<h3 id="configurations">Configurations</h3>
+<p>The <strong><abbr title="Concept of Operations">ConOps</abbr></strong> behaviour can be tuned based on the mission requirements through the modification of several thresholds. These are persistent configurations and as such are stored in non-volatile memory. The user can modify these at any point and the effect is immediate.</p>
+<h4 id="thresholds-of-the-physical-parameters">Thresholds of the physical parameters</h4>
+<p>These thresholds correspond to the ones described under the <a href="#used-physical-parameters">used physical parameters here</a>. The user can opt to change these one by one, by issuing the <code>ConOps.fidl::setThreshVal</code> command or to change all of them at once by issuing the <code>ConOps.fidl::setAllThreshVal</code> command.
+Respectively, one can check a single threshold value or all threshold values by issuing <code>ConOps.fidl::getThreshVal</code> and <code>ConOps.fidl::getAllThreshVal</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The SDK is provided with preset threshold values. However, these may be very different for the different mission scenarios (and can typically change during the mission lifetime). The user must analyse the mission requirements and change these thresholds accordingly.</p>
+</div>
+<h4 id="sun-tracking-flag">Sun-tracking flag</h4>
+<p>This is again a persistent configuration. Typically, the user will need to set this only once as it reflects the type of the <abbr title="Attitude Determination and Control System">ADCS</abbr> hardware interfacing to the <abbr title="On-board Computer">OBC</abbr>. The two envisioned cases are:</p>
+<ul>
+<li>A 3-axis stabilised <abbr title="Attitude Determination and Control System">ADCS</abbr></li>
+<li>Y-Momentum <abbr title="Attitude Determination and Control System">ADCS</abbr> (a one wheel solution)</li>
+</ul>
+<p>The flag value dictates the <strong>default</strong> <a href="devguide_aocs.html"><abbr title="Attitude and Orbit Control System">AOCS</abbr> State</a> when the <abbr title="Concept of Operations">ConOps</abbr> is in <strong>IDLE</strong> mode. For example, if the used <abbr title="Attitude Determination and Control System">ADCS</abbr> hardware is 3-axis stabilised and the flag value is set to indicate this, each time the <abbr title="Concept of Operations">ConOps</abbr> makes a switch from <strong>PAYLOAD</strong> mode to <strong>IDLE</strong> mode, the <a href="devguide_aocs.html#sun_tracking"><strong>SUN_TRACKING</strong></a> <strong><abbr title="Attitude and Orbit Control System">AOCS</abbr> State</strong> will be triggered. If, however, the flag value is not set, then the <strong>default</strong> <strong><abbr title="Attitude and Orbit Control System">AOCS</abbr> State</strong> will be <a href="devguide_aocs.html#y_momentum"><strong>Y_MOMENTUM</strong></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some missions may prefer nadir pointing as the default control mode. In this case, the user can modify the <abbr title="Concept of Operations">ConOps</abbr> respectively, by changing <a href="devguide_aocs.html#sun_tracking"><strong>SUN_TRACKING</strong></a> control to <a href="devguide_aocs.html#three_axis_control"><strong>THREE_AXIS_CONTROL</strong></a> in the <a href="../assets/src-docs/group__app__conops.html">code</a>.</p>
+</div>
+<h3 id="scheduling">Scheduling</h3>
+<p>The activation and deactivation of payloads is orchestrated by the <strong>Payload Scheduler</strong>, first introduced in <a href="devguide_user_payloads.html">Payload Operations</a>.</p>
+<p>Two commands associated to scheduling are part of the <strong><abbr title="Concept of Operations">ConOps</abbr>.fidl</strong> interface. These are:</p>
+<ul>
+<li><code>ConOps.fidl::addNewScheduleRecord</code>, which can be used to add a new entry to the first empty slot (if such is present).</li>
+<li><code>ConOps.fidl::clearScheduleRecords</code>, which clears all scheduled entries.</li>
+</ul>
+<h3 id="using-the-conops-from-other-software-modules">Using the <abbr title="Concept of Operations">ConOps</abbr> from other software modules</h3>
+<p>Most of the methods described in the <code>ConOps.fidl</code> interface make use of the <abbr title="Concept of Operations">ConOps</abbr>'s public interface <code>&lt;OBC SDK&gt;/espf/app/conops/conops.h</code>. For example, <code>ConOps.fidl::sendNewEvent</code> makes use of <code>conops_trigger_hsm(const uint32_t event_id, const sConOps_pay_cfg_t *const pay_cfg)</code>, which in turn is also used by different software modules from within the SDK.</p>
+<p>Likewise, the user can use the public interface to achieve the same functionality as the one described in the dedicated interface.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>When the <strong>ADCS_State</strong> equals <strong>DETUMB</strong> this means that the <abbr title="Attitude Determination and Control System">ADCS</abbr> subsystem is either in <strong>Normal Detumbling</strong> or <strong>Y-Thomson Detumbling</strong>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>When the <strong>ADCS_State</strong> equals <strong>FAST_DETUMB</strong> the <abbr title="Attitude Determination and Control System">ADCS</abbr> subsystem can either be in <strong>Very Fast Detumbling</strong> or <strong>Fast Detumbling</strong>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><strong>Angular Rate &lt; Thresh</strong> here indicates that the measured angular rate should be contained in [-39:39] mrad/s&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="footer.title">
+      
+        
+        <a href="devguide_es_adcs.html" class="md-footer__link md-footer__link--prev" aria-label="Previous: EnduroSat ADCS" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              EnduroSat ADCS
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="devguide_user_payloads.html" class="md-footer__link md-footer__link--next" aria-label="Next: User Payloads" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              User Payloads
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            <i>Privileged and confidential</i>
+          </div>
+        
+      </div>
+      <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://www.linkedin.com/company/endurosat/" target="_blank" rel="noopener" title="EnduroSat on LinkedIn" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+<script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.annotate", "search.suggest", "search.highlight", "search.share", "navigation.tabs", "navigation.top", "toc.integrate"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+
+
+    
+      <script src="../assets/javascripts/bundle.ad660dcc.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(() => { lightbox.reload() });
+</script></body>
+</html>

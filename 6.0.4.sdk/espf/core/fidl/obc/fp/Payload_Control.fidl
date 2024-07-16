@@ -1,0 +1,89 @@
+package endurosat.pf.Payload
+
+<** @description: Payload Control interface used for testing purposes
+
+    @details: id = 111
+**>
+interface Payload_Control
+{
+    version { major 0 minor 1 }
+
+    enumeration payload_op_result
+    {
+        NOT_INIT
+        INVALID_PL_ID
+        REFUSE_CMD
+        FAILED
+        OK
+    }
+
+    enumeration payload_state
+    {
+        NOT_INIT,
+        STOPPED,
+        STARTED,
+        STARTING,
+        STOPPING,
+        ERROR
+    }
+    
+    enumeration stop_mode
+    {
+        NORMAL = 0,
+        EMERGENCY = 0xFF
+    }
+
+    struct payload_info
+    {
+        payload_state pl_state
+        UInt32 last_error_code
+    }
+
+    <** @description: Start payload
+        @details: id = 0x00000000
+    **>
+    method startPayload
+    {
+        in
+        {
+            UInt8 payload_id
+            UInt16 adcs_prep_time
+            UInt8 cntrl_mode
+        }
+        out
+        {
+            payload_op_result op_result
+        }
+    }
+
+    <** @description: Stop payload
+        @details: id = 0x00000001
+    **>
+    method stopPayload
+    {
+        in
+        {
+            UInt8 payload_id
+            stop_mode req_stop_mode
+        }
+        out
+        {
+            payload_op_result op_result
+        }
+    }
+
+    <** @description: Get payload information
+        @details: id = 0x00000002
+    **>
+    method getPayloadInfo
+    {
+        in
+        {
+            UInt8 payload_id
+        }
+        out
+        {
+            payload_info info
+        }
+    }
+}

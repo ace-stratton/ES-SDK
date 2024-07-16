@@ -1,0 +1,66 @@
+package endurosat.pf
+
+<** @description: Non-volatile memory services
+    @details: id = 259
+**>
+
+interface nvm
+{
+    version { major 0 minor 1 }
+
+    enumeration StandardResult
+    {
+        SUCCESS
+        ERROR
+        INVALID_ARGS
+        NOT_SUPPORTED
+    }
+
+    enumeration BlockId
+    {
+        BOOTLAYOUTVERSION
+        BOOTDATA
+        MODULEID
+        MACCONFIG
+        RESERVED
+        BEACONS_GENERAL
+        BEACONS_PRESETS
+        BLOCK_CONOPS_CONFIG
+        BLOCK_CONOPS_IDLE_CONFIG
+        TELEMETRY_GENERAL
+        TELEMETRY_PRESETS
+        TELEMETRY_FILE_CFG
+        EPS_M_CONFIG
+        CUBEADCS_ERR_HANDL_CONFIG
+        CUBEADCS_STATUS
+        I2C_CONFIG
+        CUBEADCS_ANGLE_LIMITS
+        ES_ADCS_CONFIG
+        COORDINATE_FRAMES
+        SDS_READ_FREQ_CFG
+        CRYPTO_CFG
+        CUBEADCS_SIMULATION_MODE
+        RTC_CALIB_DATA
+        GYROSCOPE_CONFIG
+        FF_STATS
+        CUBEADCS_SYS_STATE_CFG
+        MAC_ADDRESS_BOOK
+    }
+
+    <** @description: Restore NVM defaults from FLASH
+      @details: id = 0x000000
+    **>
+    method restore_defaults
+    {
+        in
+        {
+            <** @description: ID of the NVM block to restore defaults to **>
+            BlockId block_id
+        }
+        out
+        {
+            StandardResult op_result
+        }
+    }
+
+}

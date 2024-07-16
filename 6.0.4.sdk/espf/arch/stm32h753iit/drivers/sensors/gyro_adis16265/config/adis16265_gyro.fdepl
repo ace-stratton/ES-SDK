@@ -1,0 +1,7 @@
+package org.endurosat.deploy
+
+import "../../../../../../core/fidl/spec/PlatformSpec.fdepl"
+
+import "../../../../../../core/fidl/obc/fp/obc_adis16265_gyro.fidl"
+
+define org.endurosat.spec.PlatformSpec for interface endurosat.macif.obc_adis16265_gyro	{ IsClient = false }

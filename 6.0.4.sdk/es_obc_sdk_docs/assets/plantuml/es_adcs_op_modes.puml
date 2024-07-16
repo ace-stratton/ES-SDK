@@ -1,0 +1,15 @@
+@startuml
+title <b>es_adcs_op_modes_sm
+[*] --> ADCS_NOT_INIT
+state ADCS_RUN
+state ADCS_TRIGGER
+state ADCS_IDLE
+state ADCS_NOT_INIT
+
+ADCS_RUN --> ADCS_IDLE: <b>run_to_idle</b> \n/ prepare_idle_mode
+ADCS_RUN --> ADCS_TRIGGER: <b>run_to_trigger</b> \n/ prepare_trigger_mode
+ADCS_TRIGGER --> ADCS_IDLE: <b>trigger_to_idle</b> \n/ prepare_idle_mode
+ADCS_IDLE --> ADCS_RUN: <b>idle_to_run</b> \n/ prepare_run_mode
+ADCS_IDLE --> ADCS_TRIGGER: <b>idle_to_trigger</b> \n/ prepare_trigger_mode
+ADCS_NOT_INIT --> ADCS_IDLE: <b>start</b> \n
+@enduml

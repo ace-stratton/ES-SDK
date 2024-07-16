@@ -1,0 +1,56 @@
+---
+beacons_sm:
+    states:
+        - Not_Init:
+            transitions:
+                - Init:
+                    - { event: init }
+            attributes:
+               on_entry: False
+               on_exit: False
+               
+        - Init:
+            transitions:
+               - Started:
+                  - { event: start }
+               - "__self":
+                  - { event: "__periodic", action: reload_config }
+            attributes:
+               on_exit: False
+               
+        - Started:
+           transitions:
+              - Stopped:
+                 - { event: stop, guard: can_stop_operation }
+           states:
+              - Beacon_Wait_Time:
+                 transitions:
+                    - Beacon_Transmission:
+                       - { event: "__periodic", guard: is_beacon_time_expired, action: start_beacon_burst }
+                 attributes:
+                     on_exit: False
+                     
+              - Beacon_Transmission:
+                 transitions:
+                    - Beacon_Wait_Time:
+                       - { event: "__periodic", guard: all_beacons_transmitted, action: reset_send_state }
+                    - Beacon_Wait_Time:
+                       - { event: "__periodic", guard: is_sink_timeout_expired, action: log_sink_timeout_error }
+                    - "__self":
+                       - { event: "__periodic", guard: can_continue_transmission, action: send_beacon }
+                 attributes:
+                    on_entry: False
+                    on_exit: False
+                     
+           attributes:
+              initial: Beacon_Wait_Time
+        - Stopped:
+           transitions:
+              - Started:
+                 - { event: start }
+              - "__self":
+                 - { event: "__periodic", action: reload_config }
+           attributes:
+              on_exit: False
+    attributes:
+        initial: Not_Init

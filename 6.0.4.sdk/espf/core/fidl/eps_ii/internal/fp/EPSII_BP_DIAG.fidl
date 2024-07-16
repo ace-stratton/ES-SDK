@@ -1,0 +1,521 @@
+package endurosat.macif
+
+<** 
+	@description: EnduroSat EPSII BP Diag
+    @details: id = 0x16
+**>
+interface EPSII_BP_DIAG
+{ 
+	// This protocol version
+    version { major 2 minor 0 }
+
+// ============================================================================================
+// Global types - TODO: Export in separate fidl, included here and there
+// ============================================================================================
+
+    <** @description: Units are signed mA, mV, mC, mT etc
+    @details: size = 4 **>
+    enumeration EPSIIT_ReservedValues
+    {
+        <** @description: Use if(VAL > ESEPSIISSV) then error or unknown value **>
+        ESEPSIISSVBP_MAX_VAL                        = 0x7FFFFFF0
+        ESEPSIISSVBP_UNKNOWN_VAL                    = 0x7FFFFFFF
+        ESEPSIISSVBP_ERROR_VAL                      = 0x7FFFFFFE
+    }
+
+    <** @description: Telemetry sensors IDs
+    @details: size = 2 **>
+    enumeration EPSIIT_SensorIDs
+    {
+        <** @description: Ignore **>
+        EPSIIT_NULL_ID                            = 0
+
+        // @description: U/I/P Measurement at battery input/output **>
+        <** @description: Current from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_I_ID                    = 1
+        <** @description: Voltage from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_U_ID                    = 2
+        <** @description: Power from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_P_ID                    = 3
+        <** @description: Temperature from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_T_ID                    = 4
+
+        <** @description: Current from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_I_ID                    = 5
+        <** @description: Voltage from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_U_ID                    = 6
+        <** @description: Power from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_P_ID                    = 7
+        <** @description: Temperature from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_T_ID                    = 8
+
+        // @description: Balancer
+        <** @description: Battery voltage measured by balancer chip **>    
+        EPSIIT_BALANCER1_BAT_U_ID                    = 9
+        <** @description: Battery current measured by balancer chip **>    
+        EPSIIT_BALANCER1_BAT_I_ID                    = 10
+        <** @description: Battery power, calculated from balancer I  U **>
+        EPSIIT_BALANCER1_BAT_P_ID                    = 11
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_1_U_ID                = 12
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_2_U_ID                = 13
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_3_U_ID                = 14
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_4_U_ID                = 15
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_5_U_ID                = 16
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_6_U_ID                = 17
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_7_U_ID                = 18
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_8_U_ID                = 19
+        <** @description: Battery cells voltages sum **>                     
+        EPSIIT_BALANCER1_BAT_SUM_CELL_U_ID            = 20
+        <** @description: Balancer internal temperature **>
+        EPSIIT_BALANCER1_INT_TEMP_ID                    = 21
+        <** @description: Balancer status register 0 **>                     
+        EPSIIT_BALANCER1_STATUS0_ID                         = 22
+        <** @description: Balancer status register 1 **>    
+        EPSIIT_BALANCER1_STATUS1_ID                            = 23
+        <** @description: Balancer status register 2 **>    
+        EPSIIT_BALANCER1_STATUS2_ID                            = 24
+        <** @description: Balancer status register 3 **>    
+        EPSIIT_BALANCER1_STATUS3_ID                            = 25
+        <** @description: Balancer control register 0 **>    
+        EPSIIT_BALANCER1_CONTROL0_ID                            = 26
+        <** @description: Balancer control register 1 **>
+        EPSIIT_BALANCER1_CONTROL1_ID                            = 27
+        <** @description: Balancer control register 2 **>
+        EPSIIT_BALANCER1_CONTROL2_ID                            = 28
+        <** @description: Balancer control register 3 **>
+        EPSIIT_BALANCER1_CONTROL3_ID                            = 29
+        <** @description: reserved 0 **>
+        EPSIIT_RESERVED_0_ID                                    = 30
+        <** @description: reserved 1 **>
+        EPSIIT_RESERVED_1_ID                                    = 31
+        <** @description: reserved 2 **>
+        EPSIIT_RESERVED_2_ID                                    = 32
+        <** @description: reserved 3 **>                     
+        EPSIIT_RESERVED_3_ID                                    = 33
+        <** @description: reserved 4 **>                 
+        EPSIIT_RESERVED_4_ID                                    = 34
+
+        // @description: Charger IN Ch.X Primary
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_XP_STAT_CHARGER_ID                = 35
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_XP_STAT_SYSTEM_ID                = 36
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_XP_STAT_SUPPLY_ID                = 37
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_XP_STAT_CHRG_FAULTS_ID            = 38
+        <** @description: Measured at the TEMPSENSE pin **>                    
+        EPSIIT_CHRG_XP_TELE_TBAT_ID                    = 39
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_XP_TELE_POUT_ID                    = 40
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_XP_TELE_PIN_ID                    = 41
+        <** @description: Calculated charger power efficiency **>                        
+        EPSIIT_CHRG_XP_TELE_EFF_ID                    = 42
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_XP_TELE_IOUT_ID                    = 43
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_XP_TELE_IIN_ID                    = 44
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_XP_TELE_VBAT_ID                    = 45
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_XP_TELE_VIN_ID                    = 46
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_XP_TELE_VINR_ID                    = 47
+
+        // @description: Charger IN Ch.X Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_XR_STAT_CHARGER_ID                = 48
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_XR_STAT_SYSTEM_ID                = 49
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_XR_STAT_SUPPLY_ID                = 50
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_XR_STAT_CHRG_FAULTS_ID            = 51
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_XR_TELE_TBAT_ID                    = 52
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_XR_TELE_POUT_ID                    = 53
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_XR_TELE_PIN_ID                    = 54
+        <** @description: Calculated charger power efficiency **>    
+        EPSIIT_CHRG_XR_TELE_EFF_ID                    = 55
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_XR_TELE_IOUT_ID                    = 56
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_XR_TELE_IIN_ID                    = 57
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_XR_TELE_VBAT_ID                    = 58
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_XR_TELE_VIN_ID                    = 59
+        <** @description: Solar panels voltage input (VINR pin) **>    
+        EPSIIT_CHRG_XR_TELE_VINR_ID                    = 60
+
+        // @description: Charger IN Ch.Y Primary
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_YP_STAT_CHARGER_ID                = 61
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_YP_STAT_SYSTEM_ID                = 62
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_YP_STAT_SUPPLY_ID                = 63
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_YP_STAT_CHRG_FAULTS_ID            = 64
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_YP_TELE_TBAT_ID                    = 65
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_YP_TELE_POUT_ID                    = 66
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_YP_TELE_PIN_ID                    = 67
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_YP_TELE_EFF_ID                    = 68
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_YP_TELE_IOUT_ID                    = 69
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_YP_TELE_IIN_ID                    = 70
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_YP_TELE_VBAT_ID                    = 71
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_YP_TELE_VIN_ID                    = 72
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_YP_TELE_VINR_ID                    = 73
+
+        // Charger IN Ch.Y Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_YR_STAT_CHARGER_ID                        = 74
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_YR_STAT_SYSTEM_ID                        = 75
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_YR_STAT_SUPPLY_ID                        = 76
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_YR_STAT_CHRG_FAULTS_ID                    = 77
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_YR_TELE_TBAT_ID                            = 78
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_YR_TELE_POUT_ID                            = 79
+        <** @description: Calculated power drawn from the charger’s supply **>  
+        EPSIIT_CHRG_YR_TELE_PIN_ID                            = 80
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_YR_TELE_EFF_ID                            = 81
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_YR_TELE_IOUT_ID                            = 82
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_YR_TELE_IIN_ID                            = 83
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_YR_TELE_VBAT_ID                            = 84
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_YR_TELE_VIN_ID                            = 85
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_YR_TELE_VINR_ID                            = 86
+
+        // Charger IN Ch.Z Primary
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_ZP_STAT_CHARGER_ID                        = 87
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_ZP_STAT_SYSTEM_ID                        = 88
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_ZP_STAT_SUPPLY_ID                        = 89
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_ZP_STAT_CHRG_FAULTS_ID                    = 90
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_ZP_TELE_TBAT_ID                            = 91
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_ZP_TELE_POUT_ID                            = 92
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_ZP_TELE_PIN_ID                            = 93
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_ZP_TELE_EFF_ID                            = 94
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_ZP_TELE_IOUT_ID                            = 95
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_ZP_TELE_IIN_ID                            = 96
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_ZP_TELE_VBAT_ID                            = 97
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_ZP_TELE_VIN_ID                            = 98
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_ZP_TELE_VINR_ID                            = 99
+        
+        // Charger IN Ch.Z Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_ZR_STAT_CHARGER_ID                        = 100
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_ZR_STAT_SYSTEM_ID                        = 101
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_ZR_STAT_SUPPLY_ID                        = 102
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_ZR_STAT_CHRG_FAULTS_ID                    = 103
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_ZR_TELE_TBAT_ID                            = 104
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_ZR_TELE_POUT_ID                            = 105
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_ZR_TELE_PIN_ID                            = 106
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_ZR_TELE_EFF_ID                            = 107
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_ZR_TELE_IOUT_ID                            = 108
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_ZR_TELE_IIN_ID                            = 109
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_ZR_TELE_VBAT_ID                            = 110
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_ZR_TELE_VIN_ID                            = 111
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_ZR_TELE_VINR_ID                            = 112
+        
+        <** @description: PCB Temp, from TMP117 chip 1**>
+        EPSIIT_BP_TEMPERATURE_PCB_1_ID                        = 113
+        <** @description: PCB Temp, from TMP117 chip 2**>
+        EPSIIT_BP_TEMPERATURE_PCB_2_ID                        = 114
+        
+        // ADC channels
+        <** @description: CPU internal temperature **>
+        EPSIIT_ADC_CPU_T_ID                                    = 115
+        <** @description: Processor AVCC voltage **>
+        EPSIIT_ADC_CPU_AVCC_U_ID                            = 116
+        <** @description: Battery pack case temperature 1 **>
+        EPSIIT_ADC_BAT_TEMP_NTC1_ID                            = 117
+        <** @description: Battery pack case temperature 2 **>
+        EPSIIT_ADC_BAT_TEMP_NTC2_ID                            = 118
+        <** @description: Radiation measurement **>
+        EPSIIT_ADC_RAD_FED_ID                                = 119
+        
+        <** @description: Heater percent **>
+        EPSIIT_HEATER_PWM_PERCENT_ID                        = 120
+        <** @description: Current targeted temperature **>
+        EPSIIT_HEATER_TARGET_TEMP_ID                        = 121
+        
+        <** @description: Battery charge in mW/h **>
+        EPSIIT_BAT_CHARGE_WH_ID                                = 122
+    }
+
+
+<** @description: Telemetry sensors IDs
+	@details: size = 2 **>
+    enumeration ESEPSII_BP_DiagResults
+    {
+    	<** @description: Ignore **>
+	    DIAG_RESULT_OK = 0
+	    <** @description: Diagnostic not active. **>
+    	DIAG_RESULT_DIAG_NOT_ACTIVE = 1
+    	<** @description: Configuration for specific sensor not active. **> 
+        DIAG_RESULT_DIAG_CONF_NOT_ACTIVE_FOR_SENSOR = 2
+    	<** @description: FAILED because of unkown reason. **> 
+        DIAG_RESULT_FAIL = 3
+    }
+    
+
+// ============================================================================================
+// Get RAW Sensor values
+// ============================================================================================
+
+    <** 
+        @description: Activate diagnostic. When diagnostic is activated the update of the sensor values stops and it is possible only by by diagnostic requests.
+		@details: id = 1 
+	**>
+	method DiagActivate
+	{
+	}
+	
+    <** 
+        @description: Deactivate the diagnostic. Once the diagnostic is deactivated the updates from diagnostic request is stopped and values are taken from the sensors again.
+		@details: id = 2 
+	**>
+	method DiagDeactivate
+	{
+	}
+	
+    <** 
+        @description: Check if diagnsotic is active or not.
+		@details: id = 3 
+	**>
+	method IsDiagActive
+	{
+		out
+		{
+			<** @description: Returns true in case diagnostic is activated
+                  **>
+		     Boolean result
+		}
+	}
+
+    <** 
+        @description: Set sensor values by ID.
+		@details: id = 4 
+	**>
+	method DiagSetSensorValue
+	{
+		in
+		{     
+			<** @description: IDs of sensors to set
+                  **>
+			EPSIIT_SensorIDs SensorsIDs
+			
+			<** @description: sensor value to be written
+                  **>
+			Int32 SensorValue				
+		}
+
+		out
+		{
+			<** @description: Returns true in case writing is successful
+                  **>
+		     ESEPSII_BP_DiagResults result
+		}
+	}
+	
+
+    <** 
+        @description: Set sensor values by ID.
+		@details: id = 5 
+	**>
+	method DiagGetSensorValue
+	{
+		in
+		{     
+			<** @description: IDs of sensors to set
+                  **>
+			EPSIIT_SensorIDs SensorsIDs
+		}
+
+		out
+		{
+			<** @description: sensor value to be written
+                  **>
+			Int32 SensorValue				
+		}
+	
+	}
+
+	<** 
+		@description: Configure which sensors are in diagnostic mode
+		@details: id = 6
+		**>
+	method SetDiagConfiguration
+	{
+		in
+		{
+			<** @description: Set to activate diagnostics on INA_BAT_OUT_1
+				**>
+			Boolean INA_BAT_OUT_1
+			<** @description: Set to activate diagnostics on INA_BAT_OUT_2
+				**>
+			Boolean INA_BAT_OUT_2
+			<** @description: Set to activate diagnostics on BALANCER1
+				**>
+			Boolean BALANCER1
+			<** @description: Set to activate diagnostics on CHRG_XP
+				**>
+			Boolean CHRG_XP
+			<** @description: Set to activate diagnostics on CHRG_XR
+				**>
+			Boolean CHRG_XR
+			<** @description: Set to activate diagnostics on CHRG_YP
+				**>
+			Boolean CHRG_YP
+			<** @description: Set to activate diagnostics on CHRG_YR
+				**>
+			Boolean CHRG_YR
+			<** @description: Set to activate diagnostics on CHRG_ZP
+				**>
+			Boolean CHRG_ZP
+			<** @description: Set to activate diagnostics on CHRG_ZR
+				**>
+			Boolean CHRG_ZR
+			<** @description: Set to activate diagnostics on BP_TEMPERATURE_PCB
+				**>
+			Boolean BP_TEMPERATURE_PCB
+			<** @description: Set to activate diagnostics on ADC_CPU
+				**>
+			Boolean ADC_CPU
+			<** @description: Set to activate diagnostics on ADC_BAT
+				**>
+			Boolean ADC_BAT
+			<** @description: Set to activate diagnostics on ADC_RAD_FED
+				**>
+			Boolean ADC_RAD_FED
+			<** @description: Set to activate diagnostics on HEATER
+				**>
+			Boolean HEATER
+			<** @description: Set to activate diagnostics on BAT_CHARGE_WH_ID
+				**>
+			Boolean BAT_CHARGE_WH_ID
+		}
+		out
+		{
+			<** @description: Result of the operation
+				**>
+			ESEPSII_BP_DiagResults result
+		}
+	}
+	
+	<** 
+		@description: Configure which sensors are in diagnostic mode
+		@details: id = 7
+		**>
+	method GetDiagConfiguration
+	{
+		out
+		{
+			<** @description: True in case diagnostic active for sensor:  INA_BAT_OUT_1
+				**>
+			Boolean INA_BAT_OUT_1
+			<** @description: True in case diagnostic active for sensor:  INA_BAT_OUT_2
+				**>
+			Boolean INA_BAT_OUT_2
+			<** @description: True in case diagnostic active for sensor:  BALANCER1
+				**>
+			Boolean BALANCER1
+			<** @description: True in case diagnostic active for sensor:  CHRG_XP
+				**>
+			Boolean CHRG_XP
+			<** @description: True in case diagnostic active for sensor:  CHRG_XR
+				**>
+			Boolean CHRG_XR
+			<** @description: True in case diagnostic active for sensor:  CHRG_YP
+				**>
+			Boolean CHRG_YP
+			<** @description: True in case diagnostic active for sensor:  CHRG_YR
+				**>
+			Boolean CHRG_YR
+			<** @description: True in case diagnostic active for sensor:  CHRG_ZP
+				**>
+			Boolean CHRG_ZP
+			<** @description: True in case diagnostic active for sensor:  CHRG_ZR
+				**>
+			Boolean CHRG_ZR
+			<** @description: True in case diagnostic active for sensor:  BP_TEMPERATURE_PCB
+				**>
+			Boolean BP_TEMPERATURE_PCB
+			<** @description: True in case diagnostic active for sensor:  ADC_CPU
+				**>
+			Boolean ADC_CPU
+			<** @description: True in case diagnostic active for sensor:  ADC_BAT
+				**>
+			Boolean ADC_BAT
+			<** @description: True in case diagnostic active for sensor:  ADC_RAD_FED
+				**>
+			Boolean ADC_RAD_FED
+			<** @description: True in case diagnostic active for sensor:  HEATER
+				**>
+			Boolean HEATER
+			<** @description: True in case diagnostic active for sensor:  BAT_CHARGE_WH_ID
+				**>
+			Boolean BAT_CHARGE_WH_ID
+		}
+	}
+	
+
+// ============================================================================================
+// END
+// ============================================================================================
+   
+}

@@ -1,0 +1,162 @@
+package endurosat.macif
+
+<** @description: Intersat communication module as part of the Onboard Computer 
+    @details: id = 66 
+**>
+interface OBC_INTERSAT
+{
+	version {
+		major 0
+		minor 1
+	}
+
+
+    enumeration StandardResult
+    {
+    	SUCCESS,
+    	ERROR,
+    	DISABLED = 0xFE	
+    }
+    
+	enumeration State
+	{
+		NOT_INIT,
+		IDLE,
+		RUN,
+		STOPPED
+	}
+	
+	enumeration Error 
+	{
+    	NONE,
+    	FILENAME_NOT_EXIST,
+    	FILENAME_NULL,
+    	SD_CARD_OPEN,
+    	SD_CARD_READ,
+    	SD_CARD_CLOSE,
+    	SD_CARD_PARSE_CHASER,
+    	SD_CARD_PARSE_TARGET,
+    	SGP4_PARSE_TLE_CHASER,
+    	SGP4_PROP_TLE_CHASER,
+    	SGP4_PARSE_TLE_TARGET,
+    	SGP4_PROP_TLE_TARGET,
+    	RTC,
+    	DEFAULT_STATE,
+    	GENERAL
+	}
+	
+	struct vec_3d 
+	{
+		Double X
+		Double Y
+		Double Z
+	}
+	
+	struct Status
+	{
+		State STATE
+		Error lastError
+	}
+	
+	struct Offset_angles 
+	{
+		Int16 roll
+		Int16 pitch
+		Int16 yaw
+	}
+	
+    struct Offset_angles_true 
+    {
+        Double roll
+        Double pitch
+        Double yaw
+    }
+    
+	<**
+		@description: Start the intersat module. Requires a valid path to file on SD card. Example: "IS_TLEs.txt" - the quotes are neccessary.
+		Make sure that the file name is shorter than 8 characters (without the .txt).
+		@details: id = 0x00000001, esttc_id = X 
+	**>
+	method Start 
+	{
+		in 
+		{
+		    <** @description: Payload arguments
+            @details: size = 20 **>
+            UInt8[] file_name
+		}
+		
+		out
+		{
+			StandardResult opResult
+		}
+	}
+	
+	<**
+		@description: Stop the intersat module. State will be IDLE if no errors are present, otherwise it will be STOPPED.
+		@details: id = 0x00000002, esttc_id = X 
+	**>
+	method Stop 
+	{	
+		out
+		{
+			StandardResult opResult
+		}
+	}
+	
+	<**
+		@description: Return the status of the intersat submodule.
+		@details: id = 0x00000003, esttc_id = X 
+	**>
+	method Get_status
+	{	
+		out
+		{
+			Status Status 
+		}
+	}
+	
+	<**
+		@description: Return calculated angles by the intersat submodule. Angles is in CubeADCS format. EulerAngles is in degrees.
+		@details: id = 0x00000004, esttc_id = X 
+	**>
+	method Get_angles
+	{	
+		out
+		{
+			Offset_angles Angles
+			Offset_angles_true EulerAngles
+		}
+	}
+	
+	<**
+		@description: Set the desired pointing vector for the intersat. Example values are (1, 0, 0), (0, 1, 0) or (0, 0, 1).
+		@details: id = 0x00000005, esttc_id = X 
+	**>
+	method Set_pointing_vector
+	{	
+		in
+		{
+			vec_3d DesiredVector
+		}
+		
+		out
+		{
+			StandardResult opResult
+		}
+	}
+
+	<**
+		@description: Returns the current satellite pointing vector.
+		@details: id = 0x00000006, esttc_id = X 
+	**>
+	method Get_pointing_vector
+	{	
+		out
+		{
+			vec_3d CurrentVector
+		}
+	}
+	
+	
+}

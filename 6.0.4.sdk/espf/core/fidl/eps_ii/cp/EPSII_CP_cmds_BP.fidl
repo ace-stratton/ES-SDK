@@ -1,0 +1,2040 @@
+package endurosat.macif
+
+<** 
+    @description: EnduroSat EPSII BP
+    @details: id = 0x15
+**>
+
+interface EPSII_CP_cmds_BP
+{
+    // This protocol version
+    version { major 1 minor 0 }
+
+// ============================================================================================
+// Global types - TODO: Export in separate fidl, included here and there
+// ============================================================================================
+
+    <** @description: Units are signed mA, mV, mC, mT, etc.
+    @details: size = 4 **>
+    enumeration EPSIIT_ReservedValues
+    {
+        <** @description: Use if(VAL > ESEPSIISSV) then error or unknown value **>
+        ESEPSIISSVBP_MAX_VAL                        = 0x7FFFFFF0
+        ESEPSIISSVBP_UNKNOWN_VAL                    = 0x7FFFFFFF
+        ESEPSIISSVBP_ERROR_VAL                      = 0x7FFFFFFE
+    }
+
+    <** @description: Telemetry sensors IDs
+    @details: size = 2 **>
+      enumeration EPSIIT_SensorIDs
+    {
+        <** @description: Ignore **>
+        EPSIIT_NULL_ID                            = 0
+
+        // @description: U/I/P Measurement at battery input/output **>
+        <** @description: Current from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_I_ID                    = 1
+        <** @description: Voltage from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_U_ID                    = 2
+        <** @description: Power from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_P_ID                    = 3
+        <** @description: Temperature from Power monitor 1 **>
+        EPSIIT_INA_BAT_OUT_1_T_ID                    = 4
+
+        <** @description: Current from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_I_ID                    = 5
+        <** @description: Voltage from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_U_ID                    = 6
+        <** @description: Power from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_P_ID                    = 7
+        <** @description: Temperature from Power monitor 2 **>
+        EPSIIT_INA_BAT_OUT_2_T_ID                    = 8
+
+        // @description: Balancer
+        <** @description: Battery voltage measured by balancer chip **>    
+        EPSIIT_BALANCER1_BAT_U_ID                    = 9
+        <** @description: Battery current measured by balancer chip **>    
+        EPSIIT_BALANCER1_BAT_I_ID                    = 10
+        <** @description: Battery power, calculated from balancer I  U **>
+        EPSIIT_BALANCER1_BAT_P_ID                    = 11
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_1_U_ID                = 12
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_2_U_ID                = 13
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_3_U_ID                = 14
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_4_U_ID                = 15
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_5_U_ID                = 16
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_6_U_ID                = 17
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_7_U_ID                = 18
+        <** @description: Battery cell voltage measured by balancer chip **>
+        EPSIIT_BALANCER1_BAT_CELL_8_U_ID                = 19
+        <** @description: Battery cells voltages sum **>                     
+        EPSIIT_BALANCER1_BAT_SUM_CELL_U_ID            = 20
+        <** @description: Balancer internal temperature **>
+        EPSIIT_BALANCER1_INT_TEMP_ID                    = 21
+        <** @description: Balancer status register 0 **>                     
+        EPSIIT_BALANCER1_STATUS0_ID                         = 22
+        <** @description: Balancer status register 1 **>    
+        EPSIIT_BALANCER1_STATUS1_ID                            = 23
+        <** @description: Balancer status register 2 **>    
+        EPSIIT_BALANCER1_STATUS2_ID                            = 24
+        <** @description: Balancer status register 3 **>    
+        EPSIIT_BALANCER1_STATUS3_ID                            = 25
+        <** @description: Balancer control register 0 **>    
+        EPSIIT_BALANCER1_CONTROL0_ID                            = 26
+        <** @description: Balancer control register 1 **>
+        EPSIIT_BALANCER1_CONTROL1_ID                            = 27
+        <** @description: Balancer control register 2 **>
+        EPSIIT_BALANCER1_CONTROL2_ID                            = 28
+        <** @description: Balancer control register 3 **>
+        EPSIIT_BALANCER1_CONTROL3_ID                            = 29
+        <** @description: reserved 0 **>
+        EPSIIT_RESERVED_0_ID                                    = 30
+        <** @description: reserved 1 **>
+        EPSIIT_RESERVED_1_ID                                    = 31
+        <** @description: reserved 2 **>
+        EPSIIT_RESERVED_2_ID                                    = 32
+        <** @description: reserved 3 **>                     
+        EPSIIT_RESERVED_3_ID                                    = 33
+        <** @description: reserved 4 **>                 
+        EPSIIT_RESERVED_4_ID                                    = 34
+
+        // @description: Charger IN Ch.X Primary
+        <** @description: STAT_CHARGER Register **>                         
+        EPSIIT_CHRG_XP_STAT_CHARGER_ID                = 35
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_XP_STAT_SYSTEM_ID                = 36
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_XP_STAT_SUPPLY_ID                = 37
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_XP_STAT_CHRG_FAULTS_ID            = 38
+        <** @description: Measured at the TEMPSENSE pin **>                    
+        EPSIIT_CHRG_XP_TELE_TBAT_ID                    = 39
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_XP_TELE_POUT_ID                    = 40
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_XP_TELE_PIN_ID                    = 41
+        <** @description: Calculated charger power efficiency **>                        
+        EPSIIT_CHRG_XP_TELE_EFF_ID                    = 42
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_XP_TELE_IOUT_ID                    = 43
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_XP_TELE_IIN_ID                    = 44
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_XP_TELE_VBAT_ID                    = 45
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_XP_TELE_VIN_ID                    = 46
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_XP_TELE_VINR_ID                    = 47
+
+        // @description: Charger IN Ch.X Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_XR_STAT_CHARGER_ID                = 48
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_XR_STAT_SYSTEM_ID                = 49
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_XR_STAT_SUPPLY_ID                = 50
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_XR_STAT_CHRG_FAULTS_ID            = 51
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_XR_TELE_TBAT_ID                    = 52
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_XR_TELE_POUT_ID                    = 53
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_XR_TELE_PIN_ID                    = 54
+        <** @description: Calculated charger power efficiency **>    
+        EPSIIT_CHRG_XR_TELE_EFF_ID                    = 55
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_XR_TELE_IOUT_ID                    = 56
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_XR_TELE_IIN_ID                    = 57
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_XR_TELE_VBAT_ID                    = 58
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_XR_TELE_VIN_ID                    = 59
+        <** @description: Solar panels voltage input (VINR pin) **>    
+        EPSIIT_CHRG_XR_TELE_VINR_ID                    = 60
+
+        // @description: Charger IN Ch.Y Primary
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_YP_STAT_CHARGER_ID                = 61
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_YP_STAT_SYSTEM_ID                = 62
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_YP_STAT_SUPPLY_ID                = 63
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_YP_STAT_CHRG_FAULTS_ID            = 64
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_YP_TELE_TBAT_ID                    = 65
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_YP_TELE_POUT_ID                    = 66
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_YP_TELE_PIN_ID                    = 67
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_YP_TELE_EFF_ID                    = 68
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_YP_TELE_IOUT_ID                    = 69
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_YP_TELE_IIN_ID                    = 70
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_YP_TELE_VBAT_ID                    = 71
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_YP_TELE_VIN_ID                    = 72
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_YP_TELE_VINR_ID                    = 73
+
+        // Charger IN Ch.Y Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_YR_STAT_CHARGER_ID                        = 74
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_YR_STAT_SYSTEM_ID                        = 75
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_YR_STAT_SUPPLY_ID                        = 76
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_YR_STAT_CHRG_FAULTS_ID                    = 77
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_YR_TELE_TBAT_ID                            = 78
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_YR_TELE_POUT_ID                            = 79
+        <** @description: Calculated power drawn from the charger’s supply **>  
+        EPSIIT_CHRG_YR_TELE_PIN_ID                            = 80
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_YR_TELE_EFF_ID                            = 81
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_YR_TELE_IOUT_ID                            = 82
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_YR_TELE_IIN_ID                            = 83
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_YR_TELE_VBAT_ID                            = 84
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_YR_TELE_VIN_ID                            = 85
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_YR_TELE_VINR_ID                            = 86
+
+        // Charger IN Ch.Z Primary
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_ZP_STAT_CHARGER_ID                        = 87
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_ZP_STAT_SYSTEM_ID                        = 88
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_ZP_STAT_SUPPLY_ID                        = 89
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_ZP_STAT_CHRG_FAULTS_ID                    = 90
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_ZP_TELE_TBAT_ID                            = 91
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_ZP_TELE_POUT_ID                            = 92
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_ZP_TELE_PIN_ID                            = 93
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_ZP_TELE_EFF_ID                            = 94
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_ZP_TELE_IOUT_ID                            = 95
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_ZP_TELE_IIN_ID                            = 96
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_ZP_TELE_VBAT_ID                            = 97
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_ZP_TELE_VIN_ID                            = 98
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_ZP_TELE_VINR_ID                            = 99
+        
+        // Charger IN Ch.Z Redundant
+        <** @description: STAT_CHARGER Register **>                            
+        EPSIIT_CHRG_ZR_STAT_CHARGER_ID                        = 100
+        <** @description: STAT_SYSTEM Register **>                                
+        EPSIIT_CHRG_ZR_STAT_SYSTEM_ID                        = 101
+        <** @description: STAT_SUPPLY Register **>                                
+        EPSIIT_CHRG_ZR_STAT_SUPPLY_ID                        = 102
+        <** @description: STAT_CHRG_FAULTS Register **>                        
+        EPSIIT_CHRG_ZR_STAT_CHRG_FAULTS_ID                    = 103
+        <** @description: Measured at the TEMPSENSE pin **>                        
+        EPSIIT_CHRG_ZR_TELE_TBAT_ID                            = 104
+        <** @description: Calculated power delivered out of the charger **>    
+        EPSIIT_CHRG_ZR_TELE_POUT_ID                            = 105
+        <** @description: Calculated power drawn from the chargers supply **>    
+        EPSIIT_CHRG_ZR_TELE_PIN_ID                            = 106
+        <** @description: Calculated charger power efficiency **>
+        EPSIIT_CHRG_ZR_TELE_EFF_ID                            = 107
+        <** @description: Output current to VBAT **>                            
+        EPSIIT_CHRG_ZR_TELE_IOUT_ID                            = 108
+        <** @description: Solar panel input current **>                        
+        EPSIIT_CHRG_ZR_TELE_IIN_ID                            = 109
+        <** @description: Charger VBAT output voltage **>                        
+        EPSIIT_CHRG_ZR_TELE_VBAT_ID                            = 110
+        <** @description: Non solar panels voltage input (FBIR pin) **>        
+        EPSIIT_CHRG_ZR_TELE_VIN_ID                            = 111
+        <** @description: Solar panels voltage input (VINR pin) **>        
+        EPSIIT_CHRG_ZR_TELE_VINR_ID                            = 112
+        
+        <** @description: PCB Temp, from TMP117 chip 1**>
+        EPSIIT_BP_TEMPERATURE_PCB_1_ID                        = 113
+        <** @description: PCB Temp, from TMP117 chip 2**>
+        EPSIIT_BP_TEMPERATURE_PCB_2_ID                        = 114
+        
+        // ADC channels
+        <** @description: CPU internal temperature **>
+        EPSIIT_ADC_CPU_T_ID                                    = 115
+        <** @description: Processor AVCC voltage **>
+        EPSIIT_ADC_CPU_AVCC_U_ID                            = 116
+        <** @description: Battery pack case temperature 1 **>
+        EPSIIT_ADC_BAT_TEMP_NTC1_ID                            = 117
+        <** @description: Battery pack case temperature 2 **>
+        EPSIIT_ADC_BAT_TEMP_NTC2_ID                            = 118
+        <** @description: Radiation measurement **>
+        EPSIIT_ADC_RAD_FED_ID                                = 119
+        
+        <** @description: Heater percent **>
+        EPSIIT_HEATER_PWM_PERCENT_ID                        = 120
+        <** @description: Current targeted temperature **>
+        EPSIIT_HEATER_TARGET_TEMP_ID                        = 121
+        
+        <** @description: Battery charge in mW/h **>
+        EPSIIT_BAT_CHARGE_WH_ID                                = 122
+    }
+
+
+    /////=====================================////
+    
+    <** @description: RawSensors descriptor **>
+    struct SRawSensors
+    {
+        <** @description: EPSIIT_INA_BAT_OUT_1_I_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_1_I_ID
+        <** @description: EPSIIT_INA_BAT_OUT_1_U_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_1_U_ID
+        <** @description: EPSIIT_INA_BAT_OUT_1_P_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_1_P_ID
+        <** @description: EPSIIT_INA_BAT_OUT_1_T_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_1_T_ID
+        <** @description: EPSIIT_INA_BAT_OUT_2_I_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_2_I_ID
+        <** @description: EPSIIT_INA_BAT_OUT_2_U_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_2_U_ID
+        <** @description: EPSIIT_INA_BAT_OUT_2_P_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_2_P_ID
+        <** @description: EPSIIT_INA_BAT_OUT_2_T_ID **>
+        UInt32 EPSIIT_INA_BAT_OUT_2_T_ID
+        <** @description: EPSIIT_BALANCER1_BAT_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_I_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_I_ID
+        <** @description: EPSIIT_BALANCER1_BAT_P_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_P_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_1_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_1_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_2_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_2_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_3_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_3_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_4_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_4_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_5_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_5_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_6_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_6_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_7_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_7_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_CELL_8_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_CELL_8_U_ID
+        <** @description: EPSIIT_BALANCER1_BAT_SUM_CELL_U_ID **>
+        UInt32 EPSIIT_BALANCER1_BAT_SUM_CELL_U_ID
+        <** @description: EPSIIT_BALANCER1_INT_TEMP_ID **>
+        UInt32 EPSIIT_BALANCER1_INT_TEMP_ID
+        <** @description: EPSIIT_BALANCER1_STATUS0_ID **>
+        UInt32 EPSIIT_BALANCER1_STATUS0_ID
+        <** @description: EPSIIT_BALANCER1_STATUS1_ID **>
+        UInt32 EPSIIT_BALANCER1_STATUS1_ID
+        <** @description: EPSIIT_BALANCER1_STATUS2_ID **>
+        UInt32 EPSIIT_BALANCER1_STATUS2_ID
+        <** @description: EPSIIT_BALANCER1_STATUS3_ID **>
+        UInt32 EPSIIT_BALANCER1_STATUS3_ID
+        <** @description: EPSIIT_BALANCER1_CONTROL0_ID **>
+        UInt32 EPSIIT_BALANCER1_CONTROL0_ID
+        <** @description: EPSIIT_BALANCER1_CONTROL1_ID **>
+        UInt32 EPSIIT_BALANCER1_CONTROL1_ID
+        <** @description: EPSIIT_BALANCER1_CONTROL2_ID **>
+        UInt32 EPSIIT_BALANCER1_CONTROL2_ID
+        <** @description: EPSIIT_BALANCER1_CONTROL3_ID **>
+        UInt32 EPSIIT_BALANCER1_CONTROL3_ID
+        <** @description: EPSIIT_RESERVED_0_ID **>
+        UInt32 EPSIIT_RESERVED_0_ID
+        <** @description: EPSIIT_RESERVED_1_ID **>
+        UInt32 EPSIIT_RESERVED_1_ID
+        <** @description: EPSIIT_RESERVED_2_ID **>
+        UInt32 EPSIIT_RESERVED_2_ID
+        <** @description: EPSIIT_RESERVED_3_ID **>
+        UInt32 EPSIIT_RESERVED_3_ID
+        <** @description: EPSIIT_RESERVED_4_ID **>
+        UInt32 EPSIIT_RESERVED_4_ID
+        <** @description: EPSIIT_CHRG_XP_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_XP_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_XP_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_XP_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_XP_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_XP_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_XP_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_XP_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_XP_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_XP_TELE_VINR_ID
+        <** @description: EPSIIT_CHRG_XR_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_XR_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_XR_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_XR_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_XR_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_XR_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_XR_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_XR_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_XR_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_XR_TELE_VINR_ID
+        <** @description: EPSIIT_CHRG_YP_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_YP_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_YP_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_YP_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_YP_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_YP_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_YP_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_YP_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_YP_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_YP_TELE_VINR_ID
+        <** @description: EPSIIT_CHRG_YR_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_YR_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_YR_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_YR_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_YR_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_YR_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_YR_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_YR_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_YR_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_YR_TELE_VINR_ID
+        <** @description: EPSIIT_CHRG_ZP_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_ZP_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_ZP_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_ZP_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_ZP_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_ZP_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_ZP_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_ZP_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_ZP_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_ZP_TELE_VINR_ID
+        <** @description: EPSIIT_CHRG_ZR_STAT_CHARGER_ID **>
+        UInt32 EPSIIT_CHRG_ZR_STAT_CHARGER_ID
+        <** @description: EPSIIT_CHRG_ZR_STAT_SYSTEM_ID **>
+        UInt32 EPSIIT_CHRG_ZR_STAT_SYSTEM_ID
+        <** @description: EPSIIT_CHRG_ZR_STAT_SUPPLY_ID **>
+        UInt32 EPSIIT_CHRG_ZR_STAT_SUPPLY_ID
+        <** @description: EPSIIT_CHRG_ZR_STAT_CHRG_FAULTS_ID **>
+        UInt32 EPSIIT_CHRG_ZR_STAT_CHRG_FAULTS_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_TBAT_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_TBAT_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_POUT_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_POUT_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_PIN_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_PIN_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_EFF_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_EFF_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_IOUT_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_IOUT_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_IIN_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_IIN_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_VBAT_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_VBAT_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_VIN_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_VIN_ID
+        <** @description: EPSIIT_CHRG_ZR_TELE_VINR_ID **>
+        UInt32 EPSIIT_CHRG_ZR_TELE_VINR_ID
+        <** @description: EPSIIT_BP_TEMPERATURE_PCB_1_ID **>
+        UInt32 EPSIIT_BP_TEMPERATURE_PCB_1_ID
+        <** @description: EPSIIT_BP_TEMPERATURE_PCB_2_ID **>
+        UInt32 EPSIIT_BP_TEMPERATURE_PCB_2_ID
+        <** @description: EPSIIT_ADC_CPU_T_ID **>
+        UInt32 EPSIIT_ADC_CPU_T_ID
+        <** @description: EPSIIT_ADC_CPU_AVCC_U_ID **>
+        UInt32 EPSIIT_ADC_CPU_AVCC_U_ID
+        <** @description: EPSIIT_ADC_BAT_TEMP_NTC1_ID **>
+        UInt32 EPSIIT_ADC_BAT_TEMP_NTC1_ID
+        <** @description: EPSIIT_ADC_BAT_TEMP_NTC2_ID **>
+        UInt32 EPSIIT_ADC_BAT_TEMP_NTC2_ID
+        <** @description: EPSIIT_ADC_RAD_FED_ID **>
+        UInt32 EPSIIT_ADC_RAD_FED_ID
+        <** @description: EPSIIT_HEATER_PWM_PERCENT_ID **>
+        UInt32 EPSIIT_HEATER_PWM_PERCENT_ID
+        <** @description: EPSIIT_HEATER_TARGET_TEMP_ID **>
+        UInt32 EPSIIT_HEATER_TARGET_TEMP_ID
+        <** @description: EPSIIT_BAT_CHARGE_WH_ID **>
+        UInt32 EPSIIT_BAT_CHARGE_WH_ID
+    }
+    
+    <** @description: Exception descriptor **>
+    struct SDiagException
+    {
+        <** @description: Exception identificator. All BP/PDM exception identificators are 0 **>
+        UInt16 m_nID
+        <** @description: File identificator where exception occurred **>
+        UInt16 m_nFileID
+        <** @description: Line number where exception occurred **>
+        UInt16 m_nLineNum
+    } 
+    
+    <** @description: Structure of all exception data **>
+    struct SDiagExceptions
+    {
+        <** @description: Version of this structure, currently = 0x1000 **>
+        UInt16 m_nVersion
+        <** @description: Returned exceptions count in the Exceptions array **>
+        UInt16 m_nCount
+        <** @description: Array with exceptions. Up to 16 exceptions can be returned, actual count is in the Count field
+                    @details: size = 16 **>
+        SDiagException[] m_exception
+    } 
+
+    <** 
+    @description: Gets the last X critical exceptions that have occurred in the BasicApp since the ResetBasicAppExceptions command
+    @details: id = 1001
+    **>
+    method GetBasicAppExceptions //enum EDiagFileIDs
+    {
+        out 
+        {
+            <** @description: Get last 16 ASSERT fails **>
+            SDiagExceptions exceptions
+        }
+    }
+    
+
+    
+    <** @description: Error Counter structure **>
+    struct SDiagErrCounter
+    {
+        <** @description: position in array **>
+        UInt16 position_0
+        <** @description: NULL ID, not returned by command **>
+        UInt16 EDC_NONE 
+        <** @description: position in array **>
+        UInt16 position_1
+        <** @description: External oscillator single failure event **>
+        UInt16 EDC_OSC_EXT_SINGLE_FAILED_CNTR 
+        <** @description: position in array **>
+        UInt16 position_2
+        <** @description: External oscillator permanent failure event (after X single failures) **>
+        UInt16 EDC_OSC_EXT_PERMANENT_FAILED_CNTR 
+        <** @description: position in array **>
+        UInt16 position_3
+        <** @description: Low Frequency oscillator failures and run on backup one **>
+        UInt16 EDC_LF_OSC_BACKUP_CNTR 
+        <** @description: position in array **>
+        UInt16 position_4
+        <** @description: FRAM Access Time Error **>
+        UInt16 EDC_SYSSNIV__ACCTEIFG 
+        <** @description: position in array **>
+        UInt16 position_5
+        <** @description: MPUSEGPIFG encapsulated IP memory segment violation **>
+        UInt16 EDC_SYSSNIV__MPUSEGPIFG 
+        <** @description: position in array **>
+        UInt16 position_6
+        <** @description: MPUSEGIIFG information memory segment violation **>
+        UInt16 EDC_SYSSNIV__MPUSEGIIFG 
+        <** @description: position in array **>
+        UInt16 position_7
+        <** @description: MPUSEG1IFG segment 1 memory violation **>
+        UInt16 EDC_SYSSNIV__MPUSEG1IFG 
+        <** @description: position in array **>
+        UInt16 position_8
+        <** @description: MPUSEG1IFG segment 2 memory violation **>
+        UInt16 EDC_SYSSNIV__MPUSEG2IFG 
+        <** @description: position in array **>
+        UInt16 position_9
+        <** @description: MPUSEG1IFG segment 3 memory violation **>
+        UInt16 EDC_SYSSNIV__MPUSEG3IFG 
+        <** @description: position in array **>
+        UInt16 position_10
+        <** @description: VMAIFG Vacant memory access **>
+        UInt16 EDC_SYSSNIV__VMAIFG 
+        <** @description: position in array **>
+        UInt16 position_11
+        <** @description: JMBOUTIFG JTAG mailbox input **>
+        UInt16 EDC_SYSSNIV__JMBINIFG 
+        <** @description: position in array **>
+        UInt16 position_12
+        <** @description: JMBOUTIFG JTAG mailbox output **>
+        UInt16 EDC_SYSSNIV__JMBOUTIFG 
+        <** @description: position in array **>
+        UInt16 position_13
+        <** @description: Correctable FRAM bit error detection **>
+        UInt16 EDC_SYSSNIV__CBDIFG 
+        <** @description: position in array **>
+        UInt16 position_14
+        <** @description: FRAM write protection detection **>
+        UInt16 EDC_SYSSNIV__WPROT 
+        <** @description: position in array **>
+        UInt16 position_15
+        <** @description: LEA time-out fault **>
+        UInt16 EDC_SYSSNIV__LEATO 
+        <** @description: position in array **>
+        UInt16 position_16
+        <** @description: LEA command fault **>
+        UInt16 EDC_SYSSNIV__LEACMD 
+        <** @description: position in array **>
+        UInt16 position_17
+        <** @description: ADC Reference voltage settle timeout **>
+        UInt16 EDC_ADC_REF_SETTLE_FAIL_CNTR 
+        <** @description: position in array **>
+        UInt16 position_18
+        <** @description: ADC Conversion timeout **>
+        UInt16 EDC_ADC_CONV_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_19
+        <** @description: ADC Reference voltage regulator bussy error **>
+        UInt16 EDC_ADC_REF_BUSSY_CNTR 
+        <** @description: position in array **>
+        UInt16 position_20
+        <** @description: ADC Bussy with previous conversion **>
+        UInt16 EDC_ADC_STUCK_IN_PREV_CONV 
+        <** @description: position in array **>
+        UInt16 position_21
+        <** @description: NVM No free memory **>
+        UInt16 EDC_NVM_NO_FREE_MEMORY 
+        <** @description: position in array **>
+        UInt16 position_22
+        <** @description: NVM Sgment not found **>
+        UInt16 EDC_NVM_SEGMENT_NOT_FOUND 
+        <** @description: position in array **>
+        UInt16 position_23
+        <** @description: BL Checker partition 1 corrupted **>
+        UInt16 EDC_BL_CHECKER_PART1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_24
+        <** @description: BL Checker partition 2 corrupted **>
+        UInt16 EDC_BL_CHECKER_PART2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_25
+        <** @description: BL Checker partition 3 corrupted **>
+        UInt16 EDC_BL_CHECKER_PART3_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_26
+        <** @description: BL Checker partition 4 corrupted **>
+        UInt16 EDC_BL_CHECKER_PART4_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_27
+        <** @description: BL Implementation partition 1 corrupted **>
+        UInt16 EDC_BL_IMPLEMENTATION_PART1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_28
+        <** @description: BL Implementation partition 2 corrupted **>
+        UInt16 EDC_BL_IMPLEMENTATION_PART2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_29
+        <** @description: NVM partition 1 header corrupted **>
+        UInt16 EDC_NVM_HDR_PART1_CORRUPTED
+        <** @description: position in array **>
+        UInt16 position_30
+        <** @description: NVM partition 2 header corrupted **>
+        UInt16 EDC_NVM_HDR_PART2_CORRUPTED
+        <** @description: position in array **>
+        UInt16 position_31
+        <** @description: NVM partition 1 corrupted **>
+        UInt16 EDC_NVM_PART1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_32
+        <** @description: NVM partition 2 corrupted **>
+        UInt16 EDC_NVM_PART2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_33
+        <** @description: External BasicApp partition 1 image corrupted **>
+        UInt16 EDC_EXT_BASICAPP_PART1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_34
+        <** @description: External BasicApp partition 2 image corrupted **>
+        UInt16 EDC_EXT_BASICAPP_PART2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_35
+        <** @description: External BasicApp partition 3 image corrupted **>
+        UInt16 EDC_EXT_BASICAPP_PART3_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_36
+        <** @description: External Main app partition 1 image corrupted **>
+        UInt16 EDC_EXT_MAINAPP_PART1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_37
+        <** @description: External Main app partition 2 image corrupted **>
+        UInt16 EDC_EXT_MAINAPP_PART2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_38
+        <** @description: External Main app partition 3 image corrupted **>
+        UInt16 EDC_EXT_MAINAPP_PART3_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_39
+        <** @description: CPU FRAM Correctable bit error (duplicated) **>
+        UInt16 EDC_CBDIFG_FRAM_CORRECTABLE_BIT 
+        <** @description: position in array **>
+        UInt16 position_40
+        <** @description: CPU RESET: Total reset counter **>
+        UInt16 EDC_RST_TOTAL 
+        <** @description: position in array **>
+        UInt16 position_41
+        <** @description: CPU RESET: Brownout (BOR) **>
+        UInt16 EDC_RST_BROWNOUT 
+        <** @description: position in array **>
+        UInt16 position_42
+        <** @description: CPU RESET: RSTIFG RST/NMI (BOR) **>       
+        UInt16 EDC_RST_RSTIFG 
+        <** @description: position in array **>
+        UInt16 position_43
+        <** @description: CPU RESET: PMMSWBOR software BOR (BOR) **>
+        UInt16 EDC_RST_PMMSWBOR 
+        <** @description: position in array **>
+        UInt16 position_44
+        <** @description: CPU RESET: LPMx.5 wake up (BOR) **>       
+        UInt16 EDC_RST_LPM_X_5_WAKE 
+        <** @description: position in array **>
+        UInt16 position_45
+        <** @description: CPU RESET: Security violation (BOR) **>   
+        UInt16 EDC_RST_SECURITY_VIOLATION 
+        <** @description: position in array **>
+        UInt16 position_46
+        <** @description: CPU RESET: Reserved (0x0C) **>
+        UInt16 EDC_RST_RES1 
+        <** @description: position in array **>
+        UInt16 position_47
+        <** @description: CPU RESET: SVSHIFG SVSH event (BOR) **>
+        UInt16 EDC_RST_SVSHIFG 
+        <** @description: position in array **>
+        UInt16 position_48
+        <** @description: CPU RESET: Reserved (0x10) **>        
+        UInt16 EDC_RST_RES2 
+        <** @description: position in array **>
+        UInt16 position_49
+        <** @description: CPU RESET: Reserved (0x12) **>
+        UInt16 EDC_RST_RES3 
+        <** @description: position in array **>
+        UInt16 position_50
+        <** @description: CPU RESET: PMMSWPOR software POR (POR) **>
+        UInt16 EDC_RST_PMMSWPOR 
+        <** @description: position in array **>
+        UInt16 position_51
+        <** @description: CPU RESET: WDTIFG watchdog timeout (PUC) **>      
+        UInt16 EDC_RST_WDTIFG 
+        <** @description: position in array **>
+        UInt16 position_52
+        <** @description: CPU RESET: WDTPW password violation (PUC) **>
+        UInt16 EDC_RST_WDTPW 
+        <** @description: position in array **>
+        UInt16 position_53
+        <** @description: CPU RESET: FRCTLPW password violation (PUC) **>
+        UInt16 EDC_RST_FRCTLPW 
+        <** @description: position in array **>
+        UInt16 position_54
+        <** @description: CPU RESET: Uncorrectable FRAM bit error detection (PUC) **>       
+        UInt16 EDC_RST_FRAM_BIT_ERR 
+        <** @description: position in array **>
+        UInt16 position_55
+        <** @description: CPU RESET: Peripheral area fetch (PUC) **>    
+        UInt16 EDC_RST_PER_FETCH 
+        <** @description: position in array **>
+        UInt16 position_56
+        <** @description: CPU RESET: PMMPW PMM password violation (PUC) **>
+        UInt16 EDC_RST_PMMPW 
+        <** @description: position in array **>
+        UInt16 position_57
+        <** @description: CPU RESET: MPUPW MPU password violation (PUC) **>
+        UInt16 EDC_RST_MPUPW 
+        <** @description: position in array **>
+        UInt16 position_58
+        <** @description: CPU RESET: CSPW CS password violation (PUC) **>       
+        UInt16 EDC_RST_CSPW 
+        <** @description: position in array **>
+        UInt16 position_59
+        <** @description: CPU RESET: MPUSEGIPIFG encapsulated IP memory segment violation (PUC) **>
+        UInt16 EDC_RST_MPUSEGIPIFG 
+        <** @description: position in array **>
+        UInt16 position_60
+        <** @description: CPU RESET: MPUSEGIIFG information memory segment violation (PUC) **>  
+        UInt16 EDC_RST_MPUSEGIIFG 
+        <** @description: position in array **>
+        UInt16 position_61
+        <** @description: CPU RESET: MPUSEG1IFG segment 1 memory violation (PUC) **>        
+        UInt16 EDC_RST_MPUSEG1IFG 
+        <** @description: position in array **>
+        UInt16 position_62
+        <** @description: CPU RESET: MPUSEG2IFG segment 2 memory violation (PUC) **>        
+        UInt16 EDC_RST_MPUSEG2IFG 
+        <** @description: position in array **>
+        UInt16 position_63
+        <** @description: CPU RESET: MPUSEG3IFG segment 3 memory violation (PUC) **>    
+        UInt16 EDC_RST_MPUSEG3IFG 
+        <** @description: position in array **>
+        UInt16 position_64
+        <** @description: Balancer configuration invalid in NVM **>
+        UInt16 EDC_BAL_CONFIG_INVALID
+        <** @description: position in array **>
+        UInt16 position_65
+        <** @description: Charger configuration invalid in NVM **>
+        UInt16 EDC_CHRG_CONFIG_INVALID
+        <** @description: position in array **>
+        UInt16 position_66
+        <** @description: Unable to apply configuration to charger chip 1 **>
+        UInt16 EDC_SUCCESSFULL_POWERDOWN_COUNTER
+        <** @description: position in array **>
+        UInt16 position_67
+        <** @description: Unable to apply configuration to charger chip 2 **>       
+        UInt16 EDC_CHRG_CANT_APPLY_CONFIG_2
+        <** @description: position in array **>
+        UInt16 position_68
+        <** @description: MAC SYS1: TX Collisions (obsolete, not used) **>      
+        UInt16 EDC_MAC_SYS1_TX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_69
+        <** @description: MAC SYS1: TX Timeout **>
+        UInt16 EDC_MAC_SYS1_TX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_70
+        <** @description: MAC SYS1: RX Message with zerro size **>
+        UInt16 EDC_MAC_SYS1_RX_MSG_WITH_ZERRO_SIZE 
+        <** @description: position in array **>
+        UInt16 position_71
+        <** @description: MAC SYS1: RX Message with wrong header CRC **>
+        UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_HDR_CRC 
+        <** @description: position in array **>
+        UInt16 position_72
+        <** @description: MAC SYS1: RX Message with wrong msg CRC **>
+        UInt16 EDC_MAC_SYS1_RX_MSG_WITH_WRONG_MSG_CRC 
+        <** @description: position in array **>
+        UInt16 position_73
+        <** @description: MAC SYS1: RX Collision detected **>
+        UInt16 EDC_MAC_SYS1_RX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_74
+        <** @description: MAC SYS1: RX No available buffer to accept message (message lost) **>
+        UInt16 EDC_MAC_SYS1_RX_MSG_MISS_NO_BUFFER 
+        <** @description: position in array **>
+        UInt16 position_75
+        <** @description: MAC SYS1: RX Timeout counter **>
+        UInt16 EDC_MAC_SYS1_RX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_76
+        <** @description: MAC SYS1: RX start reception of message while previous not fully received **>
+        UInt16 EDC_MAC_SYS1_RX_RESTARTED_MSGS 
+        <** @description: position in array **>
+        UInt16 position_77
+        <** @description: MAC SYS1: RX byte to byte timeout **>
+        UInt16 EDC_MAC_SYS1_RX_INTER_BYTE_MAX_TIME 
+        <** @description: position in array **>
+        UInt16 position_78
+        <** @description: MAC SYS2: TX Collisions (obsolete, not used) **>
+        UInt16 EDC_MAC_SYS2_TX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_79
+        <** @description: MAC SYS2: TX Timeout **>
+        UInt16 EDC_MAC_SYS2_TX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_80
+        <** @description: MAC SYS2: RX Message with zerro size **>
+        UInt16 EDC_MAC_SYS2_RX_MSG_WITH_ZERRO_SIZE 
+        <** @description: position in array **>
+        UInt16 position_81
+        <** @description: MAC SYS2: RX Message with wrong header CRC **>
+        UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_HDR_CRC 
+        <** @description: position in array **>
+        UInt16 position_82
+        <** @description: MAC SYS2: RX Message with wrong msg CRC **>
+        UInt16 EDC_MAC_SYS2_RX_MSG_WITH_WRONG_MSG_CRC 
+        <** @description: position in array **>
+        UInt16 position_83
+        <** @description: MAC SYS2: RX Collision detected **>
+        UInt16 EDC_MAC_SYS2_RX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_84
+        <** @description: MAC SYS2: RX No available buffer to accept message (message lost) **>
+        UInt16 EDC_MAC_SYS2_RX_MSG_MISS_NO_BUFFER 
+        <** @description: position in array **>
+        UInt16 position_85
+        <** @description: MAC SYS2: RX Timeout counter **>
+        UInt16 EDC_MAC_SYS2_RX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_86
+        <** @description: MAC SYS2: RX start reception of message while previous not fully received **>
+        UInt16 EDC_MAC_SYS2_RX_RESTARTED_MSGS 
+        <** @description: position in array **>
+        UInt16 position_87
+        <** @description: MAC SYS2: RX byte to byte timeout **>
+        UInt16 EDC_MAC_SYS2_RX_INTER_BYTE_MAX_TIME 
+        <** @description: position in array **>
+        UInt16 position_88
+        <** @description: MAC PAY1: TX Collisions (obsolete, not used) **>
+        UInt16 EDC_MAC_PAY1_TX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_89
+        <** @description: MAC PAY1: TX Timeout **>
+        UInt16 EDC_MAC_PAY1_TX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_90
+        <** @description: MAC PAY1: RX Message with zerro size **>
+        UInt16 EDC_MAC_PAY1_RX_MSG_WITH_ZERRO_SIZE 
+        <** @description: position in array **>
+        UInt16 position_91
+        <** @description: MAC PAY1: RX Message with wrong header CRC **>
+        UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_HDR_CRC 
+        <** @description: position in array **>
+        UInt16 position_92
+        <** @description: MAC PAY1: RX Message with wrong msg CRC **>
+        UInt16 EDC_MAC_PAY1_RX_MSG_WITH_WRONG_MSG_CRC 
+        <** @description: position in array **>
+        UInt16 position_93
+        <** @description: MAC PAY1: RX Collision detected **>
+        UInt16 EDC_MAC_PAY1_RX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_94
+        <** @description: MAC PAY1: RX No available buffer to accept message (message lost) **>
+        UInt16 EDC_MAC_PAY1_RX_MSG_MISS_NO_BUFFER 
+        <** @description: position in array **>
+        UInt16 position_95
+        <** @description: MAC PAY1: RX Timeout counter **>
+        UInt16 EDC_MAC_PAY1_RX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_96
+        <** @description: MAC PAY1: RX start reception of message while previous not fully received **>
+        UInt16 EDC_MAC_PAY1_RX_RESTARTED_MSGS 
+        <** @description: position in array **>
+        UInt16 position_97
+        <** @description: MAC PAY1: RX byte to byte timeout **>
+        UInt16 EDC_MAC_PAY1_RX_INTER_BYTE_MAX_TIME 
+        <** @description: position in array **>
+        UInt16 position_98
+        <** @description: MAC PAY2: TX Collisions (obsolete, not used) **>
+        UInt16 EDC_MAC_PAY2_TX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_99
+        <** @description: MAC PAY2: TX Timeout **>
+        UInt16 EDC_MAC_PAY2_TX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_100
+        <** @description: MAC PAY2: RX Message with zerro size **>
+        UInt16 EDC_MAC_PAY2_RX_MSG_WITH_ZERRO_SIZE 
+        <** @description: position in array **>
+        UInt16 position_101
+        <** @description: MAC PAY2: RX Message with wrong header CRC **>
+        UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_HDR_CRC 
+        <** @description: position in array **>
+        UInt16 position_102
+        <** @description: MAC PAY2: RX Message with wrong msg CRC **>
+        UInt16 EDC_MAC_PAY2_RX_MSG_WITH_WRONG_MSG_CRC 
+        <** @description: position in array **>
+        UInt16 position_103
+        <** @description: MAC PAY2: RX Collision detected **>
+        UInt16 EDC_MAC_PAY2_RX_COLLISION 
+        <** @description: position in array **>
+        UInt16 position_104
+        <** @description: MAC PAY2: RX No available buffer to accept message (message lost) **>
+        UInt16 EDC_MAC_PAY2_RX_MSG_MISS_NO_BUFFER 
+        <** @description: position in array **>
+        UInt16 position_105
+        <** @description: MAC PAY2: RX Timeout counter **>
+        UInt16 EDC_MAC_PAY2_RX_TIMEOUT 
+        <** @description: position in array **>
+        UInt16 position_106
+        <** @description: MAC PAY2: RX start reception of message while previous not fully received **>
+        UInt16 EDC_MAC_PAY2_RX_RESTARTED_MSGS 
+        <** @description: position in array **>
+        UInt16 position_107
+        <** @description: MAC PAY2: RX byte to byte timeout **>
+        UInt16 EDC_MAC_PAY2_RX_INTER_BYTE_MAX_TIME 
+        <** @description: position in array **>
+        UInt16 position_108
+        <** @description: CPU time since last reset in seconds (Low 2 bytes) **>
+        UInt16 EDC_CPU_UP_TIME_LO 
+        <** @description: position in array **>
+        UInt16 position_109
+        <** @description: CPU time since last reset in seconds (High 2 bytes) **>
+        UInt16 EDC_CPU_UP_TIME_HI 
+        <** @description: position in array **>
+        UInt16 position_110
+        <** @description: CPU cooperative loop max time in ms **>
+        UInt16 EDC_CPU_MAIN_LOOP_MAX_TIME 
+        <** @description: position in array **>
+        UInt16 position_111
+        <** @description: Battery balancers RAM configuration corruption detected and fixed **>
+        UInt16 EDC_BAL_ISL94202IRTZ_RE_APPLY_CNF_CNTR
+        <** @description: position in array **>
+        UInt16 position_112
+        <** @description: Charger chips RAM configuration corruption detected and fixed **>
+        UInt16 EDC_LT8491_FORCE_RE_APPLY_CNF_RAM_CNTR
+        <** @description: position in array **>
+        UInt16 position_113
+        <** @description: Charger chips EEPROM configuration corruption detected and fixed **>
+        UInt16 EDC_LT8491_FORCE_RE_APPLY_CNF_ROM_CNTR
+        <** @description: position in array **>
+        UInt16 position_114
+        <** @description: Counter of transitions to NOHIB state of the BP StateMachine **>
+        UInt16 EDC_CONOPS_ENTER_IN_NOHIB_COUNTER
+        <** @description: position in array **>
+        UInt16 position_115
+        <** @description: Charger chips reset during EEPROM recovery counter **>
+        UInt16 EDC_LT8491_CHIP_RESET_DURING_EEPROMWRITE_CNTR
+        <** @description: position in array **>
+        UInt16 position_116
+        <** @description: NVM Initial device configuration partition 1 corrupted counter **>
+        UInt16 EDC_INIT_CONFIG_NVM_1_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_117
+        <** @description: NVM Initial device configuration partition 2 corrupted counter **>
+        UInt16 EDC_INIT_CONFIG_NVM_2_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_118
+        <** @description: External FRAM chip probe during CPU boot failed **>
+        UInt16 EDC_EXT_FRAM_PROBE_FAILED 
+        <** @description: position in array **>
+        UInt16 position_119
+        <** @description: Current NVM allocated size **>
+        UInt16 EDC_NVM_ALLOCATED_SIZE 
+        <** @description: position in array **>
+        UInt16 position_120
+        <** @description: Current NVM used size **>
+        UInt16 EDC_NVM_USED_SIZE 
+        <** @description: position in array **>
+        UInt16 position_121
+        <** @description: Device basic settings in NVM corrupted **>
+        UInt16 EDC_BASIC_SETTINGS_NVM_CORRUPTED 
+        <** @description: position in array **>
+        UInt16 position_122
+        <** @description: Counter of transitions to BATTERY state of the BP StateMachine **>
+        UInt16 EDC_CONOPS_ENTER_IN_BATTERY_COUNTER
+        <** @description: position in array **>
+        UInt16 position_123
+        <** @description: Counter of transitions to PANEL state of the BP StateMachine **>
+        UInt16 EDC_CONOPS_ENTER_IN_PANEL_COUNTER
+        <** @description: position in array **>
+        UInt16 position_124
+        <** @description: Counter of transitions to HIB state of the BP StateMachine **>
+        UInt16 EDC_BPMODE_ENTER_IN_HIB_COUNTER
+    } 
+
+    <** @description: Error Counter all data structure **>
+    struct SDiagErrCounters
+    {
+        <** @description: Version of this structure, currently = 0x1000 **>
+        UInt16 m_nVersion
+        <** @description: Returned diagnostics counters count in the Counters array **>
+        UInt16 m_nCount
+        <** @description: Array with diagnostics counters. Actual count is in the Count field **>
+        SDiagErrCounter m_counter
+    }
+    
+        <** 
+    @description: Gets error counters (non-critical errors, handled by application) of BasicApp
+    @details: id = 1002
+    **>
+    method GetBasicAppErrCounters   //enum EDiagCntrs
+    {
+        out
+        {
+            <** @description: Gets error counters (non-critical errors, handled by application) of the BasicApp. **>
+            SDiagErrCounters errorCounters
+        }
+    }
+
+    <** 
+    @description: Gets the last X critical exceptions that have occurred in the main application since the ResetBasicAppExceptions command
+    @details: id = 1003
+    **>
+    method GetMainAppExceptions //enum EDiagFileIDs
+    {
+        out
+        {
+        <** @description: Get last 16 ASSERT fails **>
+            SDiagExceptions exceptions
+        }
+    }
+    
+    <** 
+    @description: Gets error counters (non-critical errors, handled by application) of main application
+    @details: id = 1004
+    **>
+    method GetMainAppErrCounters    //enum EDiagCntrs
+    {
+        out
+        {
+            SDiagErrCounters errorCounters
+        }
+    }
+            
+    <** 
+    @description: Clears exceptions for the BasicApp
+    @details: id = 1005
+    **>
+    method ResetBasicAppExceptions
+    {
+    }
+    
+    <** 
+    @description: Clears error counters for the BasicApp
+    @details: id = 1006
+    **>
+    method ResetBasicAppErrCounters
+    {
+    }
+        
+    <** 
+    @description: Clears exceptions for the main application
+    @details: id = 1007
+    **>
+    method ResetMainAppExceptions
+    {
+    }
+    
+    <** 
+    @description: Clears error counters for the main application
+    @details: id = 1008
+    **>
+    method ResetMainAppErrCounters
+    {
+    }
+
+/////=====================================////
+
+
+    <** 
+        @description: Reset device in same mode (main/BasicApp) as it is at the time command is received.
+      @details: id = 1011
+    **>
+    method ResetDevice   
+    {
+    }
+
+    <** 
+        @description: Restarts and installs main application. This command may be initiated to switch from BasicApp to main application operation
+      @details: id = 1012
+    **>
+    method ForceInstallMainApp   
+    {
+    }
+
+    <** 
+        @description: Restarts and installs BasicApp
+      @details: id = 1013
+    **>
+    method ForceInstallBasicApp     
+    {
+    }
+
+/////=====================================////
+
+
+// ============================================================================================
+// Get RAW Sensor values
+// ============================================================================================
+
+    <** 
+        @description: Gets all sensor values of the PDM by ID. Up to 53 different sensor values may be got.
+        @details: id = 1014
+    **>
+    method GetRawSensorsValues
+    {
+        out
+        {
+              <** @description: Random value to identify Request <-> Response **>
+            UInt32 PktID            
+
+            <** @description: uses EPSIIT_ReservedValues on error. The sensors are arranged in enum "EPSIIT_SensorIDs"
+                  **>
+            SRawSensors SensorValues
+        }
+    }
+    
+<** @description: Balancer configuration register 00 **>
+struct EPSBAL_Config_00
+{
+  <** @description: Charge Detect Pulse-Width **>
+    UInt16 m_COV___m_CDPW 
+} 
+
+<** @description: Balancer configuration register 02 **>
+struct EPSBAL_Config_02
+{
+  <** @description: VCELL Overvoltage Recovery Threshold **>
+    UInt16 m_OVR         
+} 
+
+<** @description: Balancer configuration register 04 **>
+ struct EPSBAL_Config_04
+{
+  <** @description: VCELL Undervoltage Threshold 12 bits,   Load Detect Pulse Width  4bits **>
+    UInt16 m_UVL___m_LDPW  
+} 
+
+<** @description: Balancer configuration register 06 **>
+struct EPSBAL_Config_06
+{
+  <** @description: VCELL Undervoltage Recovery Threshold 12bits **>
+    UInt16 m_UVR        
+} 
+
+<** @description: Balancer configuration register 08 **>
+struct EPSBAL_Config_08
+{
+  <** @description: VCELL Overvoltage Lockout Threshold  12bits **>
+    UInt16 m_OVLO       
+} 
+
+<** @description: Balancer configuration register 0A **>
+struct EPSBAL_Config_0A
+{
+  <** @description: VCELL Undervoltage Lockout Threshold 12 bits **>
+    UInt16 m_UVLO       
+} 
+ 
+<** @description: Balancer configuration register 0C **>
+struct EPSBAL_Config_0C
+{
+  <** @description: VCELL End-of-Charge Threshold 12bits **>
+    UInt16 m_EOC        
+} 
+
+<** @description: Balancer configuration register 0E **>
+struct EPSBAL_Config_0E
+{
+  <** @description: VCELL Low Voltage Charge Level 12bits **>
+    UInt16 m_LVCL     
+} 
+
+<** @description: Balancer configuration register 10 **>
+struct EPSBAL_Config_10
+{
+  <** @description: VCELL Overvoltage Delay Timer 10bits  ,     VCELL Overvoltage Delay Timer Unit 2bits **>
+    UInt16 m_OVDT___m_OVDTU     
+}
+
+<** @description: Balancer configuration register 12 **>
+struct EPSBAL_Config_12
+{
+  <** @description: VCELL Undervoltage Delay Time  10bits  ,  VCELL Undervoltage Delay Timer Unit 2bits **>
+    UInt16 m_UVDT___m_UVDTU     
+}
+
+<** @description: Balancer configuration register 14 **>
+struct EPSBAL_Config_14
+{
+  <** @description: Open-Wire Timing 9 bits,  Open-Wire Timing  Unit 1bit **>
+    UInt16 m_OWT____m_OWTU  
+} 
+
+<** @description: Balancer configuration register 16 **>
+struct EPSBAL_Config_16
+{
+  <** @description: Discharge Overcurrent Timer 10bits, Discharge Overcurrent Timer Unit 2bits, Discharge Overcurrent Threshold 3bits **>
+    UInt16 m_DOCT__m_DOCTU__m_DOC   
+} 
+
+<** @description: Balancer configuration register 18 **>
+ struct EPSBAL_Config_18
+{
+  <** @description: Charge Overcurrent Timer 10bits, Charge Overcurrent Timer Unit 2bits, Charge Overcurrent Threshold 3bits **>
+    UInt16 m_COCT__m_COCTU__m_COC
+} 
+
+<** @description: Balancer configuration register 1A **>
+ struct EPSBAL_Config_1A
+{
+  <** @description: Discharge Short-Circuit Timer 10bits, Discharge Short-Circuit Timer Unit 2bits, Discharge Short-Circuit Threshold 3bits **>
+    UInt16 m_DSCT___m_DSCTU___m_DSC 
+} 
+
+<** @description: Balancer configuration register 1C **>
+ struct EPSBAL_Config_1C
+{
+  <** @description: Cell Balance Minimum Voltage 12bits **>
+    UInt16 m_CBMIN  
+} 
+
+<** @description: Balancer configuration register 1E **>
+ struct EPSBAL_Config_1E
+{
+  <** @description: Cell Balance Maximum Voltage 12bits **>
+    UInt16 m_CBMAX  
+} 
+
+<** @description: Balancer configuration register 20 **>
+ struct EPSBAL_Config_20
+{
+  <** @description: Cell Balance Minimum Delta Voltage 12bits **>
+    UInt16 m_CBMIND     
+} 
+
+<** @description: Balancer configuration register 22 **>
+ struct EPSBAL_Config_22
+{
+  <** @description: Cell Balance Maximum Delta Voltage 12bits **>
+    UInt16 m_CBMAXD 
+} 
+
+<** @description: Balancer configuration register 24 **>
+ struct EPSBAL_Config_24
+{
+  <** @description: Cell Balance On-Time 10bits, Cell Balance On-Time Unit 2bits **>
+    UInt16 m_CBON___m_CBONU     
+} 
+
+<** @description: Balancer configuration register 26 **>
+ struct EPSBAL_Config_26
+{
+  <** @description: Cell Balance Off    Time 10bits, Cell Balance Off   Time Unit 2bits **>
+    UInt16 m_CBOFF___m_CBOFFU   
+}
+
+<** @description: Balancer configuration register 28 **>
+ struct EPSBAL_Config_28
+{
+  <** @description: Cell Balance Under-Temperature Limit 12bits **>
+    UInt16 m_CBUT   
+} 
+
+<** @description: Balancer configuration register 2A **>
+ struct EPSBAL_Config_2A
+{
+  <** @description: Cell Balance Under-Temperature Recovery Level 12bits **>
+    UInt16 m_CBUTR  
+} 
+ 
+<** @description: Balancer configuration register 2C **>
+ struct EPSBAL_Config_2C
+{
+  <** @description: Cell Balance Over-Temperature Limit 12bits **>
+    UInt16 m_CBOT   
+} 
+
+<** @description: Balancer configuration register 2E **>
+ struct EPSBAL_Config_2E
+{
+  <** @description: Cell Balance Over-Temperature Recovery Level 12bits **>
+    UInt16 m_CBOTR  
+} 
+
+<** @description: Balancer configuration register 30 **>
+ struct EPSBAL_Config_30
+{
+  <** @description: Charge Over-Temperature Limit 12bits **>
+    UInt16 m_COT    
+} 
+
+<** @description: Balancer configuration register 32 **>
+ struct EPSBAL_Config_32
+{
+  <** @description: Charge Over-Temperature Recovery Level 12bits **>
+    UInt16 m_COTR   
+} 
+
+<** @description: Balancer configuration register 34 **>
+ struct EPSBAL_Config_34
+{
+  <** @description: Charge Under-Temperature Limit 12bits **>
+    UInt16 m_CUT    
+}  
+
+<** @description: Balancer configuration register 36 **>
+ struct EPSBAL_Config_36
+{
+  <** @description: Charge Under-Temperature Recovery Level 12bits **>
+    UInt16 m_CUTR   
+} 
+
+<** @description: Balancer configuration register 38 **>
+ struct EPSBAL_Config_38
+{
+  <** @description: Discharge Over-Temperature Voltage 12bit **>
+    UInt16 m_DOT    
+}  
+
+<** @description: Balancer configuration register 3A **>
+ struct EPSBAL_Config_3A
+{
+  <** @description: Discharge Over-Temperature Recovery Level 12bits **>
+    UInt16 m_DOTR   
+}  
+
+<** @description: Balancer configuration register 3C **>
+ struct EPSBAL_Config_3C
+{
+  <** @description: Discharge Under-Temperature Limit 12bits **>
+    UInt16 m_DUT        
+}  
+
+<** @description: Balancer configuration register 3E **>
+ struct EPSBAL_Config_3E
+{
+  <** @description: Discharge Under-Temperature Recovery Voltage DUTR 12bits **>
+    UInt16 m_DUTR 
+}  
+
+<** @description: Balancer configuration register 40 **>
+ struct EPSBAL_Config_40
+{
+  <** @description: Internal Over-Temperature Voltage Limit 12bits **>
+    UInt16 m_IOT        
+}  
+
+<** @description: Balancer configuration register 42 **>
+ struct EPSBAL_Config_42
+{
+  <** @description: Internal Over-Temperature Recovery Voltage 12bits **>
+    UInt16 m_IOTR   
+}  
+
+<** @description: Balancer configuration register 44 **>
+ struct EPSBAL_Config_44
+{
+  <** @description: VCELL SLEEP Level Voltage 12bits **>
+    UInt16 m_SLV        
+}  
+
+<** @description: Balancer configuration register 46 **>
+ struct EPSBAL_Config_46
+{
+  <** @description: SLEEP Delay Timer 9bits, SLEEP Delay Timer Unit 2bits,  Watchdog Timer 5bits **>
+    UInt16 m_SDT__m_SDTU___m_WDT            
+}  
+
+<** @description: Balancer configuration register 48 **>
+ struct EPSBAL_Config_48
+{
+  <** @description: IDLE/DOZE Mode MOD3 - MOD0 4bits, SLEEP Mode MOD7 - MOD4 4bits **>
+    UInt8 m_IDLE_DOZE_Mode___m_SLEEP_Mode   
+}  
+
+// Only some combination are permitted, check datasheet
+<** @description: Balancer configuration register 49 **>
+ struct EPSBAL_Config_49
+{
+  <** @description: Cell Select(Enable) 8 CELLs **>
+    UInt8 m_Cell_Enable_1to8_bitfield           
+}  
+
+<** @description: Balancer configuration register 4A **>
+ struct EPSBAL_Config_4A
+{
+  <** @description: Open Wire Pack Shutdown 1bit, Disable Open Wire Detection 1bit, Pre-Charge FET Enable 1bit, m_RSV_0 1bit, Temperature Gain 1bit, Second External Temperature Monitor 1bit, m_RSV_1 1bit, Cell Fail Pack Shutdown 1bit **>
+    UInt8 m_OWPSD__m_DOWD__m_PCFETE__m_RSV_0__m_TGain__m_XT2M__m_RSV_1__m_CELLF_PSD 
+}  
+
+<** @description: Balancer configuration register 4B **>
+ struct EPSBAL_Config_4B
+{
+  <** @description: Cell Balance During End-of-Charge 1bit, RSV 1bit, Undervoltage Lockout Powerdown 1bit, FET On During Overvoltage 1bit, FET On During Undervoltage 1bit, Cell Balance During Charge 1bit, Cell Balance During Discharge 1bit **>
+	UInt8 m_CB_EOC 		
+}  
+
+    // Configuration registers pack
+    <** @description: All balancer configuration registers **>
+ struct EPSBAL_ConfigRegs
+{
+	<** @description: VCELL Overvoltage Threshold COV / CPW **>
+    EPSBAL_Config_00 m_OV           
+	<** @description: VCELL Overvoltage Recovery Threshold OVR **>
+    EPSBAL_Config_02 m_OVR          
+	<** @description: VCELL Undervoltage Threshold UVL **>
+    EPSBAL_Config_04 m_UVL          
+    <** @description: VCELL Undervoltage Recovery Threshold UVR **>
+    EPSBAL_Config_06 m_UVR          
+  <** @description: VCELL Overvoltage Lockout Threshold OVLO **>
+    EPSBAL_Config_08 m_OVLO         
+  <** @description: VCELL Undervoltage Lockout Threshold UVLO **>
+    EPSBAL_Config_0A m_UVLO         
+  <** @description: VCELL End-of-Charge Threshold EOC **>
+    EPSBAL_Config_0C m_EOC          
+  <** @description: VCELL Low Voltage Charge Level LVCL **>
+    EPSBAL_Config_0E m_LVCL         
+  <** @description: VCELL Overvoltage Delay Timer OVDT **>
+    EPSBAL_Config_10 m_OVDT         
+  <** @description: VCELL Undervoltage Delay Time UVDT **>
+    EPSBAL_Config_12 m_UVDT         
+  <** @description: Open-Wire Timing OWT **>
+    EPSBAL_Config_14 m_OWT          
+  <** @description: Discharge Overcurrent Timer DOCT **>
+    EPSBAL_Config_16 m_DOCT         
+  <** @description: Charge Overcurrent Timer COCT **>
+    EPSBAL_Config_18 m_COCT     
+  <** @description: Discharge Short-Circuit Timer DSCT **>
+    EPSBAL_Config_1A m_DSCT         
+  <** @description: Cell Balance Minimum Voltage CBMIN **>
+    EPSBAL_Config_1C m_CBMIN        
+  <** @description: Cell Balance Maximum Voltage CBMAX **>
+    EPSBAL_Config_1E m_CBMAX        
+  <** @description: Cell Balance Minimum Delta Voltage CBMIND **>
+    EPSBAL_Config_20 m_CBMIND       
+  <** @description: Cell Balance Maximum Delta Voltage CBMAXD **>
+    EPSBAL_Config_22 m_CBMAXD       
+  <** @description: Cell Balance On-Time CBON **>
+    EPSBAL_Config_24 m_CBON         
+  <** @description: Cell Balance Off-Time CBOFF **>
+    EPSBAL_Config_26 m_CBOFF        
+  <** @description: Cell Balance Under-Temperature Limit CBUT **>
+    EPSBAL_Config_28 m_CBUT         
+  <** @description: Cell Balance Under-Temperature Recovery Level CBUTR **>
+    EPSBAL_Config_2A m_CBUTR        
+  <** @description: Cell Balance Over-Temperature Limit CBOT **>
+    EPSBAL_Config_2C m_CBOT         
+  <** @description: Cell Balance Over-Temperature Recovery Level CBOTR **>
+    EPSBAL_Config_2E m_CBOTR        
+  <** @description: Charge Over-Temperature Limit COT **>
+    EPSBAL_Config_30 m_COT          
+  <** @description: Charge Over-Temperature Recovery Level COTR **>
+    EPSBAL_Config_32 m_COTR         
+  <** @description: Charge Under-Temperature Limit CUT **>
+    EPSBAL_Config_34 m_CUT          
+  <** @description: Charge Under-Temperature Recovery Level CUTR **>
+    EPSBAL_Config_36 m_CUTR         
+  <** @description: Discharge Over-Temperature Voltage DOT **>
+    EPSBAL_Config_38 m_DOT          
+  <** @description: Discharge Over-Temperature Recovery Level DOTR **>
+    EPSBAL_Config_3A m_DOTR     
+  <** @description: Discharge Under-Temperature Limit DUT **>
+    EPSBAL_Config_3C m_DUT          
+  <** @description: Discharge Under-Temperature Recovery Voltage DUTR **>
+    EPSBAL_Config_3E m_DUTR         
+  <** @description: Internal Over-Temperature Voltage Limit IOT **>
+    EPSBAL_Config_40 m_IOT      
+  <** @description: Internal Over-Temperature Recovery Voltage IOTR **>
+    EPSBAL_Config_42 m_IOTR         
+  <** @description: VCELL SLEEP Level Voltage SLV **>
+    EPSBAL_Config_44 m_SLV          
+  <** @description: SLEEP Delay Timer SDT & WDT **>
+    EPSBAL_Config_46 m_SDT_WDT      
+  <** @description: SLEEP Mode MOD7 - MOD4 IDLE/DOZE Mode MOD3 - MOD0 **>
+    EPSBAL_Config_48 m_MODE_T   
+  <** @description: Cell Select (Enable) CELL8 - CELL1 **>
+    EPSBAL_Config_49 m_CELL_S       
+  <** @description: CFPSD, XT2M, TGain, PCFET, DOWD, OWPSD **>
+    EPSBAL_Config_4A m_Setup_0  
+  <** @description: CBDD, CBDC, DFOUV, CFOOV, UVLOPD, CBEOC **>
+    EPSBAL_Config_4B m_Setup_1  
+} 
+    
+    <** @description: All data from the balancer **>
+     struct ESCP_GetBALConfigResp
+    {
+        <** @description: 0 - success, 1 - there is no valid configuration (empty memory) in NVM, 2 - invalid parameters **>
+        UInt32 nResult      
+        <** @description: 0 - no configuration, 1 - configuration is applied **>
+        UInt32 nFlags       
+        EPSBAL_ConfigRegs Config
+    }  
+
+    <** 
+        @description: Reads all settings of the balancer
+        @details: id = 1015
+    **>
+    method GetBalConfig
+    {
+        in
+        {
+            <** @description: 0 - first chip, 1 - second chip (future use only) **>
+            UInt8 nChipID
+        }
+        
+        out
+        {
+            <** @description: Get configuration status and data **>
+            ESCP_GetBALConfigResp Config                
+        }
+    }
+    
+    <** @description: Charger configuration data **>
+    struct ESCP_GetCHRGConfigResp
+    {
+        UInt32 nResult                      
+        <** @description: 0 - no configuration, 1 - configuration is applied **>
+        UInt32 nFlags                       
+        <** @description: 
+            @details: size = 52 **>
+        UInt8[] Cnf
+    }
+
+    <** 
+        @description: Reads all settings of the charger
+        @details: id = 1016
+    **>
+    method GetCHRGConfig
+    {
+    
+        out
+        {
+            <** @description: Get configuration status and data **>
+          ESCP_GetCHRGConfigResp Config             
+        }
+    }
+
+    <** @description: Balancer configuration structure description **>
+    struct ESCP_SetBALConfigReq
+    {
+        <** @description: 0 - no configuration, 1 - configuration is applied **>
+        UInt32 nFlags                   
+        EPSBAL_ConfigRegs Config
+    }
+    
+    <** 
+        @description: Sets all settings of the balancer
+        @details: id = 1017
+    **>
+    method SetBalConfig
+    {
+        in
+        {
+            <** @description: input configuration **>
+            ESCP_SetBALConfigReq Config
+        }
+        
+        out
+        {
+            <** @description: 0 - success, 1 - there is no configuration (empty), 2 - NVM Err, 3 - bad input parameters **>
+            UInt32 nResult
+        }
+    }
+    
+    <** @description: Structure to set charger settings **>
+    struct ESCP_SetCHRGConfigReq
+    {
+        <** @description: 0 - no configuration, 1 - configuration is applied **>
+        UInt32 nFlags   
+        <** @description: Array with all configuration registers
+                @details: size = 52 **>
+        UInt8[] Cnf
+    }  
+
+    
+    <** 
+        @description: Writes all settings of the charger
+        @details: id = 1018
+    **>
+    method SetCHRGConfig
+    {
+        in
+        {
+            <** @description: input configuration **>
+          ESCP_SetCHRGConfigReq Config              
+        }
+        
+        out
+        {
+            <** @description: 0 - success, 1 - there is no configuration (empty), 2 - NVM Err, 3 - bad input parameters **>
+            UInt32 nResult
+        }
+    }
+    
+    <** @description: List with error types
+    @details: size = 1 **>
+    enumeration EMDrvChipState
+    {
+            <** @description: Chip state and/or communication state is unknown at the moment **>
+        EDHICS_EMDCS_UNKNOWN        = 0                 
+            <** @description: Chip state and communication is currently ok **>
+        EDHICS_EMDCS_ONLINE     = 1                     
+            <** @description: Chip communication error, NACK or else **>
+        EDHICS_EMDCS_COM_ERR        = 2                 
+            <** @description: Chip communication error, timeout **>
+        EDHICS_EMDCS_COM_TIMEOUT    = 3                 
+            <** @description: Driver disabled **>
+        EDHICS_EMDCS_DRV_DISABLED   = 4                 
+    }
+    
+    <** @description: Structure with all statuses for the SOCs **>
+    struct ESCP_GetChipStatusResp
+    {
+        <** @description: Communication state with balancer **>
+        EMDrvChipState nBal_1_State         
+        <** @description: Not in use for now **>
+        EMDrvChipState nBal_2_State         
+        <** @description: Communication state with primary charger channel X **>
+        EMDrvChipState nCHRG_XP_State       
+        <** @description: Communication state with secondary charger channel X **>
+        EMDrvChipState nCHRG_XR_State       
+        <** @description: Communication state with primary charger channel Y **>
+        EMDrvChipState nCHRG_YP_State       
+        <** @description: Communication state with secondary charger channel Y **>
+        EMDrvChipState nCHRG_YR_State       
+        <** @description: Communication state with primary charger channel Z **>
+        EMDrvChipState nCHRG_ZP_State       
+        <** @description: Communication state with secondary charger channel Z **>
+        EMDrvChipState nCHRG_ZR_State       
+        <** @description: Communication state with Power monitor 1 **>
+        EMDrvChipState nINA_BatOut_1_State  
+        <** @description: Communication state with Power monitor 2 **>
+        EMDrvChipState nINA_BatOut_2_State  
+        <** @description: Communication state with Temperature sensor 1 **>
+        EMDrvChipState nTMP117_U810_State   
+        <** @description: Communication state with Temperature sensor 2 **>
+        EMDrvChipState nTMP117_U811_State   
+        <** @description: Communication state with I/O expander 1 **>
+        EMDrvChipState nGPIO_PCA9538_U2001  
+        <** @description: Communication state with I/O expander 2 **>
+        EMDrvChipState nGPIO_PCA9538_U2002  
+    }
+
+    <** 
+        @description: Read the statuses of all chips
+        @details: id = 1019
+    **>
+    method GetChipStatus
+    {
+        out
+        {
+            <** @description: Get configuration status **>
+            ESCP_GetChipStatusResp status
+        }
+    }
+    
+// ============================================================================================
+// SetBatHeaterSettings / GetBatHeaterSettings
+// ============================================================================================
+
+    <** @description: Heaters enable mask in different Battery Pack modes 
+    @details: size = 4 **>
+    enumeration SBH_EnableBitmask
+    {
+        <** @description: Disabled **>
+        SBHEB_ALL_MODES_DISABLE = 0
+        <** @description: Enabled in normal mode **>
+        SBHEB_NORMAL_MODE_ONLY  = 1
+		<** @description: Enabled in HIB(hibernation) mode **>
+        SBHEB_HIB_MODE_ONLY  = 2
+        <** @description: Enabled in HIB(hibernation) and normal modes **>
+        SBHEB_HIB_AND_NORMAL = 3
+    }
+
+    <** @description: SetBatHeaterSettings command error codes 
+    @details: size = 4 **>
+    enumeration SBH_SetError
+    {
+        <** @description: Done **>
+        SBHSE_SUCCESS
+        <** @description: Invalid input parameters **>
+        SBHSE_BAD_PARAMS
+        <** @description: NVM memory error **>
+        SBHSE_NVM_ERR
+    }
+
+    <** 
+        @description: Get current batteries heaters settings
+        @details: id = 1020
+    **>
+    method GetHeaterConfig
+    {
+        out
+        {
+            <** @description: Parameters get from NVM, otherwise hard-coded default ones **>
+            UInt8 bNVMSet
+            
+            <** @description: Modes to enable heater and battery temperature control **>
+            SBH_EnableBitmask EnableBitmask
+
+            <** @description: Target temperature In degrees C \* 65536 **>
+            Int32 NormalModeSetPointTemp    
+            <** @description: Target temperature In degrees C \* 65536 **>
+            Int32 HibModeSetPointTemp       
+
+            <** @description: PID regulator parameters. Fixed point \* 65536 **>
+            UInt32 PID_KP                       
+            <** @description: PID regulator parameters. Fixed point \* 65536 **>
+            UInt32 PID_KI                       
+            <** @description: PID regulator parameters. Fixed point \* 65536 **>
+            UInt32 PID_KD                       
+        }
+    }
+    
+    <** @description: Configuration structure of the heaters **>
+    struct ESCP_HeaterConfig
+    {
+        <** @description: Modes to enable heater and battery temperature control **>
+        SBH_EnableBitmask EnableBitmask
+    
+        <** @description: Target temperature In degrees C \* 65536 **>
+        Int32 NormalModeSetPointTemp    
+        <** @description: Target temperature In degrees C \* 65536 **>
+        Int32 HibModeSetPointTemp       
+
+        <** @description: PID regulator parameters. Fixed point \* 65536 **>
+        UInt32 PID_KP                       
+        <** @description: PID regulator parameters. Fixed point \* 65536 **>
+        UInt32 PID_KI                       
+        <** @description: PID regulator parameters. Fixed point \* 65536 **>
+        UInt32 PID_KD   
+    }
+    
+    // Set CP Command request
+    <** @description: Setting of the heaters **>
+    struct ESCP_SetHeaterConfigReq
+    {
+        <** @description: If set, set command will set also PID constants **>
+        UInt8 bSetPIDConstants          
+        <** @description: configuration of the heaters **>
+        ESCP_HeaterConfig Config
+    }  
+
+    <** 
+        @description: Set batteries heaters settings
+        @details: id = 1021
+    **>
+    method SetHeaterConfig
+    {
+        in
+        {
+            <** @description: input configuration **>
+            ESCP_SetHeaterConfigReq config              
+        }
+
+        out
+        {
+            <** @description: OK = 0, NVM_ERR = 1, BAD_PARAMS = 2, REG_TYPE_NOT_SUPP = 3 **>
+            SBH_SetError Err
+        }
+    }
+   
+    
+// ============================================================================================
+// SetBasicSettings / GetBasicSettings
+// ============================================================================================
+
+    <** @description: Limits and settings for one Battery Pack mode **>
+	struct SBS_BpHibSetting
+	{
+		<** @description: Voltage multiplied by 1000, i.e. mV. If battery drops below this limit, we enter 'HIB'(hibernation) mode. **>
+		Int64 EnterThreshold					
+		<** @description: Voltage multiplied by 1000, i.e. mV. If battery is above this limit, we enter higher Battery Pack mode. **>
+		Int64 ExitThreshold					
+		<** @description: If battery temperature drops below this limit, we enter HIB(hibernation) mode. **>
+		Int64 nLowTemperature					
+		<** @description: If battery temperature is above this limit, we exit HIB(hibernation) mode. **>
+		Int64 nLowTemperatureRestore	
+		
+		<** @description: Maximum allowed power in [%] that can be used by the battery heaters in HIB(hibernation) mode. **>
+		UInt8 nMaximumHeatersPower	
+	}
+
+	<** @description: SBasicSettings structure to get/set **>
+    struct SBasicSettings
+	{
+		<** @description: OK = 0, NVM_ERR = 1, NOT_SET = 2 **>
+		UInt8 nErr
+		<** @description: in seconds. If 0, no broadcast will be sent. Max: 60  **>
+		UInt16 BroadcastInterval
+		<** @description: in minutes. Time spent in HIB(hibernation) mode after we switch to NOHIB mode.**>
+		UInt16 HibModeTimeout
+		<** @description: in minutes. Time needed to be spent in Normal mode before considering Battery Pack as healthy.**>
+		UInt16 HealthyBpCheckTime
+		<** @description: Settings of battery pack to enter/exit HIB(hibernation) mode **>
+		SBS_BpHibSetting BpHibModeSettings			     
+	}
+
+    <** @description: Error returned for SetBasicSettings command 
+    @details: size = 2 **>
+    enumeration SBS_SetError
+    {
+        <** @description: Done **>
+        SBSSE_SUCCESS       = 0
+        <** @description: NVM memory error **>
+        SBSSE_NVM_ERR       = 1
+        <** @description: Invalid input parameters **>
+        SBSSE_BAD_PARAMS        = 2
+        <** @description: Not supported **>
+        SBSSE_REG_TYPE_NOT_SUPP = 3
+    }
+
+    <** 
+        @description: Set basic device operation configuration.
+      @details: id = 1023
+    **>
+    method SetBasicSettings
+    {
+        in
+        {
+            <** @description: input configuration **>
+            SBasicSettings BasicSettings
+        }
+
+        out
+        {
+            <** @description: Status after executing the commands **>
+            SBS_SetError Err
+        }
+    }
+
+    <** @description: Error returned for GetBasicSettings command **>
+    enumeration SBS_GetError
+    {
+        <** @description: Done **>
+        SBSGE_SUCCESS
+        <** @description: NVM memory error **>
+        SBSGE_NVM_ERR
+        <** @description: Empty configuration **>
+        SBSGE_CONFIG_NOT_SET
+    }
+    
+    <** 
+        @description: Get current basic device settings
+      @details: id = 1022
+    **>
+    method GetBasicSettings
+    {
+        out
+        {
+            <** @description: Get configuration status and data **>
+            SBasicSettings BasicSettings
+        }
+    }
+    
+
+
+
+
+    /////=====================================////
+    
+    
+    <** 
+        @description: Get the values of the error counters of the bootloader in case the App fails to run
+      @details: id = 1024
+    **>
+    method GetBootLoaderErrCounters     
+    {
+        out
+        {
+             <** @description: Application continuous running at start up failures **>
+            UInt16 c_app_restart_errors
+             <** @description: Application freeze failures **>
+            UInt8  g_pAppCyclesErrors
+             <** @description: unused **>
+              UInt8  reserved
+             <** @description: Memory health checks failures **>
+              UInt16 g_pIntegrityCheckStates
+        }
+    }
+    
+    <** 
+        @description: Clear the values of the error counters of the bootloader about the App fails to run
+      @details: id = 1025
+    **>
+    method ResetBootLdrErrCounters     
+    {
+    }
+    
+    
+    <** @description: chargers statuses **>
+    enumeration ChargerSettings
+    {
+        <** @description: Read status **>
+        READ_STAT
+        <** @description: Set primary configuration **>
+        ENABLE_CFG_PRYMARY
+        <** @description: Set secondary configuration **>
+        ENABLE_CFG_SECONDARY
+        <** @description: Set to automatic selection between primary and secondary **>
+        ENABLE_CFG_AUTO
+    }
+    
+    <** 
+        @description: Three possible configurations: primary, secondary, automatic
+      @details: id = 1026
+    **>
+    method SetChargerSettings
+    {
+        in
+        {
+            <** @description: input configuration
+                @details: size = 3 **>
+            ChargerSettings[] inChargers
+        }
+        
+        out
+        {
+            <** @description: Get configuration data 
+             @details: size = 3 **>
+            ChargerSettings[] outChargers
+        }
+    }
+
+// ============================================================================================
+// END
+// ============================================================================================
+   
+}

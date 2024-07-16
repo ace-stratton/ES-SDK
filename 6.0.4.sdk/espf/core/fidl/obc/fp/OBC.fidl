@@ -1,0 +1,349 @@
+package endurosat.macif
+
+<** @description: This is the Onboard Computer (OBC) general interface. It hosts the majority
+of OBC methods - configuring the onboard computer, accessing sensors, clocks, other operational modes,
+triggering firmware updates & controlling telemetry. The interface is provided as a smoother transition
+from ESTTC protocol which is more or less deprecated.
+    @details: id = 14
+**>
+interface OBC
+{
+    version { major 3 minor 4 }
+
+    <** @description: General status type used for HW-related communication and/or settings **>
+    enumeration HwResult
+    {
+        <** @description:  Operation is successful **>
+        SUCCESS,
+        <** @description:  Operation could not be executed **>
+        ERROR,
+        <** @description:  The sensor needs first to be reserved for use via the triggerSensorCommand method **>
+        DISABLED = 0xFF
+    }
+
+    <** @description: General status type used for SW-related communication and/or settings. **>
+    enumeration StandardResult
+    {
+        <** @description: The operation is successful **>
+        SUCCESS,
+        <** @description: An error has occurred **>
+        ERROR,
+        <** @description: Invalid input arguments provided to the operation **>
+        INVALID_ARGS,
+        <** @description: The action related to the input data is not supported by the firmware **>
+        NOT_SUPPORTED
+    }
+
+    <** @description: Onboard Computer Application mode **>
+    enumeration ApplicationMode
+    {
+        <** @description: OBC is executing its regular application **>
+        APPLICATION
+        <** @description: OBC is executing its bootloader application **>
+        BOOTLOADER
+    }
+
+    <** @description: Structure for the individual OBC general purpose outputs.**>
+    struct GpioStatus
+    {
+        <** @description: Bit-field indicating the status of the individual OBC GP outputs
+                          Bit 0 -> OUT 1
+                          Bit 1 -> OUT 2
+                          Bit 2 -> OUT 3
+                          Bit 3 -> OUT 5
+                          Bit 4 -> OUT 6 and OUT 4
+                          Bit 5 -> OUT 7
+                          Bit 6 -> OUT 8
+            If the corresponding bit is set to 1, then the output is set to a high voltage level, otherwise - low voltage level.
+        **>
+        UInt8 gpioStatusBitField
+    }
+
+    <**@description: Structure for the I2C Pull-Up Resistors.**>
+    struct I2CPullUpsState
+    {
+        <** @description: State of the 4.7K pull-up for the I2C system bus **>
+        Boolean SystemBus_4K7
+        <** @description: State of the 10K pull-up for the I2C system bus **>
+        Boolean SystemBus_10K
+        <** @description: State of the 4.7K pull-up for the I2C payload bus **>
+        Boolean PayloadBus_4K7
+        <** @description: State of the 10K pull-up for the I2C payload bus **>
+        Boolean PayloadBus_10K
+    }
+
+    <** @description: This structure keeps information about the OBC reset counters.
+                      Each counter represents the number of specific resets which took place since last
+                      clear operation.
+    **>
+    struct ResetCountersInfo
+    {
+        <** @description: System Window Watchdog reset count **>
+        UInt32 WWD
+        <** @description: Independent Watchdog reset count **>
+        UInt32 IWD
+        <** @description: Low power mode reset count **>
+        UInt32 LPR
+        <** @description: Power-on-reset reset count **>
+        UInt32 POR
+        <** @description: External Reset pin reset count **>
+        UInt32 RstPin
+        <** @description: Brown-out-detector reset count **>
+        UInt32 BOR
+        <** @description: Hard faults reset count **>
+        UInt32 HardFault
+        <** @description: Memory faults reset count **>
+        UInt32 MemFault
+        <** @description: Bus faults reset count **>
+        UInt32 BusFault
+        <** @description: Usage faults reset count **>
+        UInt32 UsageFault
+    }
+
+    <** @description: This enumeration maps to the individual fields of the ResetCountersInfo structure **>
+    enumeration ResetCntrId
+    {
+        WWD
+        IWD
+        LPR
+        POR
+        RSTPIN
+        BOR
+        HARDFAULT
+        MEMFAULT
+        BUSFAULT
+        USAGEFAULT
+        <** @description: When used, it refers to all of the previously defined counter values **>
+        ALL
+    }
+
+    <** @description: Enumeration for the Solar Panel IDs**>
+    enumeration PanelId
+    {
+        <** @description: This is any panel connected to PAN 1 (physical) interface **>
+        X_P
+        <** @description: This is any panel connected to PAN 2 (physical) interface **>
+        Y_P
+        <** @description: This is any panel connected to PAN 3 (physical) interface **>
+        Z_P
+        <** @description: This is any panel connected to PAN 4 (physical) interface **>
+        X_M
+        <** @description: This is any panel connected to PAN 5 (physical) interface **>
+        Y_M
+        <** @description: This is any panel connected to PAN 6 (physical) interface **>
+        Z_M
+    }
+
+    <** @description: Struct containing the values of an accelerometer register **>
+    struct RegData
+    {
+        <** @description: Status of the register operation **>
+        HwResult status
+        <** @description: Register value as returned by the accelerometer **>
+        UInt16 data
+    }
+
+    <** @description: Structure for the sensors currently in use**>
+    struct SensorInUseData
+    {
+        <** @description: True - if the sensor communication is working, otherwise set to False **>
+        Boolean isSensorValid
+        <** @description: Number of users who have requested the operation of the sensor. The sensor will be powered until usersCount becomes 0. **>
+        UInt8 usersCount
+    }
+	
+	<** @description: Enumeration for the Accelerometer IDs**>
+    enumeration AccelId
+    {
+        ONE
+        TWO
+    }
+	
+	<** @description: Enumeration for the magnetometer IDs**>
+    enumeration MagnetometerId
+    {
+        LOW
+        HIGH
+    }
+	
+	<** @description: Enumeration for SAFE booleans**>
+	enumeration SafeBool
+    {
+        FALSE = 0,
+        TRUE = 255 
+    }
+
+    <** @description: Provides the states of all OBC general-purpose outputs
+        @details: id = 0x0000000E
+    **>
+    method getGpOutputStates
+    {
+        out
+        {
+            <** @description: General Purpose Input Output data
+            **>
+            GpioStatus data
+        }
+    }
+
+    <** @description: Triggers a change in the specified output pin state
+        @details: id = 0x0000000F
+    **>
+    method setGpOutputState
+    {
+        in
+        {
+            <** @description: GPIO output pin ID
+                              0 -> OBC OUT1
+                              1 -> OBC OUT2
+                              2 -> OBC OUT3
+                              3 -> OBC OUT5
+                              4 -> OBC OUT4_6
+                              5 -> OBC OUT7
+                              6 -> OBC OUT8
+            **>
+            UInt8 pinId
+            <** @description: True - set pin to High voltage level; False - set pin to Low voltage level **>
+            Boolean value
+        }
+
+        out
+        {
+            <** @description: General result **>
+            HwResult opResult
+        }
+    }
+
+    <** @description: Obtains information on state of the I2C Pull-Up resistors for system and
+                      customer payload buses
+        @details: id = 0x00000012
+    **>
+    method getI2CPullUpsState
+    {
+        out
+        {
+            <** @description: Pull-up resistor state as configured in NVM **>
+            I2CPullUpsState nvm_pullupsState
+            <** @description: Pull-up resistor state as read from the MCU input data registers **>
+            I2CPullUpsState io_pullupsState
+        }
+    }
+
+    <** @description: Reconfigures the state of the I2C Pull-Up resistors for system and
+                      customer payload buses
+        @details: id = 0x00000013
+    **>
+    method setI2CPullUpsState
+    {
+        in
+        {
+            <** @description: Pull-up resistor state **>
+            I2CPullUpsState pullupsState
+        }
+        out
+        {
+            <** @description: Pull-up resistor physical state obtained from the MCU output registers **>
+            I2CPullUpsState pullupsIoState
+        }
+    }
+
+    <** @description: Obtains the up time of the OBC since last reset.
+        @details: id = 0x00000018
+    **>
+    method get_uptime
+    {
+        out
+        {
+            <** @description: Time since last reset, in seconds. **>
+            UInt32 uptime
+        }
+    }
+
+    <** @description: Obtains the current values of the MCU reset counters
+        @details: id = 0x0000002A
+    **>
+    method getResetCounters
+    {
+        out
+        {
+            <** @description: Reset counters statistics **>
+            ResetCountersInfo status
+        }
+    }
+
+    <** @description: Clears a given MCU reset counter
+        @details: id = 0x0000002B
+    **>
+    method clearResetCounter
+    {
+        in
+        {
+            <** @description: ID of the reset counter to clear **>
+            ResetCntrId id
+        }
+
+        out
+        {
+            <** @description: Clear operation result **>
+            StandardResult opResult
+        }
+    }
+
+    
+    <** @description: Triggers a reset of the OBC starting with the specified APP mode
+        @details: id = 0x00000036
+    **>
+    method triggerResetInMode
+    {
+        in
+        {
+            <** @description: Mode for OBC to start with after the reset **>
+            ApplicationMode startMode
+        }
+
+        out
+        {
+            <** @description: Reset request result **>
+            StandardResult opResult
+        }
+    }
+
+
+    <** @description: Update the MAC addres in the mac address book of the OBC NVM.
+        @details: id = 0x00000040
+    **>
+    method set_device_mac_address
+    {
+        in
+        {
+            <** @description: New MAC address. **>
+            UInt8 new_mac_address
+            <** @description: Device. See the list of device IDs in the NVM fidl. **>
+            UInt8 device_id
+        }
+        out
+        {
+            <** @description: Set request result **>
+            StandardResult opResult
+        }
+    }
+    
+    <** @description: Read the MAC addres in the mac address book of the OBC NVM.
+        @details: id = 0x00000041
+    **>
+    method get_device_mac_address
+    {
+        in
+        {
+            <** @description: Device. See the list of device IDs in the NVM fidl. **>
+            UInt8 device_id
+        }
+        out
+        {
+            <** @description: MAC address read from NVM. **>
+            UInt8 mac_address
+            <** @description: Get request result **>
+            StandardResult opResult
+        }
+    }
+}

@@ -1,0 +1,13 @@
+1. pip install mkdocs
+2. pip install mkdocs-material
+3. pip install mkdocs-build-plantuml-plugin
+4. pip install mkdocs-localsearch
+    (https://github.com/wilhelmer/mkdocs-localsearch)
+
+mkdocs-material reference can be found here:
+https://squidfunk.github.io/mkdocs-material/reference/abbreviations/
+
+Execute "mkdocs serve" and open your browser to be able to dynamically see the updates in your md files;
+Execute "mkdocs build" to generate the documentation.
+	
+For an automatic PlantUML diagram rendering, make sure to configure the Graphviz root path in plantuml.bat.

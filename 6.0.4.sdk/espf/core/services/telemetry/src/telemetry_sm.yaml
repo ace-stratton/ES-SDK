@@ -1,0 +1,36 @@
+---
+telemetry_sm:
+    states:
+        - Not_Init:
+            transitions:
+                - Init:
+                    - { event: init }
+            attributes:
+               on_entry: False
+               on_exit: False
+               
+        - Init:
+            transitions:
+               - Started:
+                  - { event: start, guard: can_start_operation, action: prepare_tlm_collection }
+               - "__self":
+                  - { event: "__periodic", action: reload_config }
+            attributes:
+               on_exit: False
+               
+        - Started:
+           transitions:
+              - Stopped:
+                 - { event: stop, guard: can_stop_operation }
+              - "__self":
+                 - { event: "__periodic", guard: periodic_timer_elapsed, action: collect_telemetry }
+        - Stopped:
+           transitions:
+              - Started:
+                 - { event: start, guard: can_start_operation, action: prepare_tlm_collection }
+              - "__self":
+                 - { event: "__periodic", action: reload_config }
+           attributes:
+              on_exit: False
+    attributes:
+        initial: Not_Init

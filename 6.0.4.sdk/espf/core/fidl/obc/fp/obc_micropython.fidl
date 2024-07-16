@@ -1,0 +1,114 @@
+package endurosat.macif
+
+<** @description: Control micropython on the Onboard Computer
+    @details: id = 69
+**>
+interface obc_micropython
+{
+    version { major 1 minor 1 }
+
+    enumeration Result
+    {
+        OK,
+        PROCESSING,
+        QUEUE_FULL,
+        PENDING,
+        FAIL,
+        TIMED_OUT,
+        NOT_FOUND_IN_QUEUE
+    }
+    
+    <**@description: Time as returned by the OBC **>
+    struct stime
+    {
+        <**@description: This value can be in the range: 0 <= hours <= 23 **>
+        UInt8  hour
+        
+        <**@description: This value can be in the range: 0 <= minutes <= 59 **>
+        UInt8  min
+        
+        <**@description: This value can be in the range: 0 <= seconds <= 59 **>
+        UInt8  sec
+        
+        <**@description: This value can be in the range: 0 <= milliseconds <= 999 **>
+        UInt16 ms
+        
+        <**@description: This value can be in the range: 0 <= microseconds <= 999 **>
+        UInt16 us
+    }
+    
+    <** @description: Execute micropython scirpt. The Script will start it's 
+    execution and the result can be get by using GetLatScriptExecStatus.
+        @details: id = 0x00000001
+    **>
+    method RequestScriptExecution
+    {
+        in
+        {
+            <** @details: size = 47 
+                @description: NULL Terminated string representing the script file 
+                name. It includes the full path to the file name or only the 
+                file name. If path is ommitted "/sd/" path is assumed.
+                The length of the field is 47 symbols and even if the path is 
+                ommitted it is included in the name size. This means that if
+                only file name is used it could be no more than 47-4=43symbols
+                with the null termination included.
+                Ex.: module.mpy equals to /sd/module.mpy**>
+            String script_full_name
+            <**@description: TimeOut for script execution. If this time elapses
+            the script is interrupted.
+            This is provided to prevent the script from blocking the system. In
+            case 0 is sent the timeout is 10min.**>
+            UInt32 timeout_ms
+        }
+        out
+        {
+            <** @description: Returns the identifier of the script in the queue. 
+            Based on this ID furher information can be retrieved from 
+            GetScriptExecStatus method**>
+            UInt8 script_id
+            <** @description: Result of the request. 
+            Returns:
+                 RESULT_OK: in case the request is accepted and put in the queue. 
+                 RESULT_QUEUE_FULL :if there is no more place in the queue. **>             
+            Result op_result
+        }
+    }
+    
+    <** @description: Retrieves the status from execution of specific script.
+        @details: id = 0x00000002
+    **>
+    method GetScriptExecStatus
+    {
+        in
+        {
+            <** @description: The id of the script to check. This ID is taken from 
+            ExecuteScript method**>
+            UInt8 script_id
+        }
+        out
+        {
+            <** @details: size = 47 
+                @description: NULL terminated string representing script file 
+                name. If there is no path this means that the default 
+                path("/sd/") is used
+                **>
+            String script_full_name
+            <**@description: Status of the script execution:
+                  RESULT_OK: If exectuion of the script has finished successfully.
+                  RESULT_PROCESSING: in case the script is still processing.
+                  RESULT_PENDING: in case the script is in the queue and it waits it's turn to start
+                  RESULT_FAIL: In case the script has failed. In case the script fails more information 
+				  can be taken from the log file produced by the upython.
+                  RESULT_TIMED_OUT: In case the script was not executed in the 
+                                  expected time. This also means that the script has been interrupted.**>
+            Result op_result 
+            <**@description: Time in which the request was requested.(put in the queue for execution) **>
+            stime requested_time
+            <**@description: Time in which the execution of the script started. **>
+            stime time_started
+            <**@description: The duration for execution of the script **>
+            UInt32 duration_ms
+        }
+    }
+}
