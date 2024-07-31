@@ -230,6 +230,9 @@ list(APPEND libs sharp)
 add_subdirectory(core/services/meddea meddea)
 list(APPEND libs meddea)
 
+add_subdirectory(core/services/fswgeneral fswgeneral)
+list(APPEND libs fswgeneral)
+
 list(APPEND shared_sources_list
     "core/services/aocs/adcs_tlm/adcs_tlm.c"
     "config/aocs/adcs_tlm/adcs_tlm_cfg.c"
