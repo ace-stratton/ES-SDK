@@ -1,7 +1,0 @@
-@startuml
-Interface IDataCache as "Data Interface"
-IDataCache -down- [DataCache]
-[Data Producer] .right.> IDataCache: <i><<<b>dc_set_<data name>_data</b>(...)>></i>
-[telemetry\nservice] .left.> IDataCache: <i><<<b>dc_get_<data name>_data</b>(...)>></i>
-[beacons\nservice] .left.> IDataCache: <i><<<b>dc_get_<data name>_data</b>(...)>></i>
-@enduml

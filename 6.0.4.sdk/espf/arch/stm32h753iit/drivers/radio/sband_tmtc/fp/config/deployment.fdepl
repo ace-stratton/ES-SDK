@@ -1,8 +1,0 @@
-package org.endurosat.deploy
-
-import "../../../../../../../../espf/core/fidl/spec/PlatformSpec.fdepl"
-
-import "../../../../../../../../espf/core/fidl/sband_tmtc/fp/S_Band_TMTC.fidl"
-
-// Client generation
-define org.endurosat.spec.PlatformSpec for interface endurosat.macif.SBAND_TMTC { IsClient = true }

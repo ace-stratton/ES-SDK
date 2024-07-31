@@ -1,7 +1,0 @@
-package org.endurosat.deploy
-
-import "../../../fidl/spec/PlatformSpec.fdepl"
-
-import "../../../fidl/obc/fp/obc_micropython.fidl"
-
-define org.endurosat.spec.PlatformSpec for interface endurosat.macif.obc_micropython	{ IsClient = false }

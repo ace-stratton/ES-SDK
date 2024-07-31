@@ -1,8 +1,0 @@
-package org.endurosat.deploy
-
-import "../../../../../../../../espf/core/fidl/spec/PlatformSpec.fdepl"
-
-import "../../../../../../../../espf/core/fidl/eps_i/fp/EPS1.fidl"
-
-// Client generation
-define org.endurosat.spec.PlatformSpec for interface endurosat.macif.EPS1     { IsClient = true }

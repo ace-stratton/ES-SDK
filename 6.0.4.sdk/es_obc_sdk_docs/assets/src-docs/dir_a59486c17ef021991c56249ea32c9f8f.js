@@ -1,5 +1,0 @@
-var dir_a59486c17ef021991c56249ea32c9f8f =
-[
-    [ "LIS3MDL_MAG_driver.c", "_l_i_s3_m_d_l___m_a_g__driver_8c.html", null ],
-    [ "LIS3MDL_MAG_driver.h", "_l_i_s3_m_d_l___m_a_g__driver_8h.html", "_l_i_s3_m_d_l___m_a_g__driver_8h" ]
-];

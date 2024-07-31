@@ -1,5 +1,0 @@
-typer>=0.9.0
-colorama
-shellingham
-pytest
-crc

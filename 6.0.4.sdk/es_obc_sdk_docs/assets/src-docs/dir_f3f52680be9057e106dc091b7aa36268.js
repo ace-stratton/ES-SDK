@@ -1,4 +1,0 @@
-var dir_f3f52680be9057e106dc091b7aa36268 =
-[
-    [ "nvm_bp", "dir_f4297838d40b86f701d2089a227e6c73.html", "dir_f4297838d40b86f701d2089a227e6c73" ]
-];
